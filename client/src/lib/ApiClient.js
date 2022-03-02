@@ -26,6 +26,7 @@ let DUMMY_DATA = [
 ];
 
 const apiClient = {
+  // TEMPORARY FUNCS
   getFlags: function (callback) {
     callback(DUMMY_DATA);
   },
@@ -36,6 +37,8 @@ const apiClient = {
     callback();
   },
   createFlag: function(flagObj, callback) {
+    DUMMY_DATA.push({ id: Math.floor(Math.random() * 100), ...flagObj });
+    console.log(DUMMY_DATA);
     callback();
   }
   // getFlags: function (callback) {
@@ -53,11 +56,19 @@ const apiClient = {
   //     .catch(logError);
   // },
   // deleteFlag: function(id, callback) {
+   //  return axios
   //     .delete(`/api/flags/${id}`)
   //     .then(unwrapData)
   //     .then(callback)
   //     .catch(logError);
   // },
+  // createFlag: function(flagObj, callback) {
+  //   return axios
+  //     .post('/api/flags')
+  //     .then(unwrapData)
+  //     .then(callback)
+  //     .catch(logError);
+  // }
 };
 
 export default apiClient;
