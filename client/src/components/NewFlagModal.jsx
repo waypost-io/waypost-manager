@@ -9,11 +9,16 @@ const NewFlagModal = ({ modalOpen, setModalOpen }) => {
     setModalOpen(false);
   };
 
+  const resetForm = () => {
+    setModalOpen(false);
+    setTitle('');
+    setActive(false);
+  }
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if (title.length === 0) return;
-    apiClient.createFlag({ title, active }, () =>  setModalOpen(false));
-   ;
+    apiClient.createFlag({ title, active }, () =>  resetForm());
   };
 
   return (
