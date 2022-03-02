@@ -19,14 +19,45 @@ function unwrapData(response) {
 axios.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
 axios.defaults.headers.common["Accept"] = "application/json";
 
+let DUMMY_DATA = [
+  { id: 1, title: "Offer Banner", active: true },
+  { id: 2, title: "Free Trial", active: true },
+  { id: 3, title: "Show Recommendations", active: false }
+];
+
 const apiClient = {
   getFlags: function (callback) {
-    return axios
-      .get('/api/flags')
-      .then(unwrapData)
-      .then(callback)
-      .catch(logError);
+    callback(DUMMY_DATA);
   },
+  toggleFlag: function(id, status, callback) {
+    callback(DUMMY_DATA);
+  },
+  deleteFlag: function(id, callback) {
+    callback();
+  },
+  createFlag: function(flagObj, callback) {
+    callback();
+  }
+  // getFlags: function (callback) {
+  //   return axios
+  //     .get('/api/flags')
+  //     .then(unwrapData)
+  //     .then(callback)
+  //     .catch(logError);
+  // },
+  // toggleFlag: function(id, status, callback) {
+  //   return axios
+  //     .put(`/api/flags/${id}`, { active: status })
+  //     .then(unwrapData)
+  //     .then(callback)
+  //     .catch(logError);
+  // },
+  // deleteFlag: function(id, callback) {
+  //     .delete(`/api/flags/${id}`)
+  //     .then(unwrapData)
+  //     .then(callback)
+  //     .catch(logError);
+  // },
 };
 
 export default apiClient;

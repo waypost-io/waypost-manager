@@ -1,17 +1,9 @@
 import './App.css';
-import Header from './components/Header';
-import SideNav from './components/SideNav';
-import FlagsList from './components/FlagsList';
+import FlagDashboard from './components/FlagDashboard';
 
 function App() {
   return (
-    <>
-      <Header />
-      <main>
-        <SideNav />
-        <FlagsList />
-      </main>
-    </>
+    <FlagDashboard />
   );
 }
 
