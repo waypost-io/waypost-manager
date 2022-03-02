@@ -26,6 +26,7 @@ const FlagsList = ({ setModalOpen }) => {
       alert("Are you sure you want to delete this?");
       apiClient.deleteFlag(id, () => {
         console.log('deleted');
+        setFlags(flags.filter(flag => flag.id !== id));
       });
     };
   };
