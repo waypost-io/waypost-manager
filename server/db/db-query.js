@@ -9,7 +9,6 @@ const logQuery = (statement, parameters) => {
 
 module.exports = {
   async dbQuery(statement, ...parameters) {
-    console.log(process.env.DB_USER);
     let client = new Client({
       database: process.env.DB,
       user: process.env.DB_USER,
@@ -17,6 +16,7 @@ module.exports = {
     });
 
     await client.connect();
+
     logQuery(statement, parameters);
     let result = await client.query(statement, parameters);
     await client.end();

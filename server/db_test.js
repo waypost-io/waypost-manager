@@ -1,11 +1,11 @@
+// Use this code as an example for how to query the waypost database
 const Pg = require("./db/pg");
 
 const postgres = new Pg();
 
-async function getFlags() {
+const getFlags = async () => {
   const allFlags = await postgres.allFlags();
   return allFlags;
-}
+};
 
-console.log("this logs");
-console.log(getFlags());
+const testResult = getFlags().then((data) => console.log(data));
