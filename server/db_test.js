@@ -4,8 +4,12 @@ const Pg = require("./db/pg");
 const postgres = new Pg();
 
 const getFlags = async () => {
-  const allFlags = await postgres.allFlags();
-  return allFlags;
+  try {
+    const allFlags = await postgres.allFlags();
+    console.log(allFlags);
+  } catch (error) {
+    console.log(error);
+  }
 };
 
-const testResult = getFlags().then((data) => console.log(data));
+getFlags();

@@ -11,7 +11,6 @@ module.exports = class Pg {
     const ALL_FLAGS = "SELECT * FROM flags;";
     const resultFlags = await dbQuery(ALL_FLAGS);
 
-    // console.log(resultFlags);
     const allFlags = resultFlags.rows;
     if (!allFlags) {
       throw new Error("Flags could not be retreived from postgres");
