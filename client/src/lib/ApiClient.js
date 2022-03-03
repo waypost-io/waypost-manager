@@ -27,9 +27,9 @@ let DUMMY_DATA = [
 
 const apiClient = {
   // TEMPORARY FUNCS
-  getFlags: function (callback) {
-    callback(DUMMY_DATA);
-  },
+  // getFlags: function (callback) {
+  //   callback(DUMMY_DATA);
+  // },
   toggleFlag: function(id, status, callback) {
     callback(DUMMY_DATA);
   },
@@ -40,14 +40,14 @@ const apiClient = {
     DUMMY_DATA.push({ id: Math.floor(Math.random() * 100), ...flagObj });
     console.log(DUMMY_DATA);
     callback();
-  }
-  // getFlags: function (callback) {
-  //   return axios
-  //     .get('/api/flags')
-  //     .then(unwrapData)
-  //     .then(callback)
-  //     .catch(logError);
-  // },
+  },
+  getFlags: function (callback) {
+    return axios
+      .get('/api/flags')
+      .then(unwrapData)
+      .then(callback)
+      .catch(logError);
+  },
   // toggleFlag: function(id, status, callback) {
   //   return axios
   //     .put(`/api/flags/${id}`, { active: status })
