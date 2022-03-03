@@ -90,4 +90,3 @@ SELECT pg_catalog.setval('public.flags_id_seq', 5, true);
 --
 -- PostgreSQL database dump complete
 --
-

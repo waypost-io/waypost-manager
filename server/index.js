@@ -1,6 +1,5 @@
 const express = require('express');
 const routes = require('./routes/api');
-const HttpError = require("./models/httpError");
 
 const app = express();
 
