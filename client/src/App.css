@@ -11,7 +11,7 @@ button:hover, .x-icon:hover {
 .sidenav {
   background-color: darkgray;
   color: white;
-  height: 100vh;
+  min-height: 100vh;
   width: max(135px, 30%);
 }
 
