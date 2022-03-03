@@ -1,9 +1,9 @@
 import React from 'react';
 
-const FlagItem = ({ id, title, active, handleToggle, handleDeleteFlag }) => {
+const FlagItem = ({ id, name, description, active, handleToggle, handleDeleteFlag }) => {
   return (
     <div className="flag-item">
-      <span>{title}</span>
+      <span>{name}</span>
       <div className="flag-controls">
         <label className="toggle">
           <input type="checkbox" defaultChecked={active ? true : false} onChange={handleToggle(id)} />

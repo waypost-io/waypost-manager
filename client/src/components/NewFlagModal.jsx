@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import apiClient from '../lib/ApiClient';
 
 const NewFlagModal = ({ modalOpen, setModalOpen }) => {
-  const [ title, setTitle ] = useState('');
-  const [ active, setActive ] = useState(false);
+  const [ name, setName ] = useState('');
+  const [ status, setStatus ] = useState(false);
 
   const handleCloseModal = () => {
     setModalOpen(false);
@@ -11,14 +11,14 @@ const NewFlagModal = ({ modalOpen, setModalOpen }) => {
 
   const resetForm = () => {
     setModalOpen(false);
-    setTitle('');
-    setActive(false);
+    setName('');
+    setStatus(false);
   }
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (title.length === 0) return;
-    apiClient.createFlag({ title, active }, () =>  resetForm());
+    if (name.length === 0) return;
+    apiClient.createFlag({ name, status }, () =>  resetForm());
   };
 
   return (
@@ -28,12 +28,12 @@ const NewFlagModal = ({ modalOpen, setModalOpen }) => {
         <h2>New Feature Flag</h2>
         <form className="new-flag-form">
           <div>
-            <label htmlFor="flag-title">Title:</label>
-            <input id="flag-title" type="text" value={title} onChange={(e) => setTitle(e.target.value)} />
+            <label htmlFor="flag-title">Name:</label>
+            <input id="flag-title" type="text" value={name} onChange={(e) => setName(e.target.value)} />
           </div>
           <div>
             <label htmlFor="flag-active">Active?</label>
-            <input id="flag-active" type="checkbox" checked={active} onChange={(e) => setActive(e.target.checked)} />
+            <input id="flag-active" type="checkbox" checked={status} onChange={(e) => setStatus(e.target.checked)} />
           </div>
           <button type="submit" className="submit-new-flag-btn" onClick={handleSubmit}>Submit</button>
         </form>

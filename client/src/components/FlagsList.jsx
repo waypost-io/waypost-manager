@@ -1,16 +1,16 @@
-import React, { useState, useEffect } from 'react';
-import apiClient from '../lib/ApiClient';
-import FlagItem from './FlagItem';
+import React, { useState, useEffect } from "react";
+import apiClient from "../lib/ApiClient";
+import FlagItem from "./FlagItem";
 
 const FlagsList = ({ setModalOpen }) => {
-  const [ flags, setFlags ] = useState([]);
+  const [flags, setFlags] = useState([]);
 
   const handleToggle = (id) => {
     return (e) => {
       apiClient.toggleFlag(id, e.target.checked, () => {
-        const updatedFlags = flags.map(flag => {
+        const updatedFlags = flags.map((flag) => {
           if (flag.id === id) {
-            return { ...flag, active: e.target.checked };
+            return { ...flag, status: e.target.checked };
           } else {
             return flag;
           }
@@ -25,8 +25,7 @@ const FlagsList = ({ setModalOpen }) => {
       e.preventDefault();
       alert("Are you sure you want to delete this?");
       apiClient.deleteFlag(id, () => {
-        console.log('deleted');
-        setFlags(flags.filter(flag => flag.id !== id));
+        setFlags(flags.filter((flag) => flag.id !== id));
       });
     };
   };
@@ -38,10 +37,26 @@ const FlagsList = ({ setModalOpen }) => {
   return (
     <div className="flags-list-container">
       <div className="flags-list-header">
-        <h2 >Feature Flags</h2>
-        <button className="create-flag-btn" type="button" onClick={() => setModalOpen(true)}>Create New</button>
+        <h2>Feature Flags</h2>
+        <button
+          className="create-flag-btn"
+          type="button"
+          onClick={() => setModalOpen(true)}
+        >
+          Create New
+        </button>
       </div>
-      {flags.map(flag => <FlagItem key={flag.id} {...flag} handleToggle={handleToggle} handleDeleteFlag={handleDeleteFlag} />)}
+      {flags.map((flag) => (
+        <FlagItem
+          key={flag.id}
+          id={flag.id}
+          name={flag.name}
+          description={flag.description}
+          active={flag.status}
+          handleToggle={handleToggle}
+          handleDeleteFlag={handleDeleteFlag}
+        />
+      ))}
     </div>
   );
 };
