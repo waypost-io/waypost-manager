@@ -7,7 +7,7 @@ Full-stack application for feature flag management
 NOTE: This is for early development. Delete from readme later.
 
 1. Open postgres in your console
-2. run "psql postgres < /waypost/server/db/waypost_data_dump.sql" in the terminal
+2. run "psql postgres < ./server/db/waypost_data_dump.sql" from root of waypost directory
 3. Open postgres, connect to the waypost database and select all features to ensure that the data made it in correctly.
 4. Add .env to the /server folder. It should look like:
    DB="waypost"
