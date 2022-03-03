@@ -19,28 +19,13 @@ function unwrapData(response) {
 axios.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
 axios.defaults.headers.common["Accept"] = "application/json";
 
-let DUMMY_DATA = [
-  { id: 1, name: "Offer Banner", description: "", status: true },
-  { id: 2, name: "Free Trial", description: "", status: true },
-  { id: 3, name: "Show Recommendations", description: "", status: false }
-];
+// let DUMMY_DATA = [
+//   { id: 1, name: "Offer Banner", description: "", status: true },
+//   { id: 2, name: "Free Trial", description: "", status: true },
+//   { id: 3, name: "Show Recommendations", description: "", status: false }
+// ];
 
 const apiClient = {
-  // TEMPORARY FUNCS
-  // getFlags: function (callback) {
-  //   callback(DUMMY_DATA);
-  // },
-  toggleFlag: function(id, status, callback) {
-    callback(DUMMY_DATA);
-  },
-  deleteFlag: function(id, callback) {
-    callback();
-  },
-  createFlag: function(flagObj, callback) {
-    DUMMY_DATA.push({ id: Math.floor(Math.random() * 100), ...flagObj });
-    console.log(DUMMY_DATA);
-    callback();
-  },
   getFlags: function (callback) {
     return axios
       .get('/api/flags')
@@ -48,27 +33,27 @@ const apiClient = {
       .then(callback)
       .catch(logError);
   },
-  // toggleFlag: function(id, status, callback) {
-  //   return axios
-  //     .put(`/api/flags/${id}`, { active: status })
-  //     .then(unwrapData)
-  //     .then(callback)
-  //     .catch(logError);
-  // },
-  // deleteFlag: function(id, callback) {
-   //  return axios
-  //     .delete(`/api/flags/${id}`)
-  //     .then(unwrapData)
-  //     .then(callback)
-  //     .catch(logError);
-  // },
-  // createFlag: function(flagObj, callback) {
-  //   return axios
-  //     .post('/api/flags')
-  //     .then(unwrapData)
-  //     .then(callback)
-  //     .catch(logError);
-  // }
+  toggleFlag: function(id, status, callback) {
+    return axios
+      .put(`/api/flags/${id}`, { status })
+      .then(unwrapData)
+      .then(callback)
+      .catch(logError);
+  },
+  deleteFlag: function(id, callback) {
+    return axios
+      .delete(`/api/flags/${id}`)
+      .then(unwrapData)
+      .then(callback)
+      .catch(logError);
+  },
+  createFlag: function(flagObj, callback) {
+    return axios
+      .post('/api/flags', flagObj)
+      .then(unwrapData)
+      .then(callback)
+      .catch(logError);
+  }
 };
 
 export default apiClient;
