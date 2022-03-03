@@ -1,17 +1,14 @@
 const express = require("express");
 const router = express.Router();
 const flagsController = require("../controllers/flagsController");
-// const {
-//   validateBoard,
-//   validateCard,
-//   validateList,
-//   validateEditList,
-//   validateComment
-// } = require("../validators/validators");
+const { validateNewFlag } = require("../validators/validators");
+// will implement later
+// const { validateSDKKey, validateNewFlag } = require("../validators/validators");
 
-router.get("/flags/:sdk-key", flagsController.getAllFlags);
+router.get("/flags", flagsController.getAllFlags);
+// router.get("/flags", validateSDKKey, flagsController.getAllFlags);
 
-router.post("/flags", flagsController.createFlag);
+router.post("/flags", validateNewFlag, flagsController.createFlag);
 
 router.put("/flags/:id", flagsController.editFlag);
 
