@@ -1,10 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import apiClient from "../lib/ApiClient";
 import FlagItem from "./FlagItem";
 
-const FlagsList = ({ setModalOpen }) => {
-  const [flags, setFlags] = useState([]);
-
+const FlagsList = ({ flags, setFlags, setModalOpen }) => {
   const handleToggle = (id) => {
     return (e) => {
       apiClient.toggleFlag(id, e.target.checked, () => {
@@ -46,8 +44,8 @@ const FlagsList = ({ setModalOpen }) => {
           Create New
         </button>
       </div>
-      {flags.map((flag) => (
-        <FlagItem
+      {flags.length > 0 && flags.map((flag) => {
+        return <FlagItem
           key={flag.id}
           id={flag.id}
           name={flag.name}
@@ -56,7 +54,7 @@ const FlagsList = ({ setModalOpen }) => {
           handleToggle={handleToggle}
           handleDeleteFlag={handleDeleteFlag}
         />
-      ))}
+      })}
     </div>
   );
 };

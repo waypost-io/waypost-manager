@@ -19,12 +19,6 @@ function unwrapData(response) {
 axios.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
 axios.defaults.headers.common["Accept"] = "application/json";
 
-// let DUMMY_DATA = [
-//   { id: 1, name: "Offer Banner", description: "", status: true },
-//   { id: 2, name: "Free Trial", description: "", status: true },
-//   { id: 3, name: "Show Recommendations", description: "", status: false }
-// ];
-
 const apiClient = {
   getFlags: function (callback) {
     return axios
