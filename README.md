@@ -77,7 +77,9 @@ response example:
 body of the request:
 
 ```
+{
    "attribute_to_edit": new_value
+}
 ```
 
 response example:
