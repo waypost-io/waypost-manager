@@ -1,39 +1,10 @@
 const pg = require('pg');
 const { validationResult } = require("express-validator");
-const { dbQuery } = require("../db/db-query");
-const { FLAGS_COL_NAMES } = require("../constants/db");
-const TABLE_NAME = "flags"
-const INVALID_UPDATE_MESSAGE = "No valid parameters passed to update";
+const PGTable = require("../db/PGTable");
+const { FLAG_FIELDS, FLAG_TABLE_NAME } = require("../constants/db");
+const { getNowString } = require("../utils");
 
-function getNowString() {
-  return new Date().toISOString();
-}
-
-const createInsertStatement = (newFlag) => {
-  const columns = FLAGS_COL_NAMES.filter((col) => ![null, "", undefined].includes(newFlag[col]));
-  const values = columns.map((col) => `'${newFlag[col]}'`);
-  return `INSERT INTO ${TABLE_NAME}(${columns.join(", ")}) VALUES (${values.join(", ")}) RETURNING *`
-}
-
-const createUpdateStatement = (id, updatedFields) => {
-  const now = getNowString();
-  if (updatedFields.status !== undefined) updatedFields["last_toggle"] = now;
-
-  const edits = [];
-  Object.keys(updatedFields).forEach((fieldName) => {
-    if (FLAGS_COL_NAMES.includes(fieldName)) {
-      edits.push(`${fieldName} = '${updatedFields[fieldName]}'`);
-    }
-  });
-  if (edits.length === 0) throw new Error(INVALID_UPDATE_MESSAGE);
-  updatedFields["date_edited"] = now;
-
-  return `UPDATE ${TABLE_NAME} SET ${edits.join(", ")} WHERE id = ${id} RETURNING *`;
-}
-
-const createDeleteStatement = (id) => {
-  return `DELETE FROM ${TABLE_NAME} WHERE id = ${id} RETURNING *`;
-}
+const flagTable = new PGTable(FLAG_TABLE_NAME, FLAG_FIELDS);
 
 const createNewFlagObj = ({ name, description, status }) => {
   const now = getNowString();
@@ -47,56 +18,66 @@ const createNewFlagObj = ({ name, description, status }) => {
   }
 }
 
+const createUpdateFlagObj = (fieldsToUpdate) => {
+  const now = getNowString();
+
+  if (fieldsToUpdate.status !== undefined) fieldsToUpdate["last_toggle"] = now;
+  fieldsToUpdate["date_edited"] = now;
+
+  return fieldsToUpdate;
+}
+
 const getAllFlags = async (req, res, next) => {
-  const result = await dbQuery("SELECT * FROM flags");
-  res.send(result.rows);
+  try {
+    const data = await flagTable.getAllRows();
+    if (!data) {
+      throw new Error(`Data could not be retreived from the ${flagTable.tableName} table`);
+    }
+    res.status(200).send(data);
+  } catch (e) {
+    res.status(500).send(e.message)
+  }
 };
 
 const createFlag = async (req, res, next) => {
   const errors = validationResult(req);
   if (errors.isEmpty()) {
     const newFlag = createNewFlagObj(req.body);
-    const queryString = createInsertStatement(newFlag);
+
     try {
-      const result = await dbQuery(queryString);
-      const savedFlag = result.rows[0]
+      const savedFlag = await flagTable.insertRow(newFlag);
       res.status(200).send(savedFlag);
     } catch (e) {
       res.status(500).send("Error inserting into flags table");
     }
+
   } else {
     return next(new HttpError("The name field is empty.", 400))
   }
 };
 
 const editFlag = async (req, res, next) => {
+  // figure out how to validate this
   const id = req.params.id;
+  const now = getNowString();
+  const updatedFields = createUpdateFlagObj(req.body);
+
   try {
-    const queryString = createUpdateStatement(id, req.body);
-    const result = await dbQuery(queryString);
-    const updatedFlag = result.rows[0];
+    const updatedFlag = await flagTable.editRow(id, updatedFields);
     res.status(200).send(updatedFlag);
   } catch (e) {
-    if (e.message === INVALID_UPDATE_MESSAGE) {
-      const errObj = {
-        message: INVALID_UPDATE_MESSAGE,
-        data: req.body
-      }
-      res.status(400).send(errObj);
-    } else {
-      res.status(500).send(e)
-    }
+    res.status(500).send(e);
   }
 };
 
 const deleteFlag = async (req, res, next) => {
   const id = req.params.id;
-  const queryString = createDeleteStatement(id);
   try {
-    const result = await dbQuery(queryString);
+    const result = await flagTable.deleteRow(id);
     if (result.rows.length === 0) throw new Error(`Flag with the id of ${id} doesn't exist`);
 
     const deletedFlagName = result.rows[0].name;
+    // change id to getting it from result?
     res.status(200).send(`Flag '${deletedFlagName}' with id = ${id} successfully deleted`);
   } catch (e) {
     res.status(400).send(e.message)
