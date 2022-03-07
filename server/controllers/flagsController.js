@@ -1,10 +1,11 @@
 const pg = require('pg');
 const { validationResult } = require("express-validator");
 const PGTable = require("../db/PGTable");
-const { FLAG_FIELDS, FLAG_TABLE_NAME } = require("../constants/db");
+const { FLAG_TABLE_NAME } = require("../constants/db");
 const { getNowString } = require("../utils");
 
-const flagTable = new PGTable(FLAG_TABLE_NAME, FLAG_FIELDS);
+const flagTable = new PGTable(FLAG_TABLE_NAME);
+flagTable.init();
 
 const createNewFlagObj = ({ name, description, status }) => {
   const now = getNowString();

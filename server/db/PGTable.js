@@ -6,9 +6,14 @@ module.exports =  class PGTable {
   // constructor(session) {
   //   this.username = session.username;
   // }
-  constructor(tableName, fields) {
+  constructor(tableName) {
     this.tableName = tableName;
-    this.fields = fields;
+    this.fields = [];
+  }
+
+  async init() {
+    this.fields = await this.getFields();
+    return this;
   }
 
   createInsertStatement(newRow) {
@@ -30,6 +35,12 @@ module.exports =  class PGTable {
 
   createDeleteStatement(id) {
     return `DELETE FROM ${this.tableName} WHERE id = ${id} RETURNING *`;
+  }
+
+  async getFields() {
+    const statement = `SELECT * FROM ${this.tableName} WHERE false`;
+    const result = await dbQuery(statement);
+    return result.fields.map(fieldObj => fieldObj.name);
   }
 
   async getAllRows() {
