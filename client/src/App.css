@@ -2,6 +2,11 @@ button:hover, .x-icon:hover {
   cursor: pointer;
 }
 
+a, a:visited {
+  color: inherit;
+  text-decoration: none;
+}
+
 .flag-dashboard {
   display: flex;
   height: 100%;
@@ -12,7 +17,7 @@ button:hover, .x-icon:hover {
   background-color: darkgray;
   color: white;
   min-height: 100vh;
-  width: max(135px, 30%);
+  width: clamp(135px, 300px, 350px);
 }
 
 .header {
@@ -34,6 +39,10 @@ button:hover, .x-icon:hover {
 .sidenav-list li:hover {
   background-color: black;
   cursor: pointer;
+}
+
+.sidenav-list a {
+  text-decoration: none;
 }
 
 .flags-list-container {
@@ -64,6 +73,10 @@ button:hover, .x-icon:hover {
   justify-content: space-between;
   padding: 20px;
   border-bottom: 1px solid gray;
+}
+
+.flag-name {
+  font-weight: bold;
 }
 
 .flag-controls {
