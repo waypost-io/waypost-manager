@@ -40,17 +40,22 @@ const FlagsList = ({ flags, setFlags, setModalOpen }) => {
           Create New
         </button>
       </div>
-      {flags.length > 0 && flags.map((flag) => {
-        return <FlagItem
-          key={flag.id}
-          id={flag.id}
-          name={flag.name}
-          description={flag.description}
-          active={flag.status}
-          handleToggle={handleToggle}
-          handleDeleteFlag={handleDeleteFlag}
-        />
-      })}
+      {flags.length > 0 &&
+        flags
+          .sort((a, b) => a.date_created - b.date_created)
+          .map((flag) => {
+            return (
+              <FlagItem
+                key={flag.id}
+                id={flag.id}
+                name={flag.name}
+                description={flag.description}
+                active={flag.status}
+                handleToggle={handleToggle}
+                handleDeleteFlag={handleDeleteFlag}
+              />
+            );
+          })}
     </div>
   );
 };
