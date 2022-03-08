@@ -4,7 +4,8 @@ import { useNavigate } from "react-router-dom";
 const FlagItem = ({ id, name, description, active, handleToggle, handleDeleteFlag }) => {
   const navigate = useNavigate();
 
-  const handleSelectFlag = () => {
+  const handleSelectFlag = (e) => {
+    e.preventDefault();
     navigate(`/flags/${id}`);
   };
 

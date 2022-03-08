@@ -7,6 +7,19 @@ a, a:visited {
   text-decoration: none;
 }
 
+.btn {
+  background-color: dodgerblue;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 25px;
+  margin: 15px;
+}
+
+.red-btn {
+  background-color: darkred;
+}
+
 .flag-dashboard {
   display: flex;
   height: 100%;
@@ -211,4 +224,12 @@ input:checked + .slider:before {
   border-radius: 10px;
   padding: 10px 25px;
   margin: 15px;
+}
+
+.flag-details-container {
+  padding: 20px 30px;
+}
+
+.create-expt-btn {
+  background-color: dodgerblue;
 }

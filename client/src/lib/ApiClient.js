@@ -47,7 +47,14 @@ const apiClient = {
       .then(unwrapData)
       .then(callback)
       .catch(logError);
-  }
+  },
+  createExperiment: function(id, callback) {
+    return axios
+      .put(`/api/flags/${id}`, { is_experiment: true })
+      .then(unwrapData)
+      .then(callback)
+      .catch(logError);
+  },
 };
 
 export default apiClient;

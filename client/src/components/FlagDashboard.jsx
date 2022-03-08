@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import FlagsList from './FlagsList';
 import NewFlagModal from './NewFlagModal';
 
-const FlagDashboard = () => {
-  const [flags, setFlags] = useState([]);
+const FlagDashboard = ({ flags, setFlags }) => {
   const [ modalOpen, setModalOpen ] = useState(false);
 
   return (
