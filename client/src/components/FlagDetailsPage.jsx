@@ -30,6 +30,7 @@ const FlagDetailsPage = ({ flags, setFlags }) => {
   return (
     <div className="flag-details-container">
       <h1>{flagData.name}</h1>
+      <p>{flagData.description}</p>
       {flagData.is_experiment ? (
         <>
           <ExperimentInfo />
