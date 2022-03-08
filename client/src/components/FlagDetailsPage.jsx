@@ -3,17 +3,6 @@ import { useParams } from "react-router-dom";
 import ExperimentInfo from "./ExperimentInfo";
 import apiClient from "../lib/ApiClient";
 
-// const NewExptForm = () => {
-//   return (
-//     <form>
-//       <div>
-//         <label htmlFor="flag-title">Name:</label>
-//         <input id="flag-title" type="text" value={name} onChange={(e) => setName(e.target.value)} />
-//       </div>
-//     </form>
-//   );
-// };
-
 const FlagDetailsPage = ({ flags, setFlags }) => {
   const { flagId } = useParams();
   const flagData = flags.find((flag) => flag.id === Number(flagId));
