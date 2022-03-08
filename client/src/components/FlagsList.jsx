@@ -42,7 +42,7 @@ const FlagsList = ({ flags, setFlags, setModalOpen }) => {
       </div>
       {flags.length > 0 &&
         flags
-          .sort((a, b) => a.date_created - b.date_created)
+          .sort((a, b) => a.id - b.id)
           .map((flag) => {
             return (
               <FlagItem
