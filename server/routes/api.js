@@ -7,6 +7,7 @@ const { validateNewFlag } = require("../validators/validators");
 
 router.get("/flags", flagsController.getAllFlags);
 // router.get("/flags", validateSDKKey, flagsController.getAllFlags);
+router.get("/flags/:id", flagsController.getFlag);
 
 router.post("/flags", validateNewFlag, flagsController.createFlag);
 

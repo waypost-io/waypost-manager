@@ -40,6 +40,22 @@ const getAllFlags = async (req, res, next) => {
   }
 };
 
+const getFlag = async (req, res, next) => {
+  const id = req.params.id;
+  try {
+    // TODO: Implement method on PGTable so we can do flagTable.getRow(id)
+    // Temp code next 2 lines:
+    const allData = await flagTable.getAllRows();
+    const data = allData.find(row => row.id === Number(id));
+    if (!data) {
+      throw new Error(`Data could not be retreived from the ${flagTable.tableName} table`);
+    }
+    res.status(200).send(data);
+  } catch (e) {
+    res.status(500).send(e.message)
+  }
+};
+
 const createFlag = async (req, res, next) => {
   const errors = validationResult(req);
   if (errors.isEmpty()) {
@@ -89,3 +105,4 @@ exports.getAllFlags = getAllFlags;
 exports.createFlag = createFlag;
 exports.editFlag = editFlag;
 exports.deleteFlag = deleteFlag;
+exports.getFlag = getFlag;
