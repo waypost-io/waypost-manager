@@ -49,6 +49,12 @@ module.exports =  class PGTable {
     return result.rows;
   }
 
+  async getRow(id) {
+    const statement = `SELECT * FROM ${this.tableName} WHERE id = ${id}`;
+    const result = await dbQuery(statement);
+    return result.rows[0];
+  }
+
   async insertRow(obj) {
     const queryString = this.createInsertStatement(obj);
     const result = await dbQuery(queryString);
