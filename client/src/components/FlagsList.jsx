@@ -32,6 +32,7 @@ const FlagsList = ({ flags, setFlags, setModalOpen }) => {
     <div className="flags-list-container">
       <div className="flags-list-header">
         <h2>Feature Flags</h2>
+        <img src="assets/red_turquoise_light.jpg" alt="Waypost" height="100px"/>
         <button
           className="btn"
           type="button"
@@ -39,6 +40,7 @@ const FlagsList = ({ flags, setFlags, setModalOpen }) => {
         >
           Create New
         </button>
+
       </div>
       {flags.length > 0 &&
         flags

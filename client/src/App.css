@@ -1,3 +1,26 @@
+/*
+COLOR PALETTES
+------------------
+Option 1:
+Black: #00090c
+Turquoise: #00c3c7
+Purple: #c842a0
+
+Option 3:
+Black: #03002d
+Navy: #00577c
+Turquoise: #00ddea
+Light blue: #c7f9ff
+Red: #ff006b
+*/
+body {
+  color: #03002d;
+}
+
+.section-title {
+  color: #ff006b;
+}
+
 button:hover, .x-icon:hover {
   cursor: pointer;
 }
@@ -7,8 +30,12 @@ a, a:visited {
   text-decoration: none;
 }
 
+a:hover {
+  color: #ff006b;
+}
+
 .btn {
-  background-color: dodgerblue;
+  background-color: #00577c;
   color: white;
   border: none;
   border-radius: 10px;
@@ -16,8 +43,16 @@ a, a:visited {
   margin: 15px;
 }
 
+.btn:hover {
+  background-color: #00ddea;
+}
+
 .red-btn {
-  background-color: darkred;
+  background-color: #ff006b;
+}
+
+.red-btn:hover {
+  background-color: #ff006b;
 }
 
 .flag-dashboard {
@@ -27,14 +62,14 @@ a, a:visited {
 }
 
 .sidenav {
-  background-color: darkgray;
+  background-color: #00577c;
   color: white;
   min-height: 100vh;
   width: clamp(135px, 300px, 350px);
 }
 
 .header {
-  background-color: black;
+  background-color: #00577c;
   color: white;
   padding: 20px;
 }
@@ -50,7 +85,8 @@ a, a:visited {
 }
 
 .sidenav-list li:hover {
-  background-color: black;
+  background-color: #ff006b;
+  color: white;
   cursor: pointer;
 }
 
@@ -66,19 +102,15 @@ a, a:visited {
 .flags-list-header {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   padding: 20px;
 }
 
 .create-flag-btn {
-  background-color: dodgerblue;
   color: white;
   border: none;
   border-radius: 15px;
   padding: 10px 15px;
-}
-
-.create-flag-btn:hover {
-  background-color: darkblue;
 }
 
 .flag-item {
@@ -136,11 +168,11 @@ a, a:visited {
 }
 
 input:checked + .slider {
-  background-color: #2196F3;
+  background-color: #00ddea;
 }
 
 input:focus + .slider {
-  box-shadow: 0 0 1px #2196F3;
+  box-shadow: 0 0 1px #00ddea;
 }
 
 input:checked + .slider:before {
@@ -167,7 +199,7 @@ input:checked + .slider:before {
 }
 
 .delete-button:hover {
-  color: darkred;
+  color: #ff006b;
 }
 
 .overlay {
@@ -217,19 +249,6 @@ input:checked + .slider:before {
   margin-right: 20px;
 }
 
-.submit-new-flag-btn {
-  background-color: dodgerblue;
-  color: white;
-  border: none;
-  border-radius: 10px;
-  padding: 10px 25px;
-  margin: 15px;
-}
-
 .flag-details-container {
   padding: 20px 30px;
-}
-
-.create-expt-btn {
-  background-color: dodgerblue;
 }
