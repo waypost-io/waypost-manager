@@ -5,7 +5,7 @@ const SideNav = () => {
     <div className="sidenav">
       <h1 className="header">Waypost</h1>
       <ul className="sidenav-list">
-        <li><a href="/">Flags Dashboard</a></li>
+        <a href="/"><li>Flags Dashboard</li></a>
         <li>Event Log</li>
         <li>Tech Debt Dashboard</li>
         <li>Get a new SDK Key</li>
