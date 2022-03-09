@@ -1,3 +1,19 @@
+/*
+COLOR PALETTES
+------------------
+Option 1:
+Black: #00090c
+Turquoise: #00c3c7
+Purple: #c842a0
+
+Option 3:
+Black: #03002d
+Navy: #00577c
+Turquoise: #00ddea
+Light blue: #c7f9ff
+Red: #ff006b
+*/
+
 button:hover, .x-icon:hover {
   cursor: pointer;
 }
