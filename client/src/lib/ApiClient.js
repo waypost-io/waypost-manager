@@ -55,9 +55,9 @@ const apiClient = {
       .then(callback)
       .catch(logError);
   },
-  createExperiment: function(id, callback) {
+  toggleExperiment: function(id, status, callback) {
     return axios
-      .put(`/api/flags/${id}`, { is_experiment: true })
+      .put(`/api/flags/${id}`, { is_experiment: status })
       .then(unwrapData)
       .then(callback)
       .catch(logError);

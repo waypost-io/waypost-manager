@@ -22,11 +22,11 @@ const FlagDetailsPage = () => {
   };
 
   const handleCreateExperiment = (e) => {
-    apiClient.createExperiment(flagId, () => setFlagExptStatus(true));
+    apiClient.toggleExperiment(flagId, true, () => setFlagExptStatus(true));
   };
 
   const handleStopExperiment = () => {
-    setFlagExptStatus(false);
+    apiClient.toggleExperiment(flagId, false, () => setFlagExptStatus(false));
   };
 
   if (!flagData) return null;
