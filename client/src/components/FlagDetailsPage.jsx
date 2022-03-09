@@ -35,6 +35,8 @@ const FlagDetailsPage = () => {
     <div className="flag-details-container">
       <h1>{flagData.name}</h1>
       <p>{flagData.description}</p>
+      <p>Current Status: <span className="accent-text">{flagData.status ? "On" : "Off"}</span></p>
+      <p>Rollout percentage: <span className="accent-text">{flagData.percentage_split}%</span></p>
       {flagData.is_experiment ? (
         <>
           <ExperimentInfo />
