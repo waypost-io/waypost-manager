@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const flagsController = require("../controllers/flagsController");
+const connectionController = require("../controllers/connectionController");
 const { validateNewFlag } = require("../validators/validators");
 // will implement later
 // const { validateSDKKey, validateNewFlag } = require("../validators/validators");
@@ -14,5 +15,9 @@ router.post("/flags", validateNewFlag, flagsController.createFlag);
 router.put("/flags/:id", flagsController.editFlag);
 
 router.delete("/flags/:id", flagsController.deleteFlag);
+
+router.post("/connection", flagsController.createConnection);
+
+router.delete("/connection", flagsController.removeConnection);
 
 module.exports = router;
