@@ -49,6 +49,11 @@ a:hover {
   background-color: #c842a0;
 }
 
+.accent-text {
+  color: #ff006b;
+  font-weight: bold;
+}
+
 .flag-dashboard {
   display: flex;
   height: 100%;
