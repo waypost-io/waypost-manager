@@ -19,6 +19,7 @@ body {
 
 .section-title {
   color: #c842a0;
+  margin-top: 30px;
 }
 
 button:hover, .x-icon:hover {
