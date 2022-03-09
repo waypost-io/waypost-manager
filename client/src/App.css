@@ -13,6 +13,13 @@ Turquoise: #00ddea
 Light blue: #c7f9ff
 Red: #ff006b
 */
+body {
+  color: #00090c;
+}
+
+.section-title {
+  color: #c842a0;
+}
 
 button:hover, .x-icon:hover {
   cursor: pointer;
@@ -23,17 +30,22 @@ a, a:visited {
   text-decoration: none;
 }
 
+a:hover {
+  color: #c842a0;
+}
+
 .btn {
-  background-color: dodgerblue;
+  background-color:  #00c3c7;
   color: white;
   border: none;
   border-radius: 10px;
   padding: 10px 25px;
   margin: 15px;
+  font-weight: bold;
 }
 
 .red-btn {
-  background-color: darkred;
+  background-color: #c842a0;
 }
 
 .flag-dashboard {
@@ -43,14 +55,14 @@ a, a:visited {
 }
 
 .sidenav {
-  background-color: darkgray;
+  background-color: #00090c;
   color: white;
   min-height: 100vh;
   width: clamp(135px, 300px, 350px);
 }
 
 .header {
-  background-color: black;
+  background-color: #00090c;
   color: white;
   padding: 20px;
 }
@@ -66,7 +78,8 @@ a, a:visited {
 }
 
 .sidenav-list li:hover {
-  background-color: black;
+  background-color: #00c3c7;
+  color: white;
   cursor: pointer;
 }
 
@@ -86,15 +99,15 @@ a, a:visited {
 }
 
 .create-flag-btn {
-  background-color: dodgerblue;
-  color: white;
+  background-color: #00c3c7;
+  color: #00090c;
   border: none;
   border-radius: 15px;
   padding: 10px 15px;
 }
 
 .create-flag-btn:hover {
-  background-color: darkblue;
+  background-color: #00c3c7;
 }
 
 .flag-item {
@@ -152,11 +165,11 @@ a, a:visited {
 }
 
 input:checked + .slider {
-  background-color: #2196F3;
+  background-color: #00c3c7;
 }
 
 input:focus + .slider {
-  box-shadow: 0 0 1px #2196F3;
+  box-shadow: 0 0 1px #00c3c7;
 }
 
 input:checked + .slider:before {
@@ -183,7 +196,7 @@ input:checked + .slider:before {
 }
 
 .delete-button:hover {
-  color: darkred;
+  color: #c842a0;
 }
 
 .overlay {
@@ -234,8 +247,8 @@ input:checked + .slider:before {
 }
 
 .submit-new-flag-btn {
-  background-color: dodgerblue;
-  color: white;
+  background-color: #00c3c7;
+  color: #00090c;
   border: none;
   border-radius: 10px;
   padding: 10px 25px;
@@ -247,5 +260,5 @@ input:checked + .slider:before {
 }
 
 .create-expt-btn {
-  background-color: dodgerblue;
+  background-color: #00c3c7;
 }
