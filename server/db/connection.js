@@ -8,14 +8,14 @@ async function insertConnection({ user, host, password, database, port }) {
 }
 
 async function getConnection() {
-  const selectQuery = `SELECT TOP (1) FROM connection`;
+  const selectQuery = `SELECT * FROM connection;`;
 
   const result = await dbQuery(selectQuery);
   return result;
 }
 
 async function deleteConnection() {
-  const deleteQuery = `DELETE TOP (1) FROM connection;`;
+  const deleteQuery = `DELETE FROM connection;`;
 
   const result = await dbQuery(deleteQuery);
   return result;

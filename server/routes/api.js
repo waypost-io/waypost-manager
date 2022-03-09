@@ -16,8 +16,8 @@ router.put("/flags/:id", flagsController.editFlag);
 
 router.delete("/flags/:id", flagsController.deleteFlag);
 
-router.post("/connection", flagsController.createConnection);
+router.post("/connection", connectionController.createConnection);
 
-router.delete("/connection", flagsController.removeConnection);
+router.delete("/connection", connectionController.removeConnection);
 
 module.exports = router;

@@ -6,18 +6,21 @@ const createConnection = async (req, res, next) => {
   // TODO: create validator
   //const errors = validationResult(req);
   try {
-    const newConnection = await insertConnection(req.body);
-    res.status(200).send(savedFlag);
+    await insertConnection(req.body);
+    res.status(200).send("Connection added");
   } catch (e) {
-    res.status(500).send("Error inserting into flags table");
+    res.status(500).send("Error inserting into connection table");
   }
 };
 
 const removeConnection = async (req, res, next) => {
   try {
-    const result = await deleteConnection();
-    return result;
+    await deleteConnection();
+    res.status(200).send("Connection removed");
   } catch (e) {
-    res.status(500).send("Error inserting into flags table");
+    res.status(500).send(e, "Error deleting from connection table");
   }
 };
+
+module.exports.createConnection = createConnection;
+module.exports.removeConnection = removeConnection;
