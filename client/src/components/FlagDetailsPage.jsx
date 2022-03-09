@@ -1,22 +1,24 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import ExperimentInfo from "./ExperimentInfo";
 import apiClient from "../lib/ApiClient";
 
-const FlagDetailsPage = ({ flags, setFlags }) => {
+const FlagDetailsPage = () => {
   const { flagId } = useParams();
-  const flagData = flags.find((flag) => flag.id === Number(flagId));
+  const [ flagFetched, setFlagFetched ] = useState(false);
+  const [ flagData, setFlagData ] = useState(undefined);
+
+  useEffect(() => {
+    if (!flagFetched) {
+      apiClient.getFlag(flagId, (data) => {
+        setFlagData(data);
+        setFlagFetched(true);
+      });
+    }
+  }, [flagId, flagFetched]);
 
   const setFlagExptStatus = (status) => {
-    let updatedFlags = flags.map(flag => {
-      if (flag.id === Number(flagId)) {
-        return { ...flag, is_experiment: status };
-      } else {
-        return { ...flag };
-      }
-    });
-    console.log(updatedFlags);
-    setFlags(updatedFlags);
+    setFlagData({ ...flagData, is_experiment: status });
   };
 
   const handleCreateExperiment = (e) => {
@@ -27,6 +29,8 @@ const FlagDetailsPage = ({ flags, setFlags }) => {
     setFlagExptStatus(false);
   };
 
+  if (!flagData) return null;
+  console.log(flagData);
   return (
     <div className="flag-details-container">
       <h1>{flagData.name}</h1>

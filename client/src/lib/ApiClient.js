@@ -27,6 +27,13 @@ const apiClient = {
       .then(callback)
       .catch(logError);
   },
+  getFlag: function(id, callback) {
+    return axios
+      .get(`/api/flags/${id}`)
+      .then(unwrapData)
+      .then(callback)
+      .catch(logError);
+  },
   toggleFlag: function(id, status, callback) {
     return axios
       .put(`/api/flags/${id}`, { status })
