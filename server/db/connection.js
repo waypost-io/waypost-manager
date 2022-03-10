@@ -2,9 +2,17 @@ const { dbQuery } = require("./db-query");
 const { eventDbQuery } = require("./event-db-query");
 
 async function insertConnection({ user, host, password, database, port }) {
-  const insertQuery = `INSERT INTO connection (pg_user, pg_host, pg_port, pg_database, pg_password) VALUES ('${user}', '${host}', '${port}', '${database}', '${password}');`;
+  const insertQuery =
+    "INSERT INTO connection (pg_user, pg_host, pg_port, pg_database, pg_password) VALUES ( $1, $2, $3, $4, $5);";
 
-  const result = await dbQuery(insertQuery);
+  const result = await dbQuery(
+    insertQuery,
+    user,
+    host,
+    port,
+    database,
+    password
+  );
   return result.rows[0];
 }
 
