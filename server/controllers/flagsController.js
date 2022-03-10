@@ -34,9 +34,7 @@ const getAllFlags = async (req, res, next) => {
     if (!data) {
       throw new Error(`Data could not be retreived from the ${flagTable.tableName} table`);
     }
-    req.flags = data;
     res.status(200).send(data);
-    next();
   } catch (e) {
     res.status(500).send(e.message)
   }
@@ -87,6 +85,7 @@ const editFlag = async (req, res, next) => {
 
   try {
     const updatedFlag = await flagTable.editRow(id, updatedFields);
+
     req.updatedFlag = updatedFlag;
     res.status(200).send(updatedFlag);
     next();
@@ -103,8 +102,8 @@ const deleteFlag = async (req, res, next) => {
 
     const deletedFlagName = result.rows[0].name;
     const deletedFlagId = result.rows[0].id;
-    req.deletedFlagId = deletedFlagId;
 
+    req.deletedFlagId = deletedFlagId;
     res.status(200).send(`Flag '${deletedFlagName}' with id = ${id} successfully deleted`);
     next();
   } catch (e) {

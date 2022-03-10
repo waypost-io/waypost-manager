@@ -12,7 +12,7 @@ router.get("/flags/:id", flagsController.getFlag);
 
 router.get("/stream", streamController.handleNewConnection)
 
-router.get("/status", (req, res) => res.json({clients: clients.length}));
+router.get("/status", streamController.status);
 
 router.post("/flags", validateNewFlag, flagsController.createFlag, streamController.sendUpdate);
 

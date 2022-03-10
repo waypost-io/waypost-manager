@@ -3,6 +3,10 @@ const { getAllFlagsData } = require("./flagsController");
 let flags = [];
 let clients = [];
 
+(async function() {
+  flags = await getAllFlagsData();
+})();
+
 const handleNewConnection = async (req, res, next) => {
   const headers = {
     'Content-Type': 'text/event-stream',
@@ -10,9 +14,6 @@ const handleNewConnection = async (req, res, next) => {
     'Cache-Control': 'no-cache'
   };
   res.writeHead(200, headers);
-  if (flags.length === 0) {
-    flags = await getAllFlagsData();
-  }
   const data = `data: ${JSON.stringify(flags)}\n\n`;
 
   res.write(data);
@@ -55,5 +56,8 @@ const updateFlags = (req, flags) => {
   return flags;
 }
 
+const status = (req, res) => res.json({clients: clients.length});
+
 exports.handleNewConnection = handleNewConnection;
-exports.sendUpdate = sendUpdate
+exports.sendUpdate = sendUpdate;
+exports.status = status;
