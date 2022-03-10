@@ -3,6 +3,7 @@ import apiClient from '../lib/ApiClient';
 
 const NewFlagModal = ({ flags, setFlags, modalOpen, setModalOpen }) => {
   const [ name, setName ] = useState('');
+  const [ description, setDescription ] = useState('');
   const [ status, setStatus ] = useState(false);
 
   const handleCloseModal = () => {
@@ -12,6 +13,7 @@ const NewFlagModal = ({ flags, setFlags, modalOpen, setModalOpen }) => {
   const resetForm = () => {
     setModalOpen(false);
     setName('');
+    setDescription('');
     setStatus(false);
   }
 
@@ -22,7 +24,7 @@ const NewFlagModal = ({ flags, setFlags, modalOpen, setModalOpen }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (name.length === 0) return;
-    apiClient.createFlag({ name, status }, (data) => {
+    apiClient.createFlag({ name, description, status }, (data) => {
       resetForm();
       addNewFlag(data);
     });
@@ -37,6 +39,9 @@ const NewFlagModal = ({ flags, setFlags, modalOpen, setModalOpen }) => {
           <div>
             <label htmlFor="flag-title">Name:</label>
             <input id="flag-title" type="text" value={name} onChange={(e) => setName(e.target.value)} />
+          </div><div>
+            <label htmlFor="flag-description">Description:</label>
+            <input id="flag-description" type="text" value={description} onChange={(e) => setDescription(e.target.value)} />
           </div>
           <div>
             <label htmlFor="flag-active">Active?</label>
