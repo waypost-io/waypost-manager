@@ -20,13 +20,10 @@ const FlagDetailsPage = () => {
   }, [flagId, flagFetched]);
 
   useEffect(() => {
-    if (!exptsFetched) {
-      apiClient.getExperiments(flagId, (data) => {
-        console.log("expt data", data);
-        setExptsFetched(true);
-        setExptData(data);
-      })
-    };
+    apiClient.getExperiments(flagId, (data) => {
+      setExptsFetched(true);
+      setExptData(data);
+    });
   }, [exptsFetched, flagId]);
 
   const setFlagExptStatus = (status) => {
@@ -43,7 +40,6 @@ const FlagDetailsPage = () => {
   };
 
   if (!flagData) return null;
-  console.log(flagData);
   return (
     <div className="flag-details-container">
       <h1>{flagData.name}</h1>
@@ -52,8 +48,6 @@ const FlagDetailsPage = () => {
       <p>Rollout percentage: <span className="accent-text">{flagData.percentage_split}%</span></p>
       {flagData.is_experiment ? (
         <>
-          <ExperimentInfo />
-          {exptData && exptData.toString()}
           <button className="btn red-btn" onClick={handleStopExperiment}>Stop Experiment</button>
         </>
       ) :
@@ -61,6 +55,9 @@ const FlagDetailsPage = () => {
           Create an experiment
         </button>
       }
+      {exptData && exptData.map(expt => {
+        return <ExperimentInfo key={expt.id} { ...expt } />
+      })}
     </div>
   );
 };
