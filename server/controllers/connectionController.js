@@ -9,9 +9,11 @@ const { verifyConnection } = require("../db/event-db-query.js");
 const createConnection = async (req, res, next) => {
   // TODO: create validator
   //const errors = validationResult(req);
+
   try {
     // Verify that the connection works
     await verifyConnection(req.body);
+
     // Save the connection to the database
     await insertConnection(req.body);
 
@@ -28,8 +30,6 @@ const createConnection = async (req, res, next) => {
 };
 
 const removeConnection = async (req, res, next) => {
-  // test the event db query
-
   try {
     await deleteConnection();
     res.status(200).send("Connection removed");
@@ -38,5 +38,16 @@ const removeConnection = async (req, res, next) => {
   }
 };
 
+const testConnection = async (req, res, next) => {
+  // NOTE: this is not a great way to do this becuase is just assumes that the db is not connected no matter the error
+  try {
+    await testEventQuery();
+    res.status(200).send("Database connected");
+  } catch (err) {
+    res.status(500).send("Database not connected");
+  }
+};
+
 module.exports.createConnection = createConnection;
 module.exports.removeConnection = removeConnection;
+module.exports.testConnection = testConnection;

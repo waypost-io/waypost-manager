@@ -150,3 +150,19 @@ response:
 ```
 `Connection removed`
 ```
+
+## Endpoint: GET api/connection
+
+No request body needed
+
+Successful response:
+
+```
+`Database connected`
+```
+
+Unsuccessful response:
+
+```
+`Database not connected`
+```

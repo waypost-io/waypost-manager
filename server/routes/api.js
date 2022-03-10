@@ -20,4 +20,6 @@ router.post("/connection", connectionController.createConnection);
 
 router.delete("/connection", connectionController.removeConnection);
 
+router.get("/connection", connectionController.testConnection);
+
 module.exports = router;

@@ -15,15 +15,13 @@ async function deleteConnection() {
   return result;
 }
 
-// example of how to create queries for the event data
 async function testEventQuery() {
-  const testQuery = "SELECT * FROM clicks;";
+  const testQuery = "SELECT;";
 
   const result = await eventDbQuery(testQuery);
   return result.rows;
 }
 
 module.exports.insertConnection = insertConnection;
-// module.exports.getConnection = getConnection;
 module.exports.deleteConnection = deleteConnection;
 module.exports.testEventQuery = testEventQuery;
