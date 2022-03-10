@@ -34,11 +34,18 @@ const getAllFlags = async (req, res, next) => {
     if (!data) {
       throw new Error(`Data could not be retreived from the ${flagTable.tableName} table`);
     }
+    req.flags = data;
     res.status(200).send(data);
+    next();
   } catch (e) {
     res.status(500).send(e.message)
   }
 };
+
+const getAllFlagsData = async () => {
+  const data = await flagTable.getAllRows();
+  return data;
+}
 
 const getFlag = async (req, res, next) => {
   const id = req.params.id;
@@ -60,7 +67,9 @@ const createFlag = async (req, res, next) => {
 
     try {
       const savedFlag = await flagTable.insertRow(newFlag);
+      req.newFlag = savedFlag;
       res.status(200).send(savedFlag);
+      next();
     } catch (e) {
       res.status(500).send("Error inserting into flags table");
     }
@@ -78,7 +87,9 @@ const editFlag = async (req, res, next) => {
 
   try {
     const updatedFlag = await flagTable.editRow(id, updatedFields);
+    req.updatedFlag = updatedFlag;
     res.status(200).send(updatedFlag);
+    next();
   } catch (e) {
     res.status(500).send(e);
   }
@@ -91,8 +102,11 @@ const deleteFlag = async (req, res, next) => {
     if (result.rows.length === 0) throw new Error(`Flag with the id of ${id} doesn't exist`);
 
     const deletedFlagName = result.rows[0].name;
-    // change id to getting it from result?
+    const deletedFlagId = result.rows[0].id;
+    req.deletedFlagId = deletedFlagId;
+
     res.status(200).send(`Flag '${deletedFlagName}' with id = ${id} successfully deleted`);
+    next();
   } catch (e) {
     res.status(400).send(e.message)
   }
@@ -103,3 +117,4 @@ exports.createFlag = createFlag;
 exports.editFlag = editFlag;
 exports.deleteFlag = deleteFlag;
 exports.getFlag = getFlag;
+exports.getAllFlagsData = getAllFlagsData;
