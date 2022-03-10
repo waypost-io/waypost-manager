@@ -2,44 +2,53 @@ const { Client } = require("pg");
 require("dotenv").config();
 
 const logQuery = (statement, parameters) => {
-  let timeStamp = new Date();
-  let formattedTimeStamp = timeStamp.toString().substring(4, 24);
+  const timeStamp = new Date();
+  const formattedTimeStamp = timeStamp.toString().substring(4, 24);
   console.log(formattedTimeStamp, statement, parameters);
 };
 
+// assign all functions to an object
+//
+
 module.exports = {
   async dbQuery(statement, ...parameters) {
-    let client = new Client({
-      database: process.env.DB,
+    const client = new Client({
       user: process.env.DB_USER,
+      host: "localhost",
       password: process.env.DB_PASSWORD,
+      database: process.env.DB,
+      port: 5432,
     });
 
     await client.connect();
 
     logQuery(statement, parameters);
-    let result = await client.query(statement, parameters);
+    const result = await client.query(statement, parameters);
     await client.end();
 
     return result;
   },
 
-  // connection to the user event database. Merge this function with the code above once I have a clearer picture of the process
-  async dbServerQuery(statement, ...parameters) {
+  async eventDbQuery(statement, ...parameters) {
+    // get the creds
+    this.dbQuery();
+  },
+
+  async verifyConnection({ user, host, password, database, port }) {
     let client = new Client({
-      pgUser: "placeholder",
-      pgHost: "placeholder",
-      pgPassword: "placeholder",
-      pgDatabase: "placeholder",
-      pgPort: "placeholder",
+      user,
+      host,
+      password,
+      database,
+      port,
     });
 
     await client.connect();
 
-    logQuery(statement, parameters);
-    let result = await client.query(statement, parameters);
-    await client.end();
+    console.log(
+      `Connection to host: ${host} database: ${database} successfully verified.`
+    );
 
-    return result;
+    await client.end();
   },
 };
