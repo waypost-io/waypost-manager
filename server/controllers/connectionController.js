@@ -11,21 +11,18 @@ const createConnection = async (req, res, next) => {
   //const errors = validationResult(req);
 
   try {
-    // Verify that the connection works
     await verifyConnection(req.body);
+  } catch (err) {
+    console.log(err);
+    res.status(500).send("Authentication failed");
+  }
 
-    // Save the connection to the database
+  try {
     await insertConnection(req.body);
-
     res.status(200).send("Connection added");
-  } catch (e) {
-    console.log(e);
-
-    if (e.routine === "auth_failed") {
-      res.status(500).send("Authentication failed");
-    } else {
-      res.status(500).send("Insert to database failed");
-    }
+  } catch (err) {
+    console.log(err);
+    res.status(500).send("Insert to database failed");
   }
 };
 

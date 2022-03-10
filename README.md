@@ -41,6 +41,24 @@ Returns all feature flags stored in the Waypost postgres db:
 ]
 ```
 
+## Endpoint: GET api/flags/:id
+
+Returns a feature flag stored in the Waypost db:
+
+```
+{
+  id: 1,
+  app_id: null,
+  name: 'Test flag 1',
+  description: 'This is a test description',
+  status: false,
+  percentage_split: 0,
+  is_experiment: false,
+  is_deleted: false,
+  date_created: 2021-03-02T08:00:00.000Z
+}
+```
+
 ## Endpoint: POST api/flags
 
 NOTE: This doc was last Updated 2022/03/04. This route will change in the future
