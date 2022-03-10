@@ -1,5 +1,15 @@
 const { dbQuery } = require('./db-query.js');
 
+async function getExperimentsForFlag(flagId) {
+  const query = `
+    SELECT * FROM experiments
+    WHERE flag_id = $1
+    ORDER BY date_started DESC;
+  `;
+  const result = await dbQuery(query, flagId);
+  return result.rows;
+}
+
 async function updateExperimentEndDate(flagId) {
   const updateQuery = `
     UPDATE experiments
@@ -11,3 +21,4 @@ async function updateExperimentEndDate(flagId) {
 }
 
 exports.updateExperimentEndDate = updateExperimentEndDate;
+exports.getExperimentsForFlag = getExperimentsForFlag;
