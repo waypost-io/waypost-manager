@@ -23,13 +23,13 @@ async function deleteConnection() {
   return result;
 }
 
-async function testEventQuery() {
-  const testQuery = "SELECT;";
+async function getDatabaseName() {
+  const databaseNameQuery = "SELECT pg_database FROM connection;";
 
-  const result = await eventDbQuery(testQuery);
-  return result.rows;
+  const result = await dbQuery(databaseNameQuery);
+  return result.rows[0]["pg_database"];
 }
 
 module.exports.insertConnection = insertConnection;
 module.exports.deleteConnection = deleteConnection;
-module.exports.testEventQuery = testEventQuery;
+module.exports.getDatabaseName = getDatabaseName;

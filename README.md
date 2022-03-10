@@ -176,11 +176,16 @@ No request body needed
 Successful response:
 
 ```
-`Database connected`
+{
+    "connected": true,
+    "database": "user_event_data"
+}
 ```
 
 Unsuccessful response:
 
 ```
-`Database not connected`
+{
+   "connected": false
+}
 ```
