@@ -1,6 +1,10 @@
 const { validationResult } = require("express-validator");
-const { insertConnection, deleteConnection } = require("../db/connection.js");
-const { verifyConnection } = require("../db/db-query.js");
+const {
+  insertConnection,
+  deleteConnection,
+  testEventQuery,
+} = require("../db/connection.js");
+const { verifyConnection } = require("../db/event-db-query.js");
 
 const createConnection = async (req, res, next) => {
   // TODO: create validator
@@ -16,14 +20,16 @@ const createConnection = async (req, res, next) => {
     console.log(e);
 
     if (e.routine === "auth_failed") {
-      res.status(500).send("Authentication failed.");
+      res.status(500).send("Authentication failed");
     } else {
-      res.status(500).send("Insert to database failed.");
+      res.status(500).send("Insert to database failed");
     }
   }
 };
 
 const removeConnection = async (req, res, next) => {
+  // test the event db query
+
   try {
     await deleteConnection();
     res.status(200).send("Connection removed");

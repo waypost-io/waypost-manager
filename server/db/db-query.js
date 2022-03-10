@@ -7,9 +7,6 @@ const logQuery = (statement, parameters) => {
   console.log(formattedTimeStamp, statement, parameters);
 };
 
-// assign all functions to an object
-//
-
 module.exports = {
   async dbQuery(statement, ...parameters) {
     const client = new Client({
@@ -27,28 +24,5 @@ module.exports = {
     await client.end();
 
     return result;
-  },
-
-  async eventDbQuery(statement, ...parameters) {
-    // get the creds
-    this.dbQuery();
-  },
-
-  async verifyConnection({ user, host, password, database, port }) {
-    let client = new Client({
-      user,
-      host,
-      password,
-      database,
-      port,
-    });
-
-    await client.connect();
-
-    console.log(
-      `Connection to host: ${host} database: ${database} successfully verified.`
-    );
-
-    await client.end();
   },
 };
