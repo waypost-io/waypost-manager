@@ -106,3 +106,47 @@ Response example:
 ```
 `Flag '${deletedFlagName}' with id = ${id} successfully deleted`
 ```
+
+## Endpoint: POST api/connection
+
+Request body:
+
+```
+{
+    "user": "user",
+    "host": "localhost",
+    "password": "password",
+    "database": "database name",
+    "port": 5432
+}
+```
+
+Possible responses:
+
+Success:
+
+```
+`Connection added`
+```
+
+Fail to authenticate:
+
+```
+`Authentication failed`
+```
+
+Fail to insert into db:
+
+```
+`Insert to database failed`
+```
+
+## Endpoint: DELETE api/connection
+
+No request body needed
+
+response:
+
+```
+`Connection removed`
+```
