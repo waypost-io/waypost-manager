@@ -34,7 +34,7 @@ const handleNewConnection = async (req, res, next) => {
 
 const sendUpdate = (req, res, next) => {
   const updatedFlags = updateFlags(req, [...flags]);
-  if (updateFlags) {
+  if (updateFlagsd) {
     flags = updatedFlags
     const data = `data: ${JSON.stringify(flags)}\n\n`;
     clients.forEach(({ res }) => res.write(data));
