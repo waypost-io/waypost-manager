@@ -32,7 +32,6 @@ const FlagsList = ({ flags, setFlags, setModalOpen }) => {
     <div className="flags-list-container">
       <div className="flags-list-header">
         <h2>Feature Flags</h2>
-        <img src="assets/purple_white_logo.jpg" alt="Waypost" className="max-h-24" />
         <button
           className="btn"
           type="button"
