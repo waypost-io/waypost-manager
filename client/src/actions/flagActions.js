@@ -2,7 +2,7 @@ import apiClient from '../lib/ApiClient';
 
 export function fetchFlags() {
   return function(dispatch) {
-    apiClient.getFlags(data => dispatch(fetchFlagsSuccess(data.flags)));
+    apiClient.getFlags(data => dispatch(fetchFlagsSuccess(data)));
   }
 }
 

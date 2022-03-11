@@ -13,14 +13,11 @@ import apiClient from "./lib/ApiClient";
 function App() {
   const dispatch = useDispatch();
   const flags = useSelector(state => state);
-  console.log(flags);
-  // const [flags, setFlags] = useState([]);
   const [dbName, setDbName] = useState("");
   const [ dbModalOpen, setDbModalOpen ] = useState(false);
 
   useEffect(() => {
     dispatch(fetchFlags());
-    // apiClient.getFlags((data) => setFlags(data));
     apiClient.checkDBConnection((data) => {
       if (data.connected) {
         setDbName(data.database);
