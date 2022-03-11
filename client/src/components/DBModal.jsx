@@ -72,8 +72,8 @@ const DBModal = ({ modalOpen, setModalOpen, setDbName }) => {
             <label htmlFor="database" className="mr-5">Database: </label>
             <input id="database" type="text" className="border border-primary-oxfordblue rounded-lg px-2" value={database} onChange={(e) => setDatabase(e.target.value)} />
           </div>
-          <div className="mt-2.5" className="mr-5">
-            <label htmlFor="port">Port: </label>
+          <div className="mt-2.5">
+            <label htmlFor="port" className="mr-5">Port: </label>
             <input id="port" type="text" className="border border-primary-oxfordblue rounded-lg px-2" value={port} onChange={(e) => setPort(e.target.value)} />
           </div>
           <button type="submit" className="btn bg-primary-violet" onClick={handleSubmit}>Submit</button>
