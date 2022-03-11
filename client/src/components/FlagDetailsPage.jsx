@@ -11,12 +11,14 @@ const FlagDetailsPage = () => {
   const [exptData, setExptData] = useState(undefined);
   const [isEditing, setIsEditing] = useState(false);
   const [ newDescription, setNewDescription ] = useState('');
+  const [ newPercent, setNewPercent ] = useState(0);
 
   useEffect(() => {
     if (!flagFetched) {
       apiClient.getFlag(flagId, (data) => {
         setFlagData(data);
         setNewDescription(data.description);
+        setNewPercent(data.percentage_split);
         setFlagFetched(true);
       });
     }
@@ -34,6 +36,10 @@ const FlagDetailsPage = () => {
   };
 
   const handleSaveEdits = () => {
+    // Validate inputs (percent must be between 0-100)
+    console.log(newDescription);
+    console.log(newPercent);
+    // Call apiClient to make PUT request
     setIsEditing(false);
   };
 
@@ -57,15 +63,34 @@ const FlagDetailsPage = () => {
         <h1 className="font-bold text-xl text-primary-violet">
           {flagData.name}
         </h1>
-        {!isEditing ? (
-          <button className="btn bg-primary-turquoise" onClick={handleEditFlag}>
-            Edit
-          </button>
-        ) : (
-          <button className="btn bg-primary-turquoise" onClick={handleSaveEdits}>
-            Save Changes
-          </button>
-        )}
+        <div>
+          {!isEditing ? (
+            <button className="btn bg-primary-turquoise" onClick={handleEditFlag}>
+              Edit
+            </button>
+          ) : (
+            <button className="btn bg-primary-turquoise" onClick={handleSaveEdits}>
+              Save Changes
+            </button>
+          )}
+          {flagData.is_experiment ? (
+            <>
+              <button
+                className="btn bg-primary-violet"
+                onClick={handleStopExperiment}
+              >
+                Stop Experiment
+              </button>
+            </>
+          ) : (
+            <button
+              className="btn bg-primary-turquoise"
+              onClick={handleCreateExperiment}
+            >
+              Create an experiment
+            </button>
+          )}
+        </div>
       </div>
       {!isEditing ? (
         <>
@@ -86,7 +111,7 @@ const FlagDetailsPage = () => {
       ) : (
         <form>
           <label htmlFor="new-description">Description: </label>
-          <textarea id="new-description" type="textarea" rows="3" cols="30" value={newDescription} className="block border border-primary-oxfordblue rounded-lg px-2"  />
+          <textarea id="new-description" type="textarea" rows="3" cols="30" value={newDescription} onChange={(e) => setNewDescription(e.target.value)} className="block border border-primary-oxfordblue rounded-lg px-2"  />
           <div className="mt-2.5 flex items-center">
             <label className="mr-2.5">Status: </label>
             <label className="toggle">
@@ -100,27 +125,9 @@ const FlagDetailsPage = () => {
           </div>
           <div  className="mt-2.5">
             <label htmlFor="new-percent">Percent of Users Exposed: </label>
-            <input id="new-percent" type="number" max={100} min={0} size="3" className="border border-primary-oxfordblue rounded-lg px-2" /> %
+            <input id="new-percent" type="number" max={100} min={0} size="3" className="border border-primary-oxfordblue rounded-lg px-2" value={newPercent} onChange={(e) => setNewPercent(e.target.value)} /> %
           </div>
         </form>
-      )}
-
-      {flagData.is_experiment ? (
-        <>
-          <button
-            className="btn bg-primary-violet"
-            onClick={handleStopExperiment}
-          >
-            Stop Experiment
-          </button>
-        </>
-      ) : (
-        <button
-          className="btn bg-primary-turquoise"
-          onClick={handleCreateExperiment}
-        >
-          Create an experiment
-        </button>
       )}
       {exptData &&
         exptData.map((expt) => {
