@@ -1,25 +1,27 @@
 /*
 COLOR PALETTES
 ------------------
-Option 1:
-Black: #00090c
-Turquoise: #00c3c7
-Purple: #c842a0
-
-Option 3:
-Black: #03002d
-Navy: #00577c
-Turquoise: #00ddea
-Light blue: #c7f9ff
-Red: #ff006b
-*/
-body {
-  color: #00090c;
+primary: {
+  'black': '#20232B',
+  'oxford_blue': '#0C182E',
+  'offwhite': '#F5F8FC',
+  'violet': '#B94E9C',
+  'turquoise': '#07C0C5'
+},
+secondary: {
+  'green': '#8FE3A5',
+  'pink': '#FCB8EA',
+  'salmon': '#F19693',
+  'skyblue': '#B0FAFC'
 }
 
-.section-title {
-  color: #c842a0;
-  margin-top: 30px;
+FONTS
+display: ['Orbitron', 'sans-serif'],
+body: ['Montserrat', 'sans-serif']
+*/
+body {
+  color: #20232B;
+  font-family: 'Montserrat', sans-serif;
 }
 
 button:hover, .x-icon:hover {
@@ -36,73 +38,12 @@ a:hover {
 }
 
 .btn {
-  background-color:  #00c3c7;
   color: white;
   border: none;
   border-radius: 10px;
   padding: 10px 25px;
   margin: 15px;
   font-weight: bold;
-}
-
-.red-btn {
-  background-color: #c842a0;
-}
-
-.accent-text {
-  color: #ff006b;
-  font-weight: bold;
-}
-
-.flag-dashboard {
-  display: flex;
-  height: 100%;
-  width: 100%;
-}
-
-.header {
-  background-color: #00090c;
-  color: white;
-  padding: 20px;
-}
-
-.flags-list-container {
-  padding: 10px 50px;
-  width: 100%;
-}
-
-.flags-list-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20px;
-}
-
-.create-flag-btn {
-  background-color: #00c3c7;
-  color: #00090c;
-  border: none;
-  border-radius: 15px;
-  padding: 10px 15px;
-}
-
-.create-flag-btn:hover {
-  background-color: #00c3c7;
-}
-
-.flag-item {
-  display: flex;
-  justify-content: space-between;
-  padding: 20px;
-  border-bottom: 1px solid gray;
-}
-
-.flag-name {
-  font-weight: bold;
-}
-
-.flag-controls {
-  display: flex;
 }
 
 .toggle {
@@ -167,18 +108,6 @@ input:checked + .slider:before {
   border-radius: 50%;
 }
 
-.delete-button {
-  color: darkgray;
-  background-color: transparent;
-  border: none;
-  font-size: 0.8rem;
-  margin-left: 10px;
-}
-
-.delete-button:hover {
-  color: #c842a0;
-}
-
 .overlay {
   position: absolute;
   left: 0;
@@ -216,29 +145,4 @@ input:checked + .slider:before {
   position: absolute;
   right: 0px;
   top: 0px;
-}
-
-.new-flag-form div {
-  margin-top: 10px;
-}
-
-.new-flag-form label {
-  margin-right: 20px;
-}
-
-.submit-new-flag-btn {
-  background-color: #00c3c7;
-  color: #00090c;
-  border: none;
-  border-radius: 10px;
-  padding: 10px 25px;
-  margin: 15px;
-}
-
-.flag-details-container {
-  padding: 20px 30px;
-}
-
-.create-expt-btn {
-  background-color: #00c3c7;
 }
