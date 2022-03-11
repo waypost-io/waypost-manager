@@ -27,6 +27,11 @@ async function getDatabaseName() {
   const databaseNameQuery = "SELECT pg_database FROM connection;";
 
   const result = await dbQuery(databaseNameQuery);
+
+  if (result.rows[0] === undefined) {
+    return undefined;
+  }
+
   return result.rows[0]["pg_database"];
 }
 

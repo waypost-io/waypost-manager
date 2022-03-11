@@ -15,12 +15,13 @@ const createConnection = async (req, res, next) => {
     await verifyConnection(req.body);
   } catch (err) {
     console.log(err);
-    res.status(500).send("Authentication failed");
+    res.status(200).send({ connected: false });
+    return;
   }
 
   try {
     await insertConnection(req.body);
-    res.status(200).send("Connection added");
+    res.status(200).send({ connected: true });
   } catch (err) {
     console.log(err);
     res.status(500).send("Insert to database failed");
@@ -40,10 +41,15 @@ const testConnection = async (req, res, next) => {
   // NOTE: this is not a great way to do this becuase is just assumes that the db is not connected no matter the error
   try {
     const result = await getDatabaseName();
-    res.status(200).send({ connected: true, database: result });
+
+    if (result === undefined) {
+      res.status(200).send({ connected: false });
+    } else {
+      res.status(200).send({ connected: true, database: result });
+    }
   } catch (err) {
     console.log(err);
-    res.status(500).send({ connected: false });
+    res.status(500);
   }
 };
 

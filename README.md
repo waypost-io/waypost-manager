@@ -150,7 +150,10 @@ Success:
 Fail to authenticate:
 
 ```
-`Authentication failed`
+status 200
+{
+    "connected": false
+}
 ```
 
 Fail to insert into db:
