@@ -41,17 +41,17 @@ const FlagDetailsPage = () => {
 
   if (!flagData) return null;
   return (
-    <div className="flag-details-container">
-      <h1>{flagData.name}</h1>
+    <div className="py-5 px-8 w-full">
+      <h1 className="font-bold text-xl">{flagData.name}</h1>
       <p>{flagData.description}</p>
-      <p>Current Status: <span className="accent-text">{flagData.status ? "On" : "Off"}</span></p>
-      <p>Rollout percentage: <span className="accent-text">{flagData.percentage_split}%</span></p>
+      <p>Current Status: <span className="text-primary-violet font-bold">{flagData.status ? "On" : "Off"}</span></p>
+      <p>Rollout percentage: <span className="text-primary-violet font-bold">{flagData.percentage_split}%</span></p>
       {flagData.is_experiment ? (
         <>
-          <button className="btn red-btn" onClick={handleStopExperiment}>Stop Experiment</button>
+          <button className="btn bg-primary-violet" onClick={handleStopExperiment}>Stop Experiment</button>
         </>
       ) :
-        <button className="btn" onClick={handleCreateExperiment}>
+        <button className="btn bg-primary-turquoise" onClick={handleCreateExperiment}>
           Create an experiment
         </button>
       }

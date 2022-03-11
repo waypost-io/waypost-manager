@@ -33,7 +33,7 @@ const FlagsList = ({ flags, setFlags, setModalOpen }) => {
       <div className="flex justify-between items-center p-5">
         <h2 className="text-xl font-bold">Feature Flags</h2>
         <button
-          className="btn"
+          className="btn bg-primary-turquoise"
           type="button"
           onClick={() => setModalOpen(true)}
         >
