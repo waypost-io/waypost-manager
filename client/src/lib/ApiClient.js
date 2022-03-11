@@ -62,6 +62,13 @@ const apiClient = {
       .then(callback)
       .catch(logError);
   },
+  getExperiments: function(id, callback) {
+    return axios
+      .get(`/api/experiments/${id}`)
+      .then(unwrapData)
+      .then(callback)
+      .catch(logError);
+  }
 };
 
 export default apiClient;

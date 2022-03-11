@@ -7,6 +7,8 @@ const FlagDetailsPage = () => {
   const { flagId } = useParams();
   const [ flagFetched, setFlagFetched ] = useState(false);
   const [ flagData, setFlagData ] = useState(undefined);
+  const [ exptsFetched, setExptsFetched ] = useState(false);
+  const [ exptData, setExptData ] = useState(undefined);
 
   useEffect(() => {
     if (!flagFetched) {
@@ -17,12 +19,20 @@ const FlagDetailsPage = () => {
     }
   }, [flagId, flagFetched]);
 
+  useEffect(() => {
+    apiClient.getExperiments(flagId, (data) => {
+      setExptsFetched(true);
+      setExptData(data);
+    });
+  }, [exptsFetched, flagId]);
+
   const setFlagExptStatus = (status) => {
     setFlagData({ ...flagData, is_experiment: status });
   };
 
   const handleCreateExperiment = (e) => {
     apiClient.toggleExperiment(flagId, true, () => setFlagExptStatus(true));
+    setExptsFetched(false);
   };
 
   const handleStopExperiment = () => {
@@ -30,7 +40,6 @@ const FlagDetailsPage = () => {
   };
 
   if (!flagData) return null;
-  console.log(flagData);
   return (
     <div className="flag-details-container">
       <h1>{flagData.name}</h1>
@@ -39,7 +48,6 @@ const FlagDetailsPage = () => {
       <p>Rollout percentage: <span className="accent-text">{flagData.percentage_split}%</span></p>
       {flagData.is_experiment ? (
         <>
-          <ExperimentInfo />
           <button className="btn red-btn" onClick={handleStopExperiment}>Stop Experiment</button>
         </>
       ) :
@@ -47,6 +55,9 @@ const FlagDetailsPage = () => {
           Create an experiment
         </button>
       }
+      {exptData && exptData.map(expt => {
+        return <ExperimentInfo key={expt.id} { ...expt } />
+      })}
     </div>
   );
 };

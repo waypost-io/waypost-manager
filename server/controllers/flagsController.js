@@ -3,6 +3,7 @@ const { validationResult } = require("express-validator");
 const PGTable = require("../db/PGTable");
 const { FLAG_TABLE_NAME } = require("../constants/db");
 const { getNowString } = require("../utils");
+const { createExperiment, stopExperiment } = require("./experimentController.js");
 
 const flagTable = new PGTable(FLAG_TABLE_NAME);
 flagTable.init();
@@ -82,6 +83,11 @@ const editFlag = async (req, res, next) => {
   const id = req.params.id;
   const now = getNowString();
   const updatedFields = createUpdateFlagObj(req.body);
+  if (updatedFields.is_experiment) {
+    createExperiment(id);
+  } else if (updatedFields.is_experiment === false) {
+    stopExperiment(id);
+  }
 
   try {
     const updatedFlag = await flagTable.editRow(id, updatedFields);
