@@ -71,7 +71,7 @@ const apiClient = {
   },
   connectToDB: function(dbObj, callback) {
     return axios
-      .post(`api/connection`, dbObj)
+      .post('api/connection', dbObj)
       .then(unwrapData)
       .then(callback)
       .catch(logError)
@@ -79,6 +79,13 @@ const apiClient = {
   removeDBConnection: function(callback) {
     return axios
       .delete('api/connection')
+      .then(unwrapData)
+      .then(callback)
+      .catch(logError)
+  },
+  checkDBConnection: function(callback) {
+    return axios
+      .get('api/connection')
       .then(unwrapData)
       .then(callback)
       .catch(logError)

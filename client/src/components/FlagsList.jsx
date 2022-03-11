@@ -1,8 +1,13 @@
-import React from "react";
+import React, { useEffect } from "react";
 import apiClient from "../lib/ApiClient";
 import FlagItem from "./FlagItem";
+import FlagsHeader from "./FlagsHeader";
 
-const FlagsList = ({ flags, setFlags, setModalOpen }) => {
+const FlagsList = ({ flags, setFlags, setFlagModalOpen, setDbModalOpen, dbName, setDbName }) => {
+  useEffect(() => {
+
+  })
+
   const handleToggle = (id) => {
     return (e) => {
       apiClient.toggleFlag(id, e.target.checked, () => {
@@ -28,6 +33,7 @@ const FlagsList = ({ flags, setFlags, setModalOpen }) => {
     };
   };
 
+  console.log(dbName);
   return (
     <div className="flags-list-container">
       <div className="flags-list-header">
