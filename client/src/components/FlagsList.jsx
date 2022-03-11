@@ -1,20 +1,16 @@
 import React from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { toggleFlag } from '../actions/flagActions';
 import apiClient from "../lib/ApiClient";
 import FlagItem from "./FlagItem";
 
-const FlagsList = ({ flags, setFlags, setModalOpen }) => {
+const FlagsList = ({ setFlags, setModalOpen }) => {
+  const dispatch = useDispatch();
+  const flags = useSelector(state => state);
+
   const handleToggle = (id) => {
     return (e) => {
-      apiClient.toggleFlag(id, e.target.checked, () => {
-        const updatedFlags = flags.map((flag) => {
-          if (flag.id === id) {
-            return { ...flag, status: e.target.checked };
-          } else {
-            return flag;
-          }
-        });
-        setFlags(updatedFlags);
-      });
+      dispatch(toggleFlag(id, e.target.checked));
     };
   };
 
