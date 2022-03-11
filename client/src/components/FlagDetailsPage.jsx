@@ -5,15 +5,18 @@ import apiClient from "../lib/ApiClient";
 
 const FlagDetailsPage = () => {
   const { flagId } = useParams();
-  const [ flagFetched, setFlagFetched ] = useState(false);
-  const [ flagData, setFlagData ] = useState(undefined);
-  const [ exptsFetched, setExptsFetched ] = useState(false);
-  const [ exptData, setExptData ] = useState(undefined);
+  const [flagFetched, setFlagFetched] = useState(false);
+  const [flagData, setFlagData] = useState(undefined);
+  const [exptsFetched, setExptsFetched] = useState(false);
+  const [exptData, setExptData] = useState(undefined);
+  const [isEditing, setIsEditing] = useState(false);
+  const [ newDescription, setNewDescription ] = useState('');
 
   useEffect(() => {
     if (!flagFetched) {
       apiClient.getFlag(flagId, (data) => {
         setFlagData(data);
+        setNewDescription(data.description);
         setFlagFetched(true);
       });
     }
@@ -25,6 +28,14 @@ const FlagDetailsPage = () => {
       setExptData(data);
     });
   }, [exptsFetched, flagId]);
+
+  const handleEditFlag = () => {
+    setIsEditing(true);
+  };
+
+  const handleSaveEdits = () => {
+    setIsEditing(false);
+  };
 
   const setFlagExptStatus = (status) => {
     setFlagData({ ...flagData, is_experiment: status });
@@ -42,22 +53,79 @@ const FlagDetailsPage = () => {
   if (!flagData) return null;
   return (
     <div className="py-5 px-8 w-full">
-      <h1 className="font-bold text-xl">{flagData.name}</h1>
-      <p>{flagData.description}</p>
-      <p>Current Status: <span className="text-primary-violet font-bold">{flagData.status ? "On" : "Off"}</span></p>
-      <p>Rollout percentage: <span className="text-primary-violet font-bold">{flagData.percentage_split}%</span></p>
+      <div className="flex justify-between items-center border-b border-b-primary-oxfordblue mb-5">
+        <h1 className="font-bold text-xl text-primary-violet">
+          {flagData.name}
+        </h1>
+        {!isEditing ? (
+          <button className="btn bg-primary-turquoise" onClick={handleEditFlag}>
+            Edit
+          </button>
+        ) : (
+          <button className="btn bg-primary-turquoise" onClick={handleSaveEdits}>
+            Save Changes
+          </button>
+        )}
+      </div>
+      {!isEditing ? (
+        <>
+          <p>{flagData.description}</p>
+          <p>
+            Current Status:{" "}
+            <span className="text-primary-violet font-bold">
+              {flagData.status ? "On" : "Off"}
+            </span>
+          </p>
+          <p>
+            Rollout percentage:{" "}
+            <span className="text-primary-violet font-bold">
+              {flagData.percentage_split}%
+            </span>
+          </p>
+        </>
+      ) : (
+        <form>
+          <label htmlFor="new-description">Description: </label>
+          <textarea id="new-description" type="textarea" rows="3" cols="30" value={newDescription} className="block border border-primary-oxfordblue rounded-lg px-2"  />
+          <div className="mt-2.5 flex items-center">
+            <label className="mr-2.5">Status: </label>
+            <label className="toggle">
+            <input
+              type="checkbox"
+              defaultChecked={flagData.status ? true : false}
+              // onChange={handleToggle(id)}
+            />
+            <span className="slider round"></span>
+            </label>
+          </div>
+          <div  className="mt-2.5">
+            <label htmlFor="new-percent">Percent of Users Exposed: </label>
+            <input id="new-percent" type="number" max={100} min={0} size="3" className="border border-primary-oxfordblue rounded-lg px-2" /> %
+          </div>
+        </form>
+      )}
+
       {flagData.is_experiment ? (
         <>
-          <button className="btn bg-primary-violet" onClick={handleStopExperiment}>Stop Experiment</button>
+          <button
+            className="btn bg-primary-violet"
+            onClick={handleStopExperiment}
+          >
+            Stop Experiment
+          </button>
         </>
-      ) :
-        <button className="btn bg-primary-turquoise" onClick={handleCreateExperiment}>
+      ) : (
+        <button
+          className="btn bg-primary-turquoise"
+          onClick={handleCreateExperiment}
+        >
           Create an experiment
         </button>
-      }
-      {exptData && exptData.map(expt => {
-        return <ExperimentInfo key={expt.id} { ...expt } />
-      })}
+      )}
+      {exptData &&
+        exptData.map((expt) => {
+          return <ExperimentInfo key={expt.id} {...expt} />;
+        })}
     </div>
   );
 };
