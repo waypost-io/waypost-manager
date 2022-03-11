@@ -17,7 +17,8 @@ module.exports = {
       }
     },
     fontFamily: {
-      sans: ['Montserrat Regular', 'sans-serif']
+      display: ['Orbitron', 'sans-serif'],
+      body: ['Montserrat', 'sans-serif']
     },
     extend: {},
   },
