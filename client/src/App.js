@@ -17,7 +17,7 @@ function App() {
   return (
     <>
       <Header />
-      <main className="flag-dashboard">
+      <main className="flex w-full h-full">
         <SideNav />
         <BrowserRouter>
           <Routes>
