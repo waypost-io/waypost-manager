@@ -1,7 +1,6 @@
 import React from "react";
 import apiClient from "../lib/ApiClient";
 import FlagItem from "./FlagItem";
-import FlagsHeader from "./FlagsHeader";
 
 const FlagsList = ({ flags, setFlags, setModalOpen }) => {
   const handleToggle = (id) => {

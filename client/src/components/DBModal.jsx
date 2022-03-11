@@ -12,6 +12,22 @@ const DBModal = ({ modalOpen, setModalOpen, setDbName }) => {
     setModalOpen(false);
   };
 
+  const validateForm = (dbObj) => {
+    Object.keys(dbObj).forEach((key) => {
+      if (dbObj[key].trim() === "") {
+        return "All fields must be filled in."
+      }
+    })
+
+    if (!dbObj.host.test(/^[a-z\d.-]+$/i)) {
+      return "Invalid host name";
+    }
+
+    if (Number(dbObj.port) < 0 || Number(dbObj.port) > 65535) {
+      return "Invalid port number. Must be a number between 0 and 65535"
+    }
+  }
+
   const resetForm = () => {
     setModalOpen(false);
     setUser("")
@@ -24,6 +40,12 @@ const DBModal = ({ modalOpen, setModalOpen, setDbName }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const dbObj = { user, host, password, database, port };
+    const invalidPropMessage = validateForm(dbObj);
+    if (invalidPropMessage) {
+      alert(invalidPropMessage);
+      return
+    }
+
     apiClient.connectToDB(dbObj, () => {
       setDbName(database);
       resetForm();
