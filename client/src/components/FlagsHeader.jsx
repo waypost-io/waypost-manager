@@ -4,10 +4,11 @@ import apiClient from "../lib/ApiClient";
 const FlagsHeader = ({ dbName, setDbName, setDbModalOpen, setFlagModalOpen }) => {
   const removeDBConnection = async (e) => {
     e.preventDefault();
-    alert("Are you sure you want to disconnect?");
-    await apiClient.removeDBConnection(() => {
-      setDbName("");
-    })
+    if (window.confirm("Are you sure you want to disconnect?")) {
+      await apiClient.removeDBConnection(() => {
+        setDbName("");
+      })
+    }
   }
 
   return (
@@ -24,7 +25,7 @@ const FlagsHeader = ({ dbName, setDbName, setDbModalOpen, setFlagModalOpen }) =>
           </button>
           :
           <button className="btn" type="button" onClick={removeDBConnection}>
-            Remove Connection
+            Disconnect
           </button>
         }
       </div>

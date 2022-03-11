@@ -1,13 +1,9 @@
-import React, { useEffect } from "react";
+import React from "react";
 import apiClient from "../lib/ApiClient";
 import FlagItem from "./FlagItem";
 import FlagsHeader from "./FlagsHeader";
 
 const FlagsList = ({ flags, setFlags, setFlagModalOpen, setDbModalOpen, dbName, setDbName }) => {
-  useEffect(() => {
-
-  })
-
   const handleToggle = (id) => {
     return (e) => {
       apiClient.toggleFlag(id, e.target.checked, () => {
@@ -26,14 +22,14 @@ const FlagsList = ({ flags, setFlags, setFlagModalOpen, setDbModalOpen, dbName, 
   const handleDeleteFlag = (id) => {
     return (e) => {
       e.preventDefault();
-      alert("Are you sure you want to delete this?");
-      apiClient.deleteFlag(id, () => {
-        setFlags(flags.filter((flag) => flag.id !== id));
-      });
+      if (window.confirm("Are you sure you want to delete this?")) {
+        apiClient.deleteFlag(id, () => {
+          setFlags(flags.filter((flag) => flag.id !== id));
+        });
+      }
     };
   };
 
-  console.log(dbName);
   return (
     <div className="flags-list-container">
       <div className="flags-list-header">
