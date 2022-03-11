@@ -26,7 +26,8 @@ function App() {
 
   return (
     <>
-      <Header />
+      <Header setDbModalOpen={setDbModalOpen} dbName={dbName} setDbName={setDbName}/>
+      <DBModal modalOpen={dbModalOpen} setModalOpen={setDbModalOpen} setDbName={setDbName}/>
       <main className="flex w-full h-full">
         <SideNav />
         <BrowserRouter>

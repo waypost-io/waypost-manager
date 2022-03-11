@@ -13,13 +13,11 @@ const DBModal = ({ modalOpen, setModalOpen, setDbName }) => {
   };
 
   const validateForm = (dbObj) => {
-    Object.keys(dbObj).forEach((key) => {
-      if (dbObj[key].trim() === "") {
-        return "All fields must be filled in."
-      }
-    })
+    if (Object.values(dbObj).some(val => val === "")) {
+      return "All fields must be filled in."
+    }
 
-    if (!dbObj.host.test(/^[a-z\d.-]+$/i)) {
+    if (!/^[a-z\d.-]+$/i.test(dbObj.host)) {
       return "Invalid host name";
     }
 
@@ -56,29 +54,29 @@ const DBModal = ({ modalOpen, setModalOpen, setDbName }) => {
     <div className={`overlay ${modalOpen ? "" : "hidden"}`}>
       <div className="new-flag-modal">
         <i className="x-icon icon close-modal" onClick={handleCloseModal}></i>
-        <h2>Database Connection</h2>
+        <h2 className="font-bold text-xl text-primary-violet">Database Connection</h2>
         <form className="database-form">
-          <div>
-            <label htmlFor="user">Username: </label>
-            <input id="user" type="text" value={user} onChange={(e) => setUser(e.target.value)} />
+          <div className="mt-2.5">
+            <label htmlFor="user" className="mr-5">Username: </label>
+            <input id="user" type="text" className="border border-primary-oxfordblue rounded-lg px-2" value={user} onChange={(e) => setUser(e.target.value)} />
           </div>
-          <div>
-            <label htmlFor="host">Host: </label>
-            <input id="host" type="text" value={host} onChange={(e) => setHost(e.target.value)} />
+          <div className="mt-2.5">
+            <label htmlFor="host" className="mr-5">Host: </label>
+            <input id="host" type="text" className="border border-primary-oxfordblue rounded-lg px-2" value={host} onChange={(e) => setHost(e.target.value)} />
           </div>
-          <div>
-            <label htmlFor="password">Password: </label>
-            <input id="password" type="text" value={password} onChange={(e) => setPassword(e.target.value)} />
+          <div className="mt-2.5">
+            <label htmlFor="password" className="mr-5">Password: </label>
+            <input id="password" type="text" className="border border-primary-oxfordblue rounded-lg px-2" value={password} onChange={(e) => setPassword(e.target.value)} />
           </div>
-          <div>
-            <label htmlFor="database">Database: </label>
-            <input id="database" type="text" value={database} onChange={(e) => setDatabase(e.target.value)} />
+          <div className="mt-2.5">
+            <label htmlFor="database" className="mr-5">Database: </label>
+            <input id="database" type="text" className="border border-primary-oxfordblue rounded-lg px-2" value={database} onChange={(e) => setDatabase(e.target.value)} />
           </div>
-          <div>
+          <div className="mt-2.5" className="mr-5">
             <label htmlFor="port">Port: </label>
-            <input id="port" type="text" value={port} onChange={(e) => setPort(e.target.value)} />
+            <input id="port" type="text" className="border border-primary-oxfordblue rounded-lg px-2" value={port} onChange={(e) => setPort(e.target.value)} />
           </div>
-          <button type="submit" className="submit-db-connection" onClick={handleSubmit}>Submit</button>
+          <button type="submit" className="btn bg-primary-violet" onClick={handleSubmit}>Submit</button>
         </form>
       </div>
     </div>
