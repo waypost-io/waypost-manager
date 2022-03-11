@@ -61,7 +61,6 @@ a:hover {
 }
 
 .sidenav {
-  background-color: #00090c;
   color: white;
   min-height: 100vh;
   width: clamp(135px, 300px, 350px);

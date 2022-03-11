@@ -4,6 +4,7 @@ import './App.css';
 import FlagDashboard from './components/FlagDashboard';
 import SideNav from './components/SideNav';
 import FlagDetailsPage from './components/FlagDetailsPage';
+import Header from './components/Header';
 import apiClient from "./lib/ApiClient";
 
 function App() {
@@ -14,15 +15,18 @@ function App() {
   }, []);
 
   return (
-    <main className="flag-dashboard">
-      <SideNav />
-      <BrowserRouter>
-        <Routes>
-          <Route exact path="/" element={<FlagDashboard flags={flags} setFlags={setFlags} />} />
-          <Route path="/flags/:flagId" element={<FlagDetailsPage flags={flags} setFlags={setFlags} />} />
-        </Routes>
-      </BrowserRouter>
-    </main>
+    <>
+      <Header />
+      <main className="flag-dashboard">
+        <SideNav />
+        <BrowserRouter>
+          <Routes>
+            <Route exact path="/" element={<FlagDashboard flags={flags} setFlags={setFlags} />} />
+            <Route path="/flags/:flagId" element={<FlagDetailsPage flags={flags} setFlags={setFlags} />} />
+          </Routes>
+        </BrowserRouter>
+      </main>
+    </>
   );
 }
 

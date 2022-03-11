@@ -2,7 +2,7 @@ import React from 'react';
 
 const SideNav = () => {
   return (
-    <div className="sidenav">
+    <div className="bg-primary-black">
       <img src="assets/PNGs/Waypost_logo_on_dark.png" alt="Waypost" />
       <ul className="sidenav-list">
         <a href="/"><li>Flags Dashboard</li></a>
