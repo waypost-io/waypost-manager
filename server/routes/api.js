@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const flagsController = require("../controllers/flagsController");
+const experimentController = require("../controllers/experimentController");
 const connectionController = require("../controllers/connectionController");
 const streamController = require("../controllers/streamController");
 const { validateNewFlag } = require("../validators/validators");
@@ -29,6 +30,8 @@ router.delete(
   flagsController.deleteFlag,
   streamController.sendUpdate
 );
+
+router.get("/experiments/:flagId", experimentController.getExperiments);
 
 router.post("/connection", connectionController.createConnection);
 
