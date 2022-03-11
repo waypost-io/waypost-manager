@@ -47,7 +47,7 @@ const NewFlagModal = ({ flags, setFlags, modalOpen, setModalOpen }) => {
             <label htmlFor="flag-active">Active?</label>
             <input id="flag-active" type="checkbox" checked={status} onChange={(e) => setStatus(e.target.checked)} />
           </div>
-          <button type="submit" className="submit-new-flag-btn" onClick={handleSubmit}>Submit</button>
+          <button type="submit" className="btn" onClick={handleSubmit}>Submit</button>
         </form>
       </div>
     </div>

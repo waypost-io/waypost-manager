@@ -43,7 +43,7 @@ a:hover {
 }
 
 .btn {
-  background-color:  #00c3c7;
+  background-color:  #07C0C5;
   color: white;
   border: none;
   border-radius: 10px;
@@ -59,57 +59,6 @@ a:hover {
 .accent-text {
   color: #ff006b;
   font-weight: bold;
-}
-
-.flag-dashboard {
-  display: flex;
-  height: 100%;
-  width: 100%;
-}
-
-.header {
-  background-color: #00090c;
-  color: white;
-  padding: 20px;
-}
-
-.flags-list-container {
-  padding: 10px 50px;
-  width: 100%;
-}
-
-.flags-list-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20px;
-}
-
-.create-flag-btn {
-  background-color: #00c3c7;
-  color: #00090c;
-  border: none;
-  border-radius: 15px;
-  padding: 10px 15px;
-}
-
-.create-flag-btn:hover {
-  background-color: #00c3c7;
-}
-
-.flag-item {
-  display: flex;
-  justify-content: space-between;
-  padding: 20px;
-  border-bottom: 1px solid gray;
-}
-
-.flag-name {
-  font-weight: bold;
-}
-
-.flag-controls {
-  display: flex;
 }
 
 .toggle {
@@ -174,17 +123,6 @@ input:checked + .slider:before {
   border-radius: 50%;
 }
 
-.delete-button {
-  color: darkgray;
-  background-color: transparent;
-  border: none;
-  font-size: 0.8rem;
-  margin-left: 10px;
-}
-
-.delete-button:hover {
-  color: #c842a0;
-}
 
 .overlay {
   position: absolute;

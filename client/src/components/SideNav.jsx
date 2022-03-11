@@ -1,9 +1,9 @@
 import React from 'react';
 
 const navLinks =[
-  { title: 'Flags Dashboard', path: "/" },
-  { title: 'Event Log', path: "/"},
-  { title: 'Get an SDK Key', path: "/"}
+  { id: 1, title: 'Flags Dashboard', path: "/" },
+  { id: 2, title: 'Event Log', path: "/"},
+  { id: 3, title: 'Get an SDK Key', path: "/"}
 ]
 
 const SideNav = () => {
@@ -13,8 +13,8 @@ const SideNav = () => {
       <ul className="font-bold p-0">
         {navLinks.map(item => {
           return (
-            <a href={item.path}>
-              <li className="p-5 hover:bg-primary-violet hover:text-primary-offwhite">{item.title}</li>
+            <a key={`a-${item.id}`} href={item.path}>
+              <li key={`li-${item.id}`} className="p-5 hover:bg-primary-violet hover:text-primary-offwhite">{item.title}</li>
             </a>
             )
         })}
