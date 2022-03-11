@@ -1,8 +1,8 @@
 import React from 'react';
 
 const ExperimentInfo = ({ id, date_started, date_ended }) => {
-  const startDate = new Date(date_started).toDateString();
-  const endDate = date_ended ? new Date(date_ended).toDateString() : "Present";
+  const startDate = new Date(date_started).toLocaleDateString("en-US");
+  const endDate = date_ended ? new Date(date_ended).toLocaleDateString("en-US") : "Present";
 
   return (
     <div>
