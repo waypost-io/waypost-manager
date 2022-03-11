@@ -3,7 +3,7 @@ import apiClient from "../lib/ApiClient";
 import FlagItem from "./FlagItem";
 import FlagsHeader from "./FlagsHeader";
 
-const FlagsList = ({ flags, setFlags, setFlagModalOpen, setDbModalOpen, dbName, setDbName }) => {
+const FlagsList = ({ flags, setFlags, setModalOpen }) => {
   const handleToggle = (id) => {
     return (e) => {
       apiClient.toggleFlag(id, e.target.checked, () => {

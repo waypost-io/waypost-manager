@@ -3,15 +3,13 @@ import FlagsList from './FlagsList';
 import NewFlagModal from './NewFlagModal';
 import DBModal from './DBModal.jsx'
 
-const FlagDashboard = ({ flags, setFlags, dbName, setDbName }) => {
+const FlagDashboard = ({ flags, setFlags }) => {
   const [ flagModalOpen, setFlagModalOpen ] = useState(false);
-  const [ dbModalOpen, setDbModalOpen ] = useState(false);
 
   return (
     <>
-      <FlagsList flags={flags} setFlags={setFlags} setFlagModalOpen={setFlagModalOpen} setDbModalOpen={setDbModalOpen} dbName={dbName} setDbName={setDbName}/>
+      <FlagsList flags={flags} setFlags={setFlags} setModalOpen={setFlagModalOpen} />
       <NewFlagModal flags={flags} setFlags={setFlags} modalOpen={flagModalOpen} setModalOpen={setFlagModalOpen} />
-      <DBModal modalOpen={dbModalOpen} setModalOpen={setDbModalOpen} setDbName={setDbName}/>
     </>
   );
 };

@@ -5,11 +5,13 @@ import FlagDashboard from './components/FlagDashboard';
 import SideNav from './components/SideNav';
 import FlagDetailsPage from './components/FlagDetailsPage';
 import Header from './components/Header';
+import DBModal from './components/DBModal';
 import apiClient from "./lib/ApiClient";
 
 function App() {
   const [flags, setFlags] = useState([]);
   const [dbName, setDbName] = useState("");
+  const [ dbModalOpen, setDbModalOpen ] = useState(false);
 
   useEffect(() => {
     apiClient.getFlags((data) => setFlags(data));
@@ -23,9 +25,9 @@ function App() {
   }, []);
 
   return (
-<<<<<<< HEAD
     <>
-      <Header />
+      <Header setDbModalOpen={setDbModalOpen} dbName={dbName} setDbName={setDbName}/>
+      <DBModal modalOpen={dbModalOpen} setModalOpen={setDbModalOpen} setDbName={setDbName}/>
       <main className="flag-dashboard">
         <SideNav />
         <BrowserRouter>
@@ -36,17 +38,6 @@ function App() {
         </BrowserRouter>
       </main>
     </>
-=======
-    <main className="flag-dashboard">
-      <SideNav />
-      <BrowserRouter>
-        <Routes>
-          <Route exact path="/" element={<FlagDashboard flags={flags} setFlags={setFlags} dbName={dbName} setDbName={setDbName}/>} />
-          <Route path="/flags/:flagId" element={<FlagDetailsPage flags={flags} setFlags={setFlags} dbName={dbName} setDbName={setDbName}/>} />
-        </Routes>
-      </BrowserRouter>
-    </main>
->>>>>>> e936998 (Added connection to DB and DB-form to FlagList. Created FlagsHeader component)
   );
 }
 
