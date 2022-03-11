@@ -5,6 +5,7 @@ const NewFlagModal = ({ flags, setFlags, modalOpen, setModalOpen }) => {
   const [ name, setName ] = useState('');
   const [ description, setDescription ] = useState('');
   const [ status, setStatus ] = useState(false);
+  const [ percentage, setPercentage ] = useState(100);
 
   const handleCloseModal = () => {
     setModalOpen(false);
@@ -47,6 +48,10 @@ const NewFlagModal = ({ flags, setFlags, modalOpen, setModalOpen }) => {
           <div className="mt-2.5">
             <label htmlFor="flag-active" className="mr-5">Active?</label>
             <input id="flag-active" type="checkbox" checked={status} onChange={(e) => setStatus(e.target.checked)} />
+          </div>
+          <div className="mt-2.5">
+            <label htmlFor="flag-percent" className="mr-5">Percent of Users Exposed</label>
+            <input id="flag-percent" type="number" max={100} min={0} size="3" className="border border-primary-oxfordblue rounded-lg px-2" value={percentage} onChange={(e) => setPercentage(e.target.value)} /> %
           </div>
           <button type="submit" className="btn bg-primary-violet" onClick={handleSubmit}>Submit</button>
         </form>
