@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchFlags } from './actions/flagActions';
 import './App.css';
 import FlagDashboard from './components/FlagDashboard';
 import SideNav from './components/SideNav';
@@ -9,12 +11,16 @@ import DBModal from './components/DBModal';
 import apiClient from "./lib/ApiClient";
 
 function App() {
-  const [flags, setFlags] = useState([]);
+  const dispatch = useDispatch();
+  const flags = useSelector(state => state);
+  console.log(flags);
+  // const [flags, setFlags] = useState([]);
   const [dbName, setDbName] = useState("");
   const [ dbModalOpen, setDbModalOpen ] = useState(false);
 
   useEffect(() => {
-    apiClient.getFlags((data) => setFlags(data));
+    dispatch(fetchFlags());
+    // apiClient.getFlags((data) => setFlags(data));
     apiClient.checkDBConnection((data) => {
       if (data.connected) {
         setDbName(data.database);
@@ -22,7 +28,7 @@ function App() {
         setDbName("")
       }
     })
-  }, []);
+  }, [dispatch]);
 
   return (
     <>
@@ -32,8 +38,8 @@ function App() {
         <SideNav />
         <BrowserRouter>
           <Routes>
-            <Route exact path="/" element={<FlagDashboard flags={flags} setFlags={setFlags} />} />
-            <Route path="/flags/:flagId" element={<FlagDetailsPage flags={flags} setFlags={setFlags} />} />
+            <Route exact path="/" element={<FlagDashboard flags={flags} />} />
+            <Route path="/flags/:flagId" element={<FlagDetailsPage flags={flags} />} />
           </Routes>
         </BrowserRouter>
       </main>
