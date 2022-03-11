@@ -20,9 +20,10 @@ const DBModal = ({ modalOpen, setModalOpen, setDbName }) => {
     if (!/^[a-z\d.-]+$/i.test(dbObj.host)) {
       return "Invalid host name";
     }
-
-    if (Number(dbObj.port) < 0 || Number(dbObj.port) > 65535) {
-      return "Invalid port number. Must be a number between 0 and 65535"
+    
+    const port = Number(dbObj.port);
+    if (Number.isNaN(port) || port < 0 || port > 65535 || port !== Math.floor(port)) {
+      return "Invalid port number. Must be an integer between 0 and 65535"
     }
   }
 
@@ -44,9 +45,13 @@ const DBModal = ({ modalOpen, setModalOpen, setDbName }) => {
       return
     }
 
-    apiClient.connectToDB(dbObj, () => {
-      setDbName(database);
-      resetForm();
+    apiClient.connectToDB(dbObj, (data) => {
+      if (data.connected) {
+        setDbName(database);
+        resetForm();
+      } else {
+        alert("The connection didn't work, please check your inputs and try again");
+      }
     })
   }
 
