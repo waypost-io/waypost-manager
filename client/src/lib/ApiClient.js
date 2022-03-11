@@ -68,7 +68,28 @@ const apiClient = {
       .then(unwrapData)
       .then(callback)
       .catch(logError);
-  }
+  },
+  connectToDB: function(dbObj, callback) {
+    return axios
+      .post('api/connection', dbObj)
+      .then(unwrapData)
+      .then(callback)
+      .catch(logError)
+  },
+  removeDBConnection: function(callback) {
+    return axios
+      .delete('api/connection')
+      .then(unwrapData)
+      .then(callback)
+      .catch(logError)
+  },
+  checkDBConnection: function(callback) {
+    return axios
+      .get('api/connection')
+      .then(unwrapData)
+      .then(callback)
+      .catch(logError)
+  },
 };
 
 export default apiClient;

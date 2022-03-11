@@ -3,12 +3,12 @@ import FlagsList from './FlagsList';
 import NewFlagModal from './NewFlagModal';
 
 const FlagDashboard = ({ flags, setFlags }) => {
-  const [ modalOpen, setModalOpen ] = useState(false);
+  const [ flagModalOpen, setFlagModalOpen ] = useState(false);
 
   return (
     <>
-      <FlagsList flags={flags} setFlags={setFlags} setModalOpen={setModalOpen} />
-      <NewFlagModal flags={flags} setFlags={setFlags} modalOpen={modalOpen} setModalOpen={setModalOpen} />
+      <FlagsList flags={flags} setFlags={setFlags} setModalOpen={setFlagModalOpen} />
+      <NewFlagModal flags={flags} setFlags={setFlags} modalOpen={flagModalOpen} setModalOpen={setFlagModalOpen} />
     </>
   );
 };

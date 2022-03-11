@@ -21,10 +21,11 @@ const FlagsList = ({ flags, setFlags, setModalOpen }) => {
   const handleDeleteFlag = (id) => {
     return (e) => {
       e.preventDefault();
-      alert("Are you sure you want to delete this?");
-      apiClient.deleteFlag(id, () => {
-        setFlags(flags.filter((flag) => flag.id !== id));
-      });
+      if (window.confirm("Are you sure you want to delete this?")) {
+        apiClient.deleteFlag(id, () => {
+          setFlags(flags.filter((flag) => flag.id !== id));
+        });
+      }
     };
   };
 
