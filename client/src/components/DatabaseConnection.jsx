@@ -18,11 +18,11 @@ const DatabaseConnection = ({ dbName, setDbName, setDbModalOpen }) => {
         {dbName === "" ? "Not Connected " : `Currently connected to ${dbName} `}
       </label>
       {dbName === "" ?
-        <button className="btn" type="button" onClick={() => setDbModalOpen(true)}>
+        <button className="btn bg-primary-turquoise" type="button" onClick={() => setDbModalOpen(true)}>
           Connect to Database
         </button>
         :
-        <button className="btn" type="button" onClick={removeDBConnection}>
+        <button className="btn bg-primary-turquoise" type="button" onClick={removeDBConnection}>
           Disconnect
         </button>
       }
