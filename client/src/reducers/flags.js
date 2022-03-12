@@ -16,7 +16,7 @@ export default function flags(state = [], action) {
       return state.filter((flag) => flag.id !== action.id);
     }
     case "CREATE_FLAG_SUCCESS": {
-      return state;
+      return [...state, action.flag];
     }
     case "EDIT_FLAG_SUCCESS": {
       return state;

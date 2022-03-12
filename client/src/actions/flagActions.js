@@ -33,3 +33,15 @@ export function deleteFlag(id) {
 export function deleteFlagSuccess(id) {
   return { type: "DELETE_FLAG_SUCCESS", id: id };
 }
+
+export function createFlag(name, description, status) {
+  return function(dispatch) {
+    apiClient.createFlag({ name, description, status }, (data) => {
+      dispatch(createFlagSuccess(data));
+    })
+  }
+}
+
+export function createFlagSuccess(flag) {
+  return { type: "CREATE_FLAG_SUCCESS", flag };
+}
