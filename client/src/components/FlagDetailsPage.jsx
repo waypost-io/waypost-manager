@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchFlags, toggleExperiment } from "../actions/flagActions";
+import { fetchFlags, toggleFlag, toggleExperiment } from "../actions/flagActions";
 import { fetchExperiments } from "../actions/exptActions";
 import { useParams } from "react-router-dom";
 import EditFlagForm from "./EditFlagForm";
@@ -44,13 +44,29 @@ const FlagDetailsPage = () => {
     dispatch(toggleExperiment(flagId, false));
   };
 
+  const handleToggle = (id) => {
+    return (e) => {
+      dispatch(toggleFlag(id, e.target.checked));
+    };
+  };
+
   if (!flagData) return null;
   return (
     <div className="py-5 px-8 w-full">
       <div className="flex justify-between items-center border-b border-b-primary-oxfordblue mb-5">
-        <h1 className="font-bold text-xl text-primary-violet">
-          {flagData.name}
-        </h1>
+        <div className="flex items-center">
+          <h1 className="inline font-bold text-xl text-primary-violet">
+            {flagData.name}
+          </h1>
+          <label className="toggle mx-5">
+            <input
+              type="checkbox"
+              defaultChecked={flagData.status ? true : false}
+              onChange={handleToggle(flagId)}
+            />
+            <span className="slider round"></span>
+          </label>
+        </div>
         <div>
           {!isEditing && (
             <button

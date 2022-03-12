@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { editFlag } from "../actions/flagActions";
 
-const EditFlagForm = () => {
+const EditFlagForm = ({ setIsEditing }) => {
   const dispatch = useDispatch();
   const { flagId } = useParams();
   const flagData = useSelector((state) =>
@@ -18,7 +18,7 @@ const EditFlagForm = () => {
     flagData ? flagData.percentage_split : 100
   );
 
-  const handleSaveEdits = ({ setIsEditing }) => {
+  const handleSaveEdits = () => {
     if (
       newName.length === 0 ||
       isNaN(Number(newPercent)) ||
@@ -64,17 +64,6 @@ const EditFlagForm = () => {
           className="block border border-primary-oxfordblue rounded-lg px-2"
         />
       </div>
-      <div className="mt-2.5 flex items-center">
-        <label className="mr-2.5">Status: </label>
-        <label className="toggle">
-          <input
-            type="checkbox"
-            defaultChecked={flagData.status ? true : false}
-            // onChange={handleToggle(id)}
-          />
-          <span className="slider round"></span>
-        </label>
-      </div>
       <div className="mt-2.5">
         <label htmlFor="new-percent">Percent of Users Exposed: </label>
         <input
@@ -92,6 +81,7 @@ const EditFlagForm = () => {
       <button className="btn bg-primary-turquoise" onClick={handleSaveEdits}>
         Save Changes
       </button>
+      <button className="btn bg-slate" onClick={() => setIsEditing(false)}>Cancel</button>
     </form>
   );
 };
