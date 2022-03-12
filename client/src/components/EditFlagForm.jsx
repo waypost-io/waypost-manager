@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { editFlag } from "../actions/flagActions";
@@ -10,12 +10,21 @@ const EditFlagForm = () => {
     state.flags.find((flag) => flag.id === +flagId)
   );
 
-  const [newName, setNewName] = useState(flagData ? flagData.name : '');
-  const [newDescription, setNewDescription] = useState(flagData ? flagData.description : '');
-  const [newPercent, setNewPercent] = useState(flagData ? flagData.percentage_split : 100);
+  const [newName, setNewName] = useState(flagData ? flagData.name : "");
+  const [newDescription, setNewDescription] = useState(
+    flagData ? flagData.description : ""
+  );
+  const [newPercent, setNewPercent] = useState(
+    flagData ? flagData.percentage_split : 100
+  );
 
   const handleSaveEdits = ({ setIsEditing }) => {
-    if (newName.length === 0 || isNaN(Number(newPercent)) || newPercent < 0 || newPercent > 100) {
+    if (
+      newName.length === 0 ||
+      isNaN(Number(newPercent)) ||
+      newPercent < 0 ||
+      newPercent > 100
+    ) {
       window.alert("Please check your inputs again.");
       return;
     }
@@ -80,10 +89,7 @@ const EditFlagForm = () => {
         />{" "}
         %
       </div>
-      <button
-        className="btn bg-primary-turquoise"
-        onClick={handleSaveEdits}
-      >
+      <button className="btn bg-primary-turquoise" onClick={handleSaveEdits}>
         Save Changes
       </button>
     </form>

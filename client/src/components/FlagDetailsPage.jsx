@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchFlags, toggleExperiment } from "../actions/flagActions";
 import { fetchExperiments } from "../actions/exptActions";
 import { useParams } from "react-router-dom";
-import EditFlagForm from './EditFlagForm';
+import EditFlagForm from "./EditFlagForm";
 import ExperimentInfo from "./ExperimentInfo";
 
 const FlagDetailsPage = () => {
@@ -52,12 +52,14 @@ const FlagDetailsPage = () => {
           {flagData.name}
         </h1>
         <div>
-          {!isEditing && <button
+          {!isEditing && (
+            <button
               className="btn bg-primary-turquoise"
               onClick={handleEditFlag}
             >
               Edit
-            </button>}
+            </button>
+          )}
           {flagData.is_experiment ? (
             <>
               <button
@@ -93,7 +95,9 @@ const FlagDetailsPage = () => {
             </span>
           </p>
         </>
-      ) : <EditFlagForm setIsEditing={setIsEditing} />}
+      ) : (
+        <EditFlagForm setIsEditing={setIsEditing} />
+      )}
       {exptData &&
         exptData.map((expt) => {
           return <ExperimentInfo key={expt.id} {...expt} />;
