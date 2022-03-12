@@ -21,3 +21,15 @@ export function toggleFlag(id, status) {
 export function toggleFlagSuccess(flag) {
   return { type: "TOGGLE_FLAG_SUCCESS", flag };
 }
+
+export function deleteFlag(id) {
+  return function(dispatch) {
+    apiClient.deleteFlag(id, () => {
+      dispatch(deleteFlagSuccess(id));
+    })
+  }
+};
+
+export function deleteFlagSuccess(id) {
+  return { type: "DELETE_FLAG_SUCCESS", id: id };
+}

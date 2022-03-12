@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { toggleFlag } from '../actions/flagActions';
+import { toggleFlag, deleteFlag } from '../actions/flagActions';
 import apiClient from "../lib/ApiClient";
 import FlagItem from "./FlagItem";
 
@@ -18,9 +18,7 @@ const FlagsList = ({ setFlags, setModalOpen }) => {
     return (e) => {
       e.preventDefault();
       if (window.confirm("Are you sure you want to delete this?")) {
-        apiClient.deleteFlag(id, () => {
-          setFlags(flags.filter((flag) => flag.id !== id));
-        });
+        dispatch(deleteFlag(id));
       }
     };
   };
