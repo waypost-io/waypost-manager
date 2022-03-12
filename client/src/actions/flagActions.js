@@ -64,6 +64,14 @@ export function toggleExperiment(flagId, status) {
   }
 }
 
+export function editFlag(id, updatedFields) {
+  return function(dispatch) {
+    apiClient.editFlag(id, updatedFields, (data) => {
+      dispatch(editFlagSuccess(data));
+    });
+  }
+}
+
 export function editFlagSuccess(flag) {
   return { type: "EDIT_FLAG_SUCCESS", flag };
 }

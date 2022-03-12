@@ -14,6 +14,7 @@ const FlagDetailsPage = () => {
   const [exptsFetched, setExptsFetched] = useState(false);
   const [exptData, setExptData] = useState(undefined);
   const [isEditing, setIsEditing] = useState(false);
+  const [ newName, setNewName ] = useState('');
   const [ newDescription, setNewDescription ] = useState('');
   const [ newPercent, setNewPercent ] = useState(0);
 
@@ -36,10 +37,12 @@ const FlagDetailsPage = () => {
   };
 
   const handleSaveEdits = () => {
-    // Validate inputs (percent must be between 0-100)
-    console.log(newDescription);
-    console.log(newPercent);
-    // Call apiClient to make PUT request
+    // TODO: Validate inputs (percent must be between 0-100)
+    dispatch(editFlag(flagId, {
+      name: newName,
+      description: newDescription,
+      percentage_split: newPercent
+    }));
     setIsEditing(false);
   };
 
@@ -106,8 +109,14 @@ const FlagDetailsPage = () => {
         </>
       ) : (
         <form>
-          <label htmlFor="new-description">Description: </label>
-          <textarea id="new-description" type="textarea" rows="3" cols="30" value={newDescription} onChange={(e) => setNewDescription(e.target.value)} className="block border border-primary-oxfordblue rounded-lg px-2"  />
+          <div>
+            <label htmlFor="new-name" className="mr-2.5">Name: </label>
+            <input type="text" value={newName} onChange={(e) => setNewName(e.target.value)} className="border border-primary-oxfordblue rounded-lg px-2" />
+          </div>
+          <div className="mt-2.5">
+            <label htmlFor="new-description">Description: </label>
+            <textarea id="new-description" type="textarea" rows="3" cols="30" value={newDescription} onChange={(e) => setNewDescription(e.target.value)} className="block border border-primary-oxfordblue rounded-lg px-2" />
+          </div>
           <div className="mt-2.5 flex items-center">
             <label className="mr-2.5">Status: </label>
             <label className="toggle">
