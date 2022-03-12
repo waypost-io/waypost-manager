@@ -10,13 +10,12 @@ const FlagDetailsPage = () => {
   const { flagId } = useParams();
   const flagData = useSelector(state => state.flags.find(flag => flag.id === Number(flagId)));
   const exptData = useSelector(state => state.experiments);
-  // console.log("Flag: ", flagData);
   const [flagFetched, setFlagFetched] = useState(false);
   const [exptsFetched, setExptsFetched] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-  const [ newName, setNewName ] = useState('');
-  const [ newDescription, setNewDescription ] = useState('');
-  const [ newPercent, setNewPercent ] = useState(0);
+  const [ newName, setNewName ] = useState(flagData.name);
+  const [ newDescription, setNewDescription ] = useState(flagData.description);
+  const [ newPercent, setNewPercent ] = useState(flagData.percentage_split);
 
   useEffect(() => {
     if (!flagFetched) {
