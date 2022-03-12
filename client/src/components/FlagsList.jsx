@@ -5,7 +5,7 @@ import FlagItem from "./FlagItem";
 
 const FlagsList = ({ setModalOpen }) => {
   const dispatch = useDispatch();
-  const flags = useSelector(state => state);
+  const flags = useSelector(state => state.flags);
 
   const handleToggle = (id) => {
     return (e) => {

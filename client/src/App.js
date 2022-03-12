@@ -12,7 +12,7 @@ import apiClient from "./lib/ApiClient";
 
 function App() {
   const dispatch = useDispatch();
-  const flags = useSelector(state => state);
+  const flags = useSelector(state => state.flags);
   const [dbName, setDbName] = useState("");
   const [ dbModalOpen, setDbModalOpen ] = useState(false);
 
