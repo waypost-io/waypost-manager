@@ -29,8 +29,8 @@ function App() {
         <SideNav />
         <BrowserRouter>
           <Routes>
-            <Route exact path="/" element={<FlagDashboard flags={flags} />} />
-            <Route path="/flags/:flagId" element={<FlagDetailsPage flags={flags} />} />
+            <Route exact path="/" element={<FlagDashboard />} />
+            <Route path="/flags/:flagId" element={<FlagDetailsPage />} />
           </Routes>
         </BrowserRouter>
       </main>
