@@ -16,31 +16,61 @@ module.exports = class PGTable {
     return this;
   }
 
+  createPlaceholdersArr(valuesArr, start = 1) {
+    return valuesArr.map((_, idx) => `$${idx+start}`);
+  }
+
   createInsertStatement(newRow) {
     const columns = this.fields.filter(
       (col) => ![null, "", undefined].includes(newRow[col])
     );
-    const values = columns.map((col) => `'${newRow[col]}'`);
-    return `INSERT INTO ${this.tableName}(${columns.join(
-      ", "
-    )}) VALUES (${values.join(", ")}) RETURNING *`;
+    const values = columns.map((col) => `${newRow[col]}`);
+    const placeholders = this.createPlaceholdersArr(values);
+    const queryString = `INSERT INTO ${this.tableName}(${columns.join(", ")})
+      VALUES (${placeholders.join(", ")}) RETURNING *`;
+    return [queryString, values]
   }
 
-  createUpdateStatement(id, updatedFields) {
+  createWhereStatement(obj, nextPlaceholderNum) {
+    if (Object.values(obj).length === 0) return "";
+
     const edits = [];
-    Object.keys(updatedFields).forEach((fieldName) => {
+    const whereVals = [];
+    Object.keys(obj).forEach((fieldName, idx) => {
       if (this.fields.includes(fieldName)) {
-        edits.push(`${fieldName} = '${updatedFields[fieldName]}'`);
+        if (obj[fieldName] === "NULL" || obj[fieldName] === "NOT NULL") {
+          edits.push(`${fieldName} IS ${obj[fieldName]}`)
+        } else {
+          edits.push(`${fieldName} = $${idx + nextPlaceholderNum}`);
+          whereVals.push(obj[fieldName]);
+        }
       }
     });
-
-    return `UPDATE ${this.tableName} SET ${edits.join(
-      ", "
-    )} WHERE id = ${id} RETURNING *`;
+    const queryString = `WHERE ${edits.join(" AND ")} `;
+    return [queryString, whereVals];
   }
 
-  createDeleteStatement(id) {
-    return `DELETE FROM ${this.tableName} WHERE id = ${id} RETURNING *`;
+  createUpdateStatement(updatedFields, whereObj = {}) {
+    const edits = [];
+    let placeholder = 1;
+    const validUpdatedValues = [];
+    Object.keys(updatedFields).forEach((fieldName) => {
+      if (this.fields.includes(fieldName)) {
+        edits.push(`${fieldName} = $${placeholder}`);
+        placeholder += 1;
+        validUpdatedValues.push(updatedFields[fieldName]);
+      }
+    });
+    const [where, wValues] = this.createWhereStatement(whereObj, validUpdatedValues.length + 1);
+    const values = validUpdatedValues.concat(wValues);
+    const queryString = `UPDATE ${this.tableName} SET ${edits.join(
+      ", "
+    )} ${where} RETURNING *`;
+    return [queryString, values];
+  }
+
+  createDeleteStatement() {
+    return `DELETE FROM ${this.tableName} WHERE id = $1 RETURNING *`;
   }
 
   async getFields() {
@@ -62,21 +92,24 @@ module.exports = class PGTable {
   }
 
   async insertRow(obj) {
-    const queryString = this.createInsertStatement(obj);
-    const result = await dbQuery(queryString);
+    const [queryString, params] = this.createInsertStatement(obj);
+    const result = await dbQuery(queryString, ...params);
     return result.rows[0];
   }
 
-  async editRow(id, updatedFields) {
-    const queryString = this.createUpdateStatement(id, updatedFields);
-    console.log("query in editRow", queryString);
-    const result = await dbQuery(queryString);
+  async editRow(updatedFields, where = {}) {
+    const [ queryString, params ] = this.createUpdateStatement(updatedFields, where);
+    const result = await dbQuery(queryString, ...params);
     return result.rows[0];
   }
 
   async deleteRow(id) {
-    const queryString = this.createDeleteStatement(id);
-    const result = await dbQuery(queryString);
+    const queryString = this.createDeleteStatement();
+    const result = await dbQuery(queryString, id);
     return result;
+  }
+
+  async query(string, params) {
+    return await dbQuery(string, ...params);
   }
 };
