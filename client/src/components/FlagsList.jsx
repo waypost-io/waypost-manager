@@ -1,10 +1,9 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { toggleFlag, deleteFlag } from '../actions/flagActions';
-import apiClient from "../lib/ApiClient";
 import FlagItem from "./FlagItem";
 
-const FlagsList = ({ setFlags, setModalOpen }) => {
+const FlagsList = ({ setModalOpen }) => {
   const dispatch = useDispatch();
   const flags = useSelector(state => state);
 
