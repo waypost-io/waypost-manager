@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchFlags, toggleExperiment, editFlag } from '../actions/flagActions';
+import { fetchExperiments } from '../actions/exptActions';
 import { useParams } from "react-router-dom";
 import ExperimentInfo from "./ExperimentInfo";
-import apiClient from "../lib/ApiClient";
 
 const FlagDetailsPage = () => {
   const dispatch = useDispatch();
   const { flagId } = useParams();
-  const flagData = useSelector(state => state.find(flag => flag.id === Number(flagId)));
+  const flagData = useSelector(state => state.flags.find(flag => flag.id === Number(flagId)));
+  const exptData = useSelector(state => state.experiments);
   // console.log("Flag: ", flagData);
   const [flagFetched, setFlagFetched] = useState(false);
   const [exptsFetched, setExptsFetched] = useState(false);
-  const [exptData, setExptData] = useState(undefined);
   const [isEditing, setIsEditing] = useState(false);
   const [ newName, setNewName ] = useState('');
   const [ newDescription, setNewDescription ] = useState('');
@@ -26,11 +26,11 @@ const FlagDetailsPage = () => {
   }, [dispatch, flagId, flagFetched]);
 
   useEffect(() => {
-    apiClient.getExperiments(flagId, (data) => {
+    if (!exptsFetched) {
+      dispatch(fetchExperiments(flagId));
       setExptsFetched(true);
-      setExptData(data);
-    });
-  }, [exptsFetched, flagId]);
+    }
+  }, [dispatch, flagId, exptsFetched]);
 
   const handleEditFlag = () => {
     setIsEditing(true);
