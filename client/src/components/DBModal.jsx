@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useDispatch } from "react-redux";
 import { connectDB } from '../actions/dbActions';
 
-const DBModal = ({ modalOpen, setModalOpen, setDbName }) => {
+const DBModal = ({ modalOpen, setModalOpen }) => {
   const dispatch = useDispatch();
   const [user, setUser] = useState("");
   const [host, setHost] = useState("");

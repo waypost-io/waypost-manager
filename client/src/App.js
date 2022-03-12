@@ -12,8 +12,6 @@ import DBModal from './components/DBModal';
 
 function App() {
   const dispatch = useDispatch();
-  const flags = useSelector(state => state.flags);
-  const dbName = useSelector(state => state.dbName);
   const [ dbModalOpen, setDbModalOpen ] = useState(false);
 
   useEffect(() => {
@@ -23,7 +21,7 @@ function App() {
 
   return (
     <>
-      <Header setDbModalOpen={setDbModalOpen} dbName={dbName} />
+      <Header setDbModalOpen={setDbModalOpen} />
       <DBModal modalOpen={dbModalOpen} setModalOpen={setDbModalOpen} />
       <main className="flex w-full h-full">
         <SideNav />
