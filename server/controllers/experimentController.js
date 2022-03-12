@@ -1,5 +1,4 @@
 const PGTable = require("../db/PGTable");
-const { getExperimentsForFlag } = require("../db/experiments.js");
 const { EXPERIMENTS_TABLE_NAME, GET_EXPERIMENTS_QUERY } = require("../constants/db");
 const { getNowString } = require("../utils");
 
@@ -23,7 +22,7 @@ const createExperiment = async (flagId) => {
 };
 
 const stopExperiment = async (flagId) => {
-  const updatedFields = { date_ended: "2022-03-11" };
+  const updatedFields = { date_ended: getNowString() };
   const where = {flag_id: flagId, date_ended: "NULL"};
   try {
     await experimentsTable.editRow(updatedFields, where);
