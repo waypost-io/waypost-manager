@@ -30,7 +30,10 @@ module.exports = class PGTable {
       VALUES (${placeholders.join(", ")}) RETURNING *`;
     return [queryString, values]
   }
-
+  // pass in object with the criteria that you want to add to where statement
+  // Ex. { id: 2, date_ended: "NOT NULL"} =>
+  //  ["WHERE id = $1 AND date_ended IS NOT NULL", ['2']]
+  // nextPlaceholderNum is a number that'll start the sequence of placeholders
   createWhereStatement(obj, nextPlaceholderNum) {
     if (Object.values(obj).length === 0) return "";
 
@@ -49,7 +52,8 @@ module.exports = class PGTable {
     const queryString = `WHERE ${edits.join(" AND ")} `;
     return [queryString, whereVals];
   }
-
+  // Ex. createUpdateStatement({ status: false, name: "New Flag"}, { id: 2})
+  // => UPDATE tableName SET ('status', 'name') WHERE id = 2
   createUpdateStatement(updatedFields, whereObj = {}) {
     const edits = [];
     let placeholder = 1;
@@ -72,7 +76,7 @@ module.exports = class PGTable {
   createDeleteStatement() {
     return `DELETE FROM ${this.tableName} WHERE id = $1 RETURNING *`;
   }
-
+  // gets the column names
   async getFields() {
     const statement = `SELECT * FROM ${this.tableName} WHERE false`;
     const result = await dbQuery(statement);
@@ -96,7 +100,8 @@ module.exports = class PGTable {
     const result = await dbQuery(queryString, ...params);
     return result.rows[0];
   }
-
+  // Ex. editRow({ status: false, name: "New Flag"}, { id: 2})
+  // => runs the query: UPDATE tableName SET ('status', 'name') WHERE id = 2
   async editRow(updatedFields, where = {}) {
     const [ queryString, params ] = this.createUpdateStatement(updatedFields, where);
     const result = await dbQuery(queryString, ...params);
@@ -108,7 +113,7 @@ module.exports = class PGTable {
     const result = await dbQuery(queryString, id);
     return result;
   }
-
+  // just a wrapper around the dbQuery function
   async query(string, params) {
     return await dbQuery(string, ...params);
   }
