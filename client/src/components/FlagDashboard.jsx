@@ -2,13 +2,13 @@ import React, { useState } from 'react';
 import FlagsList from './FlagsList';
 import NewFlagModal from './NewFlagModal';
 
-const FlagDashboard = ({ flags, setFlags }) => {
+const FlagDashboard = () => {
   const [ flagModalOpen, setFlagModalOpen ] = useState(false);
 
   return (
     <>
-      <FlagsList flags={flags} setFlags={setFlags} setModalOpen={setFlagModalOpen} />
-      <NewFlagModal flags={flags} setFlags={setFlags} modalOpen={flagModalOpen} setModalOpen={setFlagModalOpen} />
+      <FlagsList setModalOpen={setFlagModalOpen} />
+      <NewFlagModal modalOpen={flagModalOpen} setModalOpen={setFlagModalOpen} />
     </>
   );
 };

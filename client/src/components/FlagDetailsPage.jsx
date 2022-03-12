@@ -1,12 +1,16 @@
 import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchFlags, toggleExperiment, editFlag } from '../actions/flagActions';
 import { useParams } from "react-router-dom";
 import ExperimentInfo from "./ExperimentInfo";
 import apiClient from "../lib/ApiClient";
 
 const FlagDetailsPage = () => {
+  const dispatch = useDispatch();
   const { flagId } = useParams();
+  const flagData = useSelector(state => state.find(flag => flag.id === Number(flagId)));
+  // console.log("Flag: ", flagData);
   const [flagFetched, setFlagFetched] = useState(false);
-  const [flagData, setFlagData] = useState(undefined);
   const [exptsFetched, setExptsFetched] = useState(false);
   const [exptData, setExptData] = useState(undefined);
   const [isEditing, setIsEditing] = useState(false);
@@ -15,14 +19,10 @@ const FlagDetailsPage = () => {
 
   useEffect(() => {
     if (!flagFetched) {
-      apiClient.getFlag(flagId, (data) => {
-        setFlagData(data);
-        setNewDescription(data.description);
-        setNewPercent(data.percentage_split);
-        setFlagFetched(true);
-      });
+      dispatch(fetchFlags());
+      setFlagFetched(true);
     }
-  }, [flagId, flagFetched]);
+  }, [dispatch, flagId, flagFetched]);
 
   useEffect(() => {
     apiClient.getExperiments(flagId, (data) => {
@@ -43,17 +43,13 @@ const FlagDetailsPage = () => {
     setIsEditing(false);
   };
 
-  const setFlagExptStatus = (status) => {
-    setFlagData({ ...flagData, is_experiment: status });
-  };
-
   const handleCreateExperiment = (e) => {
-    apiClient.toggleExperiment(flagId, true, () => setFlagExptStatus(true));
+    dispatch(toggleExperiment(flagId, true))
     setExptsFetched(false);
   };
 
   const handleStopExperiment = () => {
-    apiClient.toggleExperiment(flagId, false, () => setFlagExptStatus(false));
+    dispatch(toggleExperiment(flagId, false));
   };
 
   if (!flagData) return null;

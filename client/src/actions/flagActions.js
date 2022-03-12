@@ -10,6 +10,16 @@ export function fetchFlagsSuccess(flags) {
   return { type: "FETCH_FLAGS_SUCCESS", flags };
 }
 
+export function fetchFlag(id) {
+  return function(dispatch) {
+    apiClient.getFlag(id, data => dispatch(fetchFlagSuccess(data)));
+  }
+}
+
+export function fetchFlagSuccess(flag) {
+  return { type: "FETCH_FLAG_SUCCESS", flag };
+}
+
 export function toggleFlag(id, status) {
   return function(dispatch) {
     apiClient.toggleFlag(id, status, data => {
@@ -44,4 +54,16 @@ export function createFlag(name, description, status, percentage_split) {
 
 export function createFlagSuccess(flag) {
   return { type: "CREATE_FLAG_SUCCESS", flag };
+}
+
+export function toggleExperiment(flagId, status) {
+  return function(dispatch) {
+    apiClient.toggleExperiment(flagId, status, (data) => {
+      dispatch(editFlagSuccess(data));
+    });
+  }
+}
+
+export function editFlagSuccess(flag) {
+  return { type: "EDIT_FLAG_SUCCESS", flag };
 }

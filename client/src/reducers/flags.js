@@ -19,7 +19,13 @@ export default function flags(state = [], action) {
       return [...state, action.flag];
     }
     case "EDIT_FLAG_SUCCESS": {
-      return state;
+      return state.map(flag => {
+        if (flag.id === action.flag.id) {
+          return action.flag;
+        } else {
+          return flag;
+        }
+      });
     }
     default: {
       return state;
