@@ -9,15 +9,15 @@ const FlagDetailsPage = () => {
   const dispatch = useDispatch();
   const { flagId } = useParams();
   const flagData = useSelector((state) =>
-    state.flags.find((flag) => flag.id === Number(flagId))
+    state.flags.find((flag) => flag.id === +flagId)
   );
   const exptData = useSelector((state) => state.experiments);
   const [flagFetched, setFlagFetched] = useState(false);
   const [exptsFetched, setExptsFetched] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-  const [newName, setNewName] = useState(flagData.name);
-  const [newDescription, setNewDescription] = useState(flagData.description);
-  const [newPercent, setNewPercent] = useState(flagData.percentage_split);
+  const [newName, setNewName] = useState(flagData ? flagData.name : '');
+  const [newDescription, setNewDescription] = useState(flagData ? flagData.description : '');
+  const [newPercent, setNewPercent] = useState(flagData ? flagData.percentage_split : 100);
 
   useEffect(() => {
     if (!flagFetched) {

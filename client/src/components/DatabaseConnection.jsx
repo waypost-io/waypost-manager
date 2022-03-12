@@ -1,14 +1,15 @@
 import React from 'react';
-import apiClient from "../lib/ApiClient";
+import { useDispatch, useSelector } from "react-redux";
+import { disconnectDB } from '../actions/dbActions';
 
-const DatabaseConnection = ({ dbName, setDbName, setDbModalOpen }) => {
+const DatabaseConnection = ({ setDbModalOpen }) => {
+  const dispatch = useDispatch();
+  const dbName = useSelector(state => state.dbName);
 
   const removeDBConnection = async (e) => {
     e.preventDefault();
     if (window.confirm("Are you sure you want to disconnect?")) {
-      await apiClient.removeDBConnection(() => {
-        setDbName("");
-      })
+      dispatch(disconnectDB());
     }
   }
 
