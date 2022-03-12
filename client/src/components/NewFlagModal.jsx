@@ -19,12 +19,13 @@ const NewFlagModal = ({ modalOpen, setModalOpen }) => {
     setName('');
     setDescription('');
     setStatus(false);
+    setPercentage(100);
   }
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (name.length === 0) return;
-    dispatch(createFlag(name, description, status));
+    dispatch(createFlag(name, description, status, percentage));
     resetForm();
   };
 

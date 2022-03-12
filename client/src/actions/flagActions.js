@@ -34,9 +34,9 @@ export function deleteFlagSuccess(id) {
   return { type: "DELETE_FLAG_SUCCESS", id: id };
 }
 
-export function createFlag(name, description, status) {
+export function createFlag(name, description, status, percentage_split) {
   return function(dispatch) {
-    apiClient.createFlag({ name, description, status }, (data) => {
+    apiClient.createFlag({ name, description, status, percentage_split }, (data) => {
       dispatch(createFlagSuccess(data));
     })
   }
