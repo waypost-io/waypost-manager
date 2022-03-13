@@ -1,6 +1,5 @@
 const PGTable = require("../db/PGTable");
-const { getExperimentsForFlag, updateExperimentEndDate } = require("../db/experiments.js");
-const { EXPERIMENTS_TABLE_NAME } = require("../constants/db");
+const { EXPERIMENTS_TABLE_NAME, GET_EXPERIMENTS_QUERY } = require("../constants/db");
 const { getNowString } = require("../utils");
 
 const experimentsTable = new PGTable(EXPERIMENTS_TABLE_NAME);
@@ -9,8 +8,8 @@ experimentsTable.init();
 const getExperiments = async (req, res, next) => {
   const flagId = req.params.flagId;
   try {
-    const experiments = await getExperimentsForFlag(flagId);
-    res.status(200).send(experiments);
+    const experiments = await experimentsTable.query(GET_EXPERIMENTS_QUERY, [flagId]);
+    res.status(200).send(experiments.rows);
   } catch (err) {
     console.log(err);
     res.status(500).send(err.message)
@@ -22,8 +21,14 @@ const createExperiment = async (flagId) => {
   return newExpt.id;
 };
 
-const stopExperiment = (flagId) => {
-  updateExperimentEndDate(flagId);
+const stopExperiment = async (flagId) => {
+  const updatedFields = { date_ended: getNowString() };
+  const where = {flag_id: flagId, date_ended: "NULL"};
+  try {
+    await experimentsTable.editRow(updatedFields, where);
+  } catch (err) {
+    console.log(err);
+  }
 }
 
 exports.getExperiments = getExperiments;

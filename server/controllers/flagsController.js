@@ -8,26 +8,28 @@ const { createExperiment, stopExperiment } = require("./experimentController.js"
 const flagTable = new PGTable(FLAG_TABLE_NAME);
 flagTable.init();
 
-const createNewFlagObj = ({ name, description, status }) => {
+const createNewFlagObj = ({ name, description, percentage_split, status, is_experiment, app_id }) => {
   const now = getNowString();
   return {
     name: name,
+    app_id: app_id || null,
     description: description || "",
+    percentage_split: percentage_split || 100,
     status: status || false,
+    is_experiment: is_experiment || false,
     date_created: now,
-    date_edited: now,
-    last_toggle: now,
+    is_deleted: false
   }
 }
 
-const createUpdateFlagObj = (fieldsToUpdate) => {
-  const now = getNowString();
-
-  if (fieldsToUpdate.status !== undefined) fieldsToUpdate["last_toggle"] = now;
-  fieldsToUpdate["date_edited"] = now;
-
-  return fieldsToUpdate;
-}
+// const createUpdateFlagObj = (fieldsToUpdate) => {
+//   const now = getNowString();
+//
+//   if (fieldsToUpdate.status !== undefined) fieldsToUpdate["last_toggle"] = now;
+//   fieldsToUpdate["date_edited"] = now;
+//
+//   return fieldsToUpdate;
+// }
 
 const getAllFlags = async (req, res, next) => {
   try {
@@ -62,6 +64,7 @@ const getFlag = async (req, res, next) => {
 const createFlag = async (req, res, next) => {
   const errors = validationResult(req);
   if (errors.isEmpty()) {
+    console.log(req.body);
     const newFlag = createNewFlagObj(req.body);
 
     try {
@@ -82,7 +85,7 @@ const editFlag = async (req, res, next) => {
   // figure out how to validate this
   const id = req.params.id;
   const now = getNowString();
-  const updatedFields = createUpdateFlagObj(req.body);
+  const updatedFields = req.body;
   if (updatedFields.is_experiment) {
     createExperiment(id);
   } else if (updatedFields.is_experiment === false) {
@@ -90,7 +93,7 @@ const editFlag = async (req, res, next) => {
   }
 
   try {
-    const updatedFlag = await flagTable.editRow(id, updatedFields);
+    const updatedFlag = await flagTable.editRow(updatedFields, { id });
 
     req.updatedFlag = updatedFlag;
     res.status(200).send(updatedFlag);
