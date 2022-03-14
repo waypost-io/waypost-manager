@@ -35,8 +35,8 @@ const FlagDetailsPage = () => {
     setIsEditing(true);
   };
 
-  const handleCreateExperiment = (e) => {
-    dispatch(toggleExperiment(flagId, true));
+  const handleCreateExperiment = async (e) => {
+    await dispatch(toggleExperiment(flagId, true));
     setExptsFetched(false);
   };
 
