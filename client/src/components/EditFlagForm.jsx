@@ -6,6 +6,7 @@ import { editFlag } from "../actions/flagActions";
 const EditFlagForm = ({ setIsEditing }) => {
   const dispatch = useDispatch();
   const { flagId } = useParams();
+  const flagNames = useSelector((state) => state.flags.map(flag => flag.name));
   const flagData = useSelector((state) =>
     state.flags.find((flag) => flag.id === +flagId)
   );
@@ -18,14 +19,19 @@ const EditFlagForm = ({ setIsEditing }) => {
     flagData ? flagData.percentage_split : 100
   );
 
-  const handleSaveEdits = () => {
+  const handleSaveEdits = (e) => {
+    e.preventDefault();
     if (
       newName.length === 0 ||
       isNaN(Number(newPercent)) ||
       newPercent < 0 ||
       newPercent > 100
     ) {
-      window.alert("Please check your inputs again.");
+      alert("Please check your inputs again.");
+      return;
+    }
+    if (flagNames.includes(newName) && newName !== flagData.name) {
+      alert("Name is already taken by another feature flag.");
       return;
     }
 

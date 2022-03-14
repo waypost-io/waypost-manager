@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
-import { useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { createFlag } from '../actions/flagActions';
 
 const NewFlagModal = ({ modalOpen, setModalOpen }) => {
   const dispatch = useDispatch();
+  const flags = useSelector(state => state.flags);
+  const flagNames = flags.map(flag => flag.name);
   const [ name, setName ] = useState('');
   const [ description, setDescription ] = useState('');
   const [ status, setStatus ] = useState(false);
@@ -24,6 +26,10 @@ const NewFlagModal = ({ modalOpen, setModalOpen }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (name.length === 0) return;
+    if (flagNames.includes(name)) {
+      alert("Name is already taken by another feature flag.");
+      return;
+    }
     dispatch(createFlag(name, description, status, percentage));
     resetForm();
   };
@@ -35,7 +41,7 @@ const NewFlagModal = ({ modalOpen, setModalOpen }) => {
         <h2 className="font-bold text-xl text-primary-violet">New Feature Flag</h2>
         <form className="new-flag-form">
           <div className="mt-2.5">
-            <label htmlFor="flag-title" className="mr-5">Name:</label>
+            <label htmlFor="flag-title" className="mr-5">Name (will be used as unique identifier):</label>
             <input id="flag-title" type="text" className="border border-primary-oxfordblue rounded-lg px-2" value={name} onChange={(e) => setName(e.target.value)} />
           </div>
           <div className="mt-2.5">
