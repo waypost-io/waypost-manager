@@ -22,7 +22,6 @@ function App() {
   return (
     <>
       <Header setDbModalOpen={setDbModalOpen} />
-      <DBModal modalOpen={dbModalOpen} setModalOpen={setDbModalOpen} />
       <main className="flex w-full h-full">
         <SideNav />
         <BrowserRouter>
@@ -32,6 +31,7 @@ function App() {
           </Routes>
         </BrowserRouter>
       </main>
+      <DBModal modalOpen={dbModalOpen} setModalOpen={setDbModalOpen} />
     </>
   );
 }
