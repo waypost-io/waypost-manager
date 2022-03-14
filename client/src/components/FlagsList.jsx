@@ -1,20 +1,15 @@
 import React from "react";
-import apiClient from "../lib/ApiClient";
+import { useSelector, useDispatch } from "react-redux";
+import { toggleFlag, deleteFlag } from '../actions/flagActions';
 import FlagItem from "./FlagItem";
 
-const FlagsList = ({ flags, setFlags, setModalOpen }) => {
+const FlagsList = ({ setModalOpen }) => {
+  const dispatch = useDispatch();
+  const flags = useSelector(state => state.flags);
+
   const handleToggle = (id) => {
     return (e) => {
-      apiClient.toggleFlag(id, e.target.checked, () => {
-        const updatedFlags = flags.map((flag) => {
-          if (flag.id === id) {
-            return { ...flag, status: e.target.checked };
-          } else {
-            return flag;
-          }
-        });
-        setFlags(updatedFlags);
-      });
+      dispatch(toggleFlag(id, e.target.checked));
     };
   };
 
@@ -22,9 +17,7 @@ const FlagsList = ({ flags, setFlags, setModalOpen }) => {
     return (e) => {
       e.preventDefault();
       if (window.confirm("Are you sure you want to delete this?")) {
-        apiClient.deleteFlag(id, () => {
-          setFlags(flags.filter((flag) => flag.id !== id));
-        });
+        dispatch(deleteFlag(id));
       }
     };
   };

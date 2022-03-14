@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
-import apiClient from '../lib/ApiClient';
+import { useDispatch } from "react-redux";
+import { createFlag } from '../actions/flagActions';
 
-const NewFlagModal = ({ flags, setFlags, modalOpen, setModalOpen }) => {
+const NewFlagModal = ({ modalOpen, setModalOpen }) => {
+  const dispatch = useDispatch();
   const [ name, setName ] = useState('');
   const [ description, setDescription ] = useState('');
   const [ status, setStatus ] = useState(false);
@@ -16,19 +18,14 @@ const NewFlagModal = ({ flags, setFlags, modalOpen, setModalOpen }) => {
     setName('');
     setDescription('');
     setStatus(false);
-  }
-
-  const addNewFlag = (newFlag) => {
-    setFlags([...flags, newFlag]);
+    setPercentage(100);
   }
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (name.length === 0) return;
-    apiClient.createFlag({ name, description, status }, (data) => {
-      resetForm();
-      addNewFlag(data);
-    });
+    dispatch(createFlag(name, description, status, percentage));
+    resetForm();
   };
 
   return (

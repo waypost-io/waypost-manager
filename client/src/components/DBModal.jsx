@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
-import apiClient from '../lib/ApiClient';
+import { useDispatch } from "react-redux";
+import { connectDB } from '../actions/dbActions';
 
-const DBModal = ({ modalOpen, setModalOpen, setDbName }) => {
+const DBModal = ({ modalOpen, setModalOpen }) => {
+  const dispatch = useDispatch();
   const [user, setUser] = useState("");
   const [host, setHost] = useState("");
   const [password, setPassword] = useState("");
@@ -20,7 +22,7 @@ const DBModal = ({ modalOpen, setModalOpen, setDbName }) => {
     if (!/^[a-z\d.-]+$/i.test(dbObj.host)) {
       return "Invalid host name";
     }
-    
+
     const port = Number(dbObj.port);
     if (Number.isNaN(port) || port < 0 || port > 65535 || port !== Math.floor(port)) {
       return "Invalid port number. Must be an integer between 0 and 65535"
@@ -42,17 +44,11 @@ const DBModal = ({ modalOpen, setModalOpen, setDbName }) => {
     const invalidPropMessage = validateForm(dbObj);
     if (invalidPropMessage) {
       alert(invalidPropMessage);
-      return
+      return;
     }
 
-    apiClient.connectToDB(dbObj, (data) => {
-      if (data.connected) {
-        setDbName(database);
-        resetForm();
-      } else {
-        alert("The connection didn't work, please check your inputs and try again");
-      }
-    })
+    dispatch(connectDB(dbObj));
+    resetForm();
   }
 
   return (

@@ -1,42 +1,37 @@
 import { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { fetchFlags } from './actions/flagActions';
+import { checkDBConnection } from './actions/dbActions';
 import './App.css';
 import FlagDashboard from './components/FlagDashboard';
 import SideNav from './components/SideNav';
 import FlagDetailsPage from './components/FlagDetailsPage';
 import Header from './components/Header';
 import DBModal from './components/DBModal';
-import apiClient from "./lib/ApiClient";
 
 function App() {
-  const [flags, setFlags] = useState([]);
-  const [dbName, setDbName] = useState("");
+  const dispatch = useDispatch();
   const [ dbModalOpen, setDbModalOpen ] = useState(false);
 
   useEffect(() => {
-    apiClient.getFlags((data) => setFlags(data));
-    apiClient.checkDBConnection((data) => {
-      if (data.connected) {
-        setDbName(data.database);
-      } else {
-        setDbName("")
-      }
-    })
-  }, []);
+    dispatch(fetchFlags());
+    dispatch(checkDBConnection());
+  }, [dispatch]);
 
   return (
     <>
-      <Header setDbModalOpen={setDbModalOpen} dbName={dbName} setDbName={setDbName}/>
-      <DBModal modalOpen={dbModalOpen} setModalOpen={setDbModalOpen} setDbName={setDbName}/>
+      <Header setDbModalOpen={setDbModalOpen} />
       <main className="flex w-full h-full">
         <SideNav />
         <BrowserRouter>
           <Routes>
-            <Route exact path="/" element={<FlagDashboard flags={flags} setFlags={setFlags} />} />
-            <Route path="/flags/:flagId" element={<FlagDetailsPage flags={flags} setFlags={setFlags} />} />
+            <Route exact path="/" element={<FlagDashboard />} />
+            <Route path="/flags/:flagId" element={<FlagDetailsPage />} />
           </Routes>
         </BrowserRouter>
       </main>
+      <DBModal modalOpen={dbModalOpen} setModalOpen={setDbModalOpen} />
     </>
   );
 }

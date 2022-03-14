@@ -1,63 +1,123 @@
 import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchFlags, toggleFlag, toggleExperiment } from "../actions/flagActions";
+import { fetchExperiments } from "../actions/exptActions";
 import { useParams } from "react-router-dom";
+import EditFlagForm from "./EditFlagForm";
 import ExperimentInfo from "./ExperimentInfo";
-import apiClient from "../lib/ApiClient";
 
 const FlagDetailsPage = () => {
+  const dispatch = useDispatch();
   const { flagId } = useParams();
-  const [ flagFetched, setFlagFetched ] = useState(false);
-  const [ flagData, setFlagData ] = useState(undefined);
-  const [ exptsFetched, setExptsFetched ] = useState(false);
-  const [ exptData, setExptData ] = useState(undefined);
+  const flagData = useSelector((state) =>
+    state.flags.find((flag) => flag.id === +flagId)
+  );
+  const exptData = useSelector((state) => state.experiments);
+  const [flagFetched, setFlagFetched] = useState(false);
+  const [exptsFetched, setExptsFetched] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
 
   useEffect(() => {
     if (!flagFetched) {
-      apiClient.getFlag(flagId, (data) => {
-        setFlagData(data);
-        setFlagFetched(true);
-      });
+      dispatch(fetchFlags());
+      setFlagFetched(true);
     }
-  }, [flagId, flagFetched]);
+  }, [dispatch, flagId, flagFetched]);
 
   useEffect(() => {
-    apiClient.getExperiments(flagId, (data) => {
+    if (!exptsFetched) {
+      dispatch(fetchExperiments(flagId));
       setExptsFetched(true);
-      setExptData(data);
-    });
-  }, [exptsFetched, flagId]);
+    }
+  }, [dispatch, flagId, exptsFetched]);
 
-  const setFlagExptStatus = (status) => {
-    setFlagData({ ...flagData, is_experiment: status });
+  const handleEditFlag = () => {
+    setIsEditing(true);
   };
 
-  const handleCreateExperiment = (e) => {
-    apiClient.toggleExperiment(flagId, true, () => setFlagExptStatus(true));
+  const handleCreateExperiment = async (e) => {
+    await dispatch(toggleExperiment(flagId, true));
     setExptsFetched(false);
   };
 
   const handleStopExperiment = () => {
-    apiClient.toggleExperiment(flagId, false, () => setFlagExptStatus(false));
+    dispatch(toggleExperiment(flagId, false));
+  };
+
+  const handleToggle = (id) => {
+    return (e) => {
+      dispatch(toggleFlag(id, e.target.checked));
+    };
   };
 
   if (!flagData) return null;
   return (
     <div className="py-5 px-8 w-full">
-      <h1 className="font-bold text-xl">{flagData.name}</h1>
-      <p>{flagData.description}</p>
-      <p>Current Status: <span className="text-primary-violet font-bold">{flagData.status ? "On" : "Off"}</span></p>
-      <p>Rollout percentage: <span className="text-primary-violet font-bold">{flagData.percentage_split}%</span></p>
-      {flagData.is_experiment ? (
+      <div className="flex justify-between items-center border-b border-b-primary-oxfordblue mb-5">
+        <div className="flex items-center">
+          <h1 className="inline font-bold text-xl text-primary-violet">
+            {flagData.name}
+          </h1>
+          <label className="toggle mx-5">
+            <input
+              type="checkbox"
+              defaultChecked={flagData.status ? true : false}
+              onChange={handleToggle(flagId)}
+            />
+            <span className="slider round"></span>
+          </label>
+        </div>
+        <div>
+          {!isEditing && (
+            <button
+              className="btn bg-primary-turquoise"
+              onClick={handleEditFlag}
+            >
+              Edit
+            </button>
+          )}
+          {flagData.is_experiment ? (
+            <>
+              <button
+                className="btn bg-primary-violet"
+                onClick={handleStopExperiment}
+              >
+                Stop Experiment
+              </button>
+            </>
+          ) : (
+            <button
+              className="btn bg-primary-turquoise"
+              onClick={handleCreateExperiment}
+            >
+              Create an experiment
+            </button>
+          )}
+        </div>
+      </div>
+      {!isEditing ? (
         <>
-          <button className="btn bg-primary-violet" onClick={handleStopExperiment}>Stop Experiment</button>
+          <p>{flagData.description}</p>
+          <p>
+            Current Status:{" "}
+            <span className="text-primary-violet font-bold">
+              {flagData.status ? "On" : "Off"}
+            </span>
+          </p>
+          <p>
+            Rollout percentage:{" "}
+            <span className="text-primary-violet font-bold">
+              {flagData.percentage_split}%
+            </span>
+          </p>
         </>
-      ) :
-        <button className="btn bg-primary-turquoise" onClick={handleCreateExperiment}>
-          Create an experiment
-        </button>
-      }
-      {exptData && exptData.map(expt => {
-        return <ExperimentInfo key={expt.id} { ...expt } />
-      })}
+      ) : (
+        <EditFlagForm setIsEditing={setIsEditing} />
+      )}
+      {exptData &&
+        exptData.map((expt) => {
+          return <ExperimentInfo key={expt.id} {...expt} />;
+        })}
     </div>
   );
 };

@@ -55,6 +55,13 @@ const apiClient = {
       .then(callback)
       .catch(logError);
   },
+  editFlag: function(id, updatedFields, callback) {
+    return axios
+      .put(`/api/flags/${id}`, updatedFields)
+      .then(unwrapData)
+      .then(callback)
+      .catch(logError);
+  },
   toggleExperiment: function(id, status, callback) {
     return axios
       .put(`/api/flags/${id}`, { is_experiment: status })
@@ -71,21 +78,21 @@ const apiClient = {
   },
   connectToDB: function(dbObj, callback) {
     return axios
-      .post('api/connection', dbObj)
+      .post('/api/connection', dbObj)
       .then(unwrapData)
       .then(callback)
       .catch(logError)
   },
   removeDBConnection: function(callback) {
     return axios
-      .delete('api/connection')
+      .delete('/api/connection')
       .then(unwrapData)
       .then(callback)
       .catch(logError)
   },
   checkDBConnection: function(callback) {
     return axios
-      .get('api/connection')
+      .get('/api/connection')
       .then(unwrapData)
       .then(callback)
       .catch(logError)
