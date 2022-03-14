@@ -19,7 +19,8 @@ const EditFlagForm = ({ setIsEditing }) => {
     flagData ? flagData.percentage_split : 100
   );
 
-  const handleSaveEdits = () => {
+  const handleSaveEdits = (e) => {
+    e.preventDefault();
     if (
       newName.length === 0 ||
       isNaN(Number(newPercent)) ||
@@ -29,7 +30,7 @@ const EditFlagForm = ({ setIsEditing }) => {
       alert("Please check your inputs again.");
       return;
     }
-    if (flagNames.includes(newName)) {
+    if (flagNames.includes(newName) && newName !== flagData.name) {
       alert("Name is already taken by another feature flag.");
       return;
     }
