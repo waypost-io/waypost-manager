@@ -1,4 +1,5 @@
 import apiClient from '../lib/ApiClient';
+import { fetchExperiments } from './exptActions';
 
 export function fetchFlags() {
   return function(dispatch) {
@@ -60,6 +61,7 @@ export function toggleExperiment(flagId, status) {
   return function(dispatch) {
     apiClient.toggleExperiment(flagId, status, (data) => {
       dispatch(editFlagSuccess(data));
+      dispatch(fetchExperiments(flagId));
     });
   }
 }
