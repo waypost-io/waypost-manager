@@ -14,12 +14,12 @@ const DatabaseConnection = ({ setDbModalOpen }) => {
   }
 
   return (
-    <div className="database-connection">
+    <div className="database-connection text-sm">
       <label htmlFor="database-connection">
         {dbName === "" ? "Not Connected " : `Currently connected to ${dbName} `}
       </label>
       {dbName === "" ?
-        <button className="btn bg-primary-turquoise" type="button" onClick={() => setDbModalOpen(true)}>
+        <button className="bg-primary-turquoise text-primary-offwhite rounded-lg py-2.5 px-6 ml-2" type="button" onClick={() => setDbModalOpen(true)}>
           Connect to Database
         </button>
         :
