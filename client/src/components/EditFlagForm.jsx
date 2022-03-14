@@ -6,6 +6,7 @@ import { editFlag } from "../actions/flagActions";
 const EditFlagForm = ({ setIsEditing }) => {
   const dispatch = useDispatch();
   const { flagId } = useParams();
+  const flagNames = useSelector((state) => state.flags.map(flag => flag.name));
   const flagData = useSelector((state) =>
     state.flags.find((flag) => flag.id === +flagId)
   );
@@ -25,7 +26,11 @@ const EditFlagForm = ({ setIsEditing }) => {
       newPercent < 0 ||
       newPercent > 100
     ) {
-      window.alert("Please check your inputs again.");
+      alert("Please check your inputs again.");
+      return;
+    }
+    if (flagNames.includes(newName)) {
+      alert("Name is already taken by another feature flag.");
       return;
     }
 
