@@ -209,7 +209,7 @@ Example response:
 ```
 
 ## Endpoint: PUT api/experiments/:id
-Request body should contain all updated fields and their new values. Example:
+Request body should contain all updated fields and their new values. Can use this to end the experiment (set the date_ended), or to update other fields like duration, name, etc. Example:
 ```
 {
   "duration": 30,
