@@ -86,11 +86,11 @@ const editFlag = async (req, res, next) => {
   const id = req.params.id;
   const now = getNowString();
   const updatedFields = req.body;
-  if (updatedFields.is_experiment) {
-    createExperiment(id);
-  } else if (updatedFields.is_experiment === false) {
-    stopExperiment(id);
-  }
+  // if (updatedFields.is_experiment) {
+  //   createExperiment(id);
+  // } else if (updatedFields.is_experiment === false) {
+  //   stopExperiment(id);
+  // }
 
   try {
     const updatedFlag = await flagTable.editRow(updatedFields, { id });

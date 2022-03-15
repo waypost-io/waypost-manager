@@ -16,9 +16,21 @@ const getExperiments = async (req, res, next) => {
   }
 };
 
-const createExperiment = async (flagId) => {
-  const newExpt = await experimentsTable.insertRow({ flag_id: flagId });
-  return newExpt.id;
+const createExperiment = async (req, res, next) => {
+  const flagId = req.params.flagId;
+  try {
+    const exptObj = {
+      flag_id: flagId,
+      duration: req.body.duration,
+      metric_ids: `{${req.body.metricIds.join(', ')}}`
+    };
+
+    const newExpt = await experimentsTable.insertRow(exptObj);
+    res.status(200).send(newExpt);
+  } catch (err) {
+    console.log(err);
+    res.status(500).send(err.message)
+  }
 };
 
 const stopExperiment = async (flagId) => {
