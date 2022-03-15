@@ -76,6 +76,13 @@ const apiClient = {
       .then(callback)
       .catch(logError);
   },
+  getMetrics: function(callback) {
+    return axios
+      .get('/api/metrics')
+      .then(unwrapData)
+      .then(callback)
+      .catch(logError);
+  },
   connectToDB: function(dbObj, callback) {
     return axios
       .post('/api/connection', dbObj)
