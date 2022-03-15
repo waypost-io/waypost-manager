@@ -139,7 +139,7 @@ const deleteFlag = async (req, res, next) => {
 const sendFlagsWebhook = async (req, res, next) => {
   try {
     await sendWebhook(req.flags);
-    res.status(200);
+    res.status(200).send("Webhook sent");
   } catch (err) {
     console.log("Could not send webhook");
   }
