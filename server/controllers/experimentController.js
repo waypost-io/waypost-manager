@@ -72,9 +72,10 @@ const editExperiment = async (req, res, next) => {
   }
 };
 
-const updateExperimentSize = async (req, res, next) => {
+const updateExperimentData = async (req, res, next) => {
   const id = req.params.id;
   // Adds row for test group and control group in the exposures table
+  // Updates the test mean and control mean in the experiment_metrics table
   res.status(200).send("Todo");
 };
 
@@ -88,5 +89,5 @@ exports.getExperimentsForFlag = getExperimentsForFlag;
 exports.getExperiment = getExperiment;
 exports.createExperiment = createExperiment;
 exports.editExperiment = editExperiment;
-exports.updateExperimentSize = updateExperimentSize;
+exports.updateExperimentData = updateExperimentData;
 exports.getAnalysis = getAnalysis;
