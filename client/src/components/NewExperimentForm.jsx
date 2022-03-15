@@ -6,18 +6,13 @@ import { editFlag } from "../actions/flagActions";
 const NewExperimentForm = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { flagId } = useParams();
-  // I lose this state upon refresh
-  const flagData = useSelector((state) =>
-    state.flags.find((flag) => flag.id === +flagId)
-  );
-  // const metrics = useSelector((state) => state.metrics);
+  const flagId = useParams();
 
   const [duration, setDuration] = useState(14);
   const [percentTest, setPercentTest] = useState(50);
   const [name, setName] = useState("")
   const [description, setDescription] = useState("");
-  const [metricIds, setMetricIds] = useState([]);
+  const [metricIds, setMetricIds] = useState([1, 2]);
 
   useEffect(() => {
     // getMetrics data here, and update state if need be.
