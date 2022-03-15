@@ -273,6 +273,51 @@ Example response:
     "type": "binomial"
 }
 ```
+## Endpoint: POST api/metrics
+For creating a new metric. Required fields are:
+- name (string up to 50 chars, must be unique)
+- query_string (string representing the query to get this data from your database)
+- type (one of: 'binomial', 'count', 'duration', 'revenue')
+Example request body:
+```
+{
+  "name": "Pageviews",
+  "query_string": "SELECT * FROM pageviews;",
+  "type": "count"
+}
+```
+Returns the newly created metric.
+Example response body:
+```
+{
+    "id": 10,
+    "name": "Pageviews",
+    "query_string": "SELECT * FROM pageviews;",
+    "type": "count"
+}
+```
+## Endpoint: PUT api/metrics/:id
+For editing a specific metric. Fields can include name, query_string, or type.
+Example response body:
+```
+{
+  "name": "Pageviews per user"
+}
+```
+Returns the newly updated object.
+Example response body:
+```
+{
+    "id": 10,
+    "name": "Pageviews per user",
+    "query_string": "SELECT * FROM pageviews;",
+    "type": "count"
+}
+```
+## Endpoint: DELETE api/metrics/:id
+For deleting a specific metric. No request body needed.
+Example response body for `DELETE api/metrics/10`:
+`"Metric 'Pageviews per user' with id 10 successfully deleted"`
 
 ## Endpoint: POST api/connection
 
