@@ -21,8 +21,8 @@ const MetricsItem = ({ id, name, query_string, type }) => {
         <p>Type: {type}</p>
       </div>
       <div>
-        <button onClick={handleEditMetric} className="bg-primary-violet text-primary-offwhite rounded py-2 px-5 block mb-2">Edit</button>
-        <button onClick={handleDeleteMetric} className="hover:text-primary-violet">Delete</button>
+        <button onClick={handleEditMetric} className="border border-primary-violet text-primary-black rounded py-2 px-5 hover:text-primary-violet mr-2">Edit</button>
+        <button onClick={handleDeleteMetric} className="border border-primary-violet text-primary-black rounded py-2 px-5 hover:text-primary-violet">Delete</button>
       </div>
     </div>
   );
