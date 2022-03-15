@@ -46,19 +46,27 @@ const createNewFlagObj = ({
 
 const getAllFlags = async (req, res, next) => {
   try {
-    const data = await flagTable.getAllRows();
-    if (!data) {
-      throw new Error(
-        `Data could not be retreived from the ${flagTable.tableName} table`
-      );
+    let data;
+
+    if (req.query.prov) {
+      data = await getFlagsForWebhook();
+    } else {
+      data = await flagTable.getAllRows();
+
+      if (!data) {
+        throw new Error(
+          `Data could not be retreived from the ${flagTable.tableName} table`
+        );
+      }
     }
+
     res.status(200).send(data);
   } catch (e) {
     res.status(500).send(e.message);
   }
 };
 
-const getAllFlagsData = async (req, res, next) => {
+const setFlagsOnReq = async (req, res, next) => {
   const data = await getFlagsForWebhook();
   req.flags = data;
   next();
@@ -141,12 +149,7 @@ const deleteFlag = async (req, res, next) => {
 const sendFlagsWebhook = async (req, res, next) => {
   try {
     await sendWebhook(req.flags);
-    // differentiate between initial boot and an update
-    if (req.update) {
-      res.status(200);
-    } else {
-      res.status(200).send("Webhook sent");
-    }
+    res.status(200).send("Webhook sent");
   } catch (err) {
     console.log(err);
     console.log("Could not send webhook");
@@ -158,5 +161,5 @@ exports.createFlag = createFlag;
 exports.editFlag = editFlag;
 exports.deleteFlag = deleteFlag;
 exports.getFlag = getFlag;
-exports.getAllFlagsData = getAllFlagsData;
+exports.setFlagsOnReq = setFlagsOnReq;
 exports.sendFlagsWebhook = sendFlagsWebhook;

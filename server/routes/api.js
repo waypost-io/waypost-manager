@@ -9,12 +9,6 @@ const { validateNewFlag } = require("../validators/validators");
 
 router.get("/flags", flagsController.getAllFlags);
 
-router.get(
-  "/flags/provider",
-  flagsController.getAllFlagsData,
-  flagsController.sendFlagsWebhook
-);
-
 // router.get("/flags", validateSDKKey, flagsController.getAllFlags);
 
 router.get("/flags/:id", flagsController.getFlag);
@@ -23,21 +17,21 @@ router.post(
   "/flags",
   validateNewFlag,
   flagsController.createFlag,
-  flagsController.getAllFlagsData,
+  flagsController.setFlagsOnReq,
   flagsController.sendFlagsWebhook
 );
 
 router.put(
   "/flags/:id",
   flagsController.editFlag,
-  flagsController.getAllFlagsData,
+  flagsController.setFlagsOnReq,
   flagsController.sendFlagsWebhook
 );
 
 router.delete(
   "/flags/:id",
   flagsController.deleteFlag,
-  flagsController.getAllFlagsData,
+  flagsController.setFlagsOnReq,
   flagsController.sendFlagsWebhook
 );
 
