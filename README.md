@@ -124,6 +124,119 @@ Response example:
 ```
 `Flag '${deletedFlagName}' with id = ${id} successfully deleted`
 ```
+## Endpoint: api/flags/:id/experiments
+No request body needed.
+Returns an array of all the experiments for the given flag.
+
+Response example:
+```
+[
+    {
+        "id": 1,
+        "flag_id": 1,
+        "date_started": "2022-03-14T07:00:00.000Z",
+        "date_ended": null,
+        "duration": 30,
+        "hash_offset": 83,
+        "name": "Experiment 1",
+        "description": "Description for expt 1",
+        "metric_ids": [1,2],
+        "mean_test": null,
+        "mean_control": null,
+        "standard_dev_test": null,
+        "standard_dev_control": null,
+        "p_value": null
+    }
+]
+```
+
+## Endpoint: GET api/experiments/:id
+
+No request body needed.
+Returns the experiment with the given id.
+
+Response example:
+
+```
+{
+    "id": 2,
+    "flag_id": 2,
+    "date_started": "2022-03-14T07:00:00.000Z",
+    "date_ended": null,
+    "duration": 30,
+    "hash_offset": 41,
+    "name": "Experiment 2",
+    "description": "Description for expt 2",
+    "metric_ids": [1,2],
+    "mean_test": null,
+    "mean_control": null,
+    "standard_dev_test": null,
+    "standard_dev_control": null,
+    "p_value": null
+}
+```
+## Endpoint: POST api/experiments
+For creating a new experiment.  Request body should have the following fields in the example unless marked optional.
+Example:
+```
+{
+  "flag_id": 1,
+  "duration": 30,
+  "metric_ids": [101, 102, 103],
+  "name": "First experiment", (OPTIONAL)
+  "description": "Very important test" (OPTIONAL)
+}
+```
+The API will return the newly created experiment object.
+Example response:
+```
+{
+    "id": 4,
+    "flag_id": 1,
+    "date_started": "2022-03-14T07:00:00.000Z",
+    "date_ended": null,
+    "duration": 30,
+    "hash_offset": 2,
+    "name": "First experiment",
+    "description": "Very important test",
+    "metric_ids": [101,102, 103],
+    "mean_test": null,
+    "mean_control": null,
+    "standard_dev_test": null,
+    "standard_dev_control": null,
+    "p_value": null
+}
+```
+
+## Endpoint: PUT api/experiments/:id
+Request body should contain all updated fields and their new values. Can use this to end the experiment (set the date_ended), or to update other fields like duration, name, etc. Example:
+```
+{
+  "duration": 30,
+  "name": "My cool experiment",
+  "description": "A cool description"
+}
+```
+Returns the newly updated experiment.
+Response example:
+```
+{
+    "id": 1,
+    "flag_id": 1,
+    "date_started": "2022-03-14T07:00:00.000Z",
+    "date_ended": null,
+    "duration": 31,
+    "hash_offset": 83,
+    "name": "Experiment 1",
+    "description": "Description for expt 1",
+    "metric_ids": [1, 2],
+    "mean_test": null,
+    "mean_control": null,
+    "standard_dev_test": null,
+    "standard_dev_control": null,
+    "p_value": null
+}
+```
 
 ## Endpoint: POST api/connection
 
