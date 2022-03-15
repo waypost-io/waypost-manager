@@ -26,7 +26,7 @@ router.post(
 
 router.get("/flags/:id/experiments", experimentController.getExperimentsForFlag);
 
-router.put("/flags/:id", flagsController.editFlag, streamController.sendUpdate);
+router.put("/flags/:id", flagsController.editFlag);
 
 router.delete(
   "/flags/:id",
