@@ -31,9 +31,9 @@ const createExperiment = async (req, res, next) => {
   try {
     const hash_offset = Math.floor(Math.random() * 100);
     const exptObj = {
-      flag_id: req.body.flagId,
+      flag_id: req.body.flag_id,
       duration: req.body.duration,
-      metric_ids: `{${req.body.metricIds.join(', ')}}`,
+      metric_ids: `{${req.body.metric_ids.join(', ')}}`,
       name: req.body.name || '',
       description: req.body.description || '',
       hash_offset
