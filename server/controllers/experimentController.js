@@ -5,10 +5,21 @@ const { getNowString } = require("../utils");
 const experimentsTable = new PGTable(EXPERIMENTS_TABLE_NAME);
 experimentsTable.init();
 
-const getExperiments = async (req, res, next) => {
-  const flagId = req.params.flagId;
+const getExperiment = async (req, res, next) => {
+  const id = req.params.id;
   try {
-    const experiments = await experimentsTable.query(GET_EXPERIMENTS_QUERY, [flagId]);
+    const experiment = await experimentsTable.getRow(id);
+    res.status(200).send(experiment);
+  } catch (err) {
+    console.log(err);
+    res.status(500).send(err.message)
+  }
+};
+
+const getExperimentsForFlag = async (req, res, next) => {
+  const id = req.params.id;
+  try {
+    const experiments = await experimentsTable.query(GET_EXPERIMENTS_QUERY, [id]);
     res.status(200).send(experiments.rows);
   } catch (err) {
     console.log(err);
@@ -42,6 +53,7 @@ const stopExperiment = async (flagId) => {
   }
 }
 
-exports.getExperiments = getExperiments;
+exports.getExperimentsForFlag = getExperimentsForFlag;
+exports.getExperiment = getExperiment;
 exports.createExperiment = createExperiment;
 exports.stopExperiment = stopExperiment;

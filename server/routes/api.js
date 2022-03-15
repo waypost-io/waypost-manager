@@ -23,6 +23,8 @@ router.post(
   streamController.sendUpdate
 );
 
+router.get("/flags/:id/experiments", experimentController.getExperimentsForFlag);
+
 router.put("/flags/:id", flagsController.editFlag, streamController.sendUpdate);
 
 router.delete(
@@ -31,7 +33,7 @@ router.delete(
   streamController.sendUpdate
 );
 
-router.get("/experiments/:flagId", experimentController.getExperiments);
+router.get("/experiments/:id", experimentController.getExperiment);
 
 router.post("/experiments", experimentController.createExperiment)
 
