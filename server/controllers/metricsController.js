@@ -1,6 +1,7 @@
 const PGTable = require("../db/PGTable");
 const { METRICS_TABLE_NAME, METRIC_TYPES } = require("../constants/db");
 const { getNowString } = require("../utils");
+const { eventDbQuery } = require("../db/event-db-query");
 
 const metricsTable = new PGTable(METRICS_TABLE_NAME);
 metricsTable.init();
@@ -32,8 +33,17 @@ const createMetric = async (req, res, next) => {
       res.status(400).send("Type not valid");
       return;
     }
-    // TODO: Validate the query by connecting to the database
-    // If no database connection, tell them to set that up first.
+    // Validate the query structure
+    const queryResult = await eventDbQuery(`${req.body.query_string} WHERE FALSE;`);
+    const tableCols = queryResult.fields.map(field => field.name);
+    const required = ['user_id', 'timestamp', 'value'];
+    for (let i = 0; i < required.length; i++) {
+      if (!tableCols.includes(required[i])) {
+        res.status(400).send("Query must return user_id, timestamp, and value columns");
+        return;
+      }
+    };
+    console.log("Query validated");
 
     const metricObj = {
       name: req.body.name,
