@@ -29,10 +29,10 @@ router.put(
   flagsController.sendFlagsWebhook
 );
 
-router.get("/flags/:id/experiments", experimentController.getExperimentsForFlag);
-
-router.put("/flags/:id", flagsController.editFlag, flagsController.setFlagsOnReq,
-flagsController.sendFlagsWebhook);
+router.get(
+  "/flags/:id/experiments",
+  experimentController.getExperimentsForFlag
+);
 
 router.delete(
   "/flags/:id",
@@ -43,7 +43,11 @@ router.delete(
 
 router.get("/experiments/:id", experimentController.getExperiment);
 
-router.put("/experiments/:id", experimentController.editExperiment, experimentController.getAnalysis);
+router.put(
+  "/experiments/:id",
+  experimentController.editExperiment,
+  experimentController.getAnalysis
+);
 
 router.post("/experiments", experimentController.createExperiment);
 
