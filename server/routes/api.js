@@ -4,34 +4,40 @@ const flagsController = require("../controllers/flagsController");
 const experimentController = require("../controllers/experimentController");
 const metricsController = require("../controllers/metricsController");
 const connectionController = require("../controllers/connectionController");
-const streamController = require("../controllers/streamController");
 const { validateNewFlag } = require("../validators/validators");
 // will implement later
 // const { validateSDKKey, validateNewFlag } = require("../validators/validators");
 
 router.get("/flags", flagsController.getAllFlags);
+
+router.get(
+  "/flags/provider",
+  flagsController.getAllFlagsData,
+  flagsController.sendFlagsWebhook
+);
+
 // router.get("/flags", validateSDKKey, flagsController.getAllFlags);
+
 router.get("/flags/:id", flagsController.getFlag);
-
-router.get("/stream", streamController.handleNewConnection);
-
-router.get("/status", streamController.status);
 
 router.post(
   "/flags",
   validateNewFlag,
   flagsController.createFlag,
-  streamController.sendUpdate
+  flagsController.getAllFlagsData,
+  flagsController.sendFlagsWebhook
 );
 
 router.get("/flags/:id/experiments", experimentController.getExperimentsForFlag);
 
-router.put("/flags/:id", flagsController.editFlag);
+router.put("/flags/:id", flagsController.editFlag, flagsController.getAllFlagsData,
+flagsController.sendFlagsWebhook);
 
 router.delete(
   "/flags/:id",
   flagsController.deleteFlag,
-  streamController.sendUpdate
+  flagsController.getAllFlagsData,
+  flagsController.sendFlagsWebhook
 );
 
 router.get("/experiments/:id", experimentController.getExperiment);
