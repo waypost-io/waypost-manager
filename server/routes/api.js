@@ -31,7 +31,7 @@ router.put(
 
 router.get("/flags/:id/experiments", experimentController.getExperimentsForFlag);
 
-router.put("/flags/:id", flagsController.editFlag, flagsController.getAllFlagsData,
+router.put("/flags/:id", flagsController.editFlag, flagsController.setFlagsOnReq,
 flagsController.sendFlagsWebhook);
 
 router.delete(
