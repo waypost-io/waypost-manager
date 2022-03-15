@@ -7,6 +7,7 @@ import './App.css';
 import FlagDashboard from './components/FlagDashboard';
 import SideNav from './components/SideNav';
 import FlagDetailsPage from './components/FlagDetailsPage';
+import MetricsPage from './components/MetricsPage';
 import Header from './components/Header';
 import DBModal from './components/DBModal';
 
@@ -28,6 +29,7 @@ function App() {
           <Routes>
             <Route exact path="/" element={<FlagDashboard />} />
             <Route path="/flags/:flagId" element={<FlagDetailsPage />} />
+            <Route path="/metrics" element={<MetricsPage />} />
           </Routes>
         </BrowserRouter>
       </main>

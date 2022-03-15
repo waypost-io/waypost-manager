@@ -2,7 +2,7 @@ import React from 'react';
 
 const navLinks =[
   { id: 1, title: 'Flags Dashboard', path: "/" },
-  { id: 2, title: 'Event Log', path: "/"},
+  { id: 2, title: 'Metrics', path: '/metrics' },
   { id: 3, title: 'Get an SDK Key', path: "/"}
 ]
 
