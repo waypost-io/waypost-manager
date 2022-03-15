@@ -57,15 +57,6 @@ export function createFlagSuccess(flag) {
   return { type: "CREATE_FLAG_SUCCESS", flag };
 }
 
-export function toggleExperiment(flagId, status) {
-  return function(dispatch) {
-    apiClient.toggleExperiment(flagId, status, (data) => {
-      dispatch(editFlagSuccess(data));
-      dispatch(fetchExperiments(flagId));
-    });
-  }
-}
-
 export function editFlag(id, updatedFields) {
   return function(dispatch) {
     apiClient.editFlag(id, updatedFields, (data) => {

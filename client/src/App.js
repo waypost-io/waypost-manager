@@ -9,6 +9,7 @@ import SideNav from './components/SideNav';
 import FlagDetailsPage from './components/FlagDetailsPage';
 import Header from './components/Header';
 import DBModal from './components/DBModal';
+import NewExperimentPage from './components/NewExperimentPage';
 
 function App() {
   const dispatch = useDispatch();
@@ -28,6 +29,7 @@ function App() {
           <Routes>
             <Route exact path="/" element={<FlagDashboard />} />
             <Route path="/flags/:flagId" element={<FlagDetailsPage />} />
+            <Route path="/flags/:flagId/create_experiment" element={<NewExperimentPage />} />
           </Routes>
         </BrowserRouter>
       </main>
