@@ -33,7 +33,7 @@ router.delete(
 
 router.get("/experiments/:flagId", experimentController.getExperiments);
 
-router.post("/experiments/:flagId", experimentController.createExperiment)
+router.post("/experiments", experimentController.createExperiment)
 
 router.post("/connection", connectionController.createConnection);
 

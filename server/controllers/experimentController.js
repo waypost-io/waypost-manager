@@ -17,10 +17,9 @@ const getExperiments = async (req, res, next) => {
 };
 
 const createExperiment = async (req, res, next) => {
-  const flagId = req.params.flagId;
   try {
     const exptObj = {
-      flag_id: flagId,
+      flag_id: req.body.flagId,
       duration: req.body.duration,
       metric_ids: `{${req.body.metricIds.join(', ')}}`
     };
