@@ -7,6 +7,7 @@ import './App.css';
 import FlagDashboard from './components/FlagDashboard';
 import SideNav from './components/SideNav';
 import FlagDetailsPage from './components/FlagDetailsPage';
+import MetricsPage from './components/MetricsPage';
 import Header from './components/Header';
 import DBModal from './components/DBModal';
 import NewExperimentPage from './components/NewExperimentPage';
@@ -30,6 +31,7 @@ function App() {
             <Route exact path="/" element={<FlagDashboard />} />
             <Route path="/flags/:flagId" element={<FlagDetailsPage />} />
             <Route path="/flags/:flagId/create_experiment" element={<NewExperimentPage />} />
+            <Route path="/metrics" element={<MetricsPage />} />
           </Routes>
         </BrowserRouter>
       </main>
