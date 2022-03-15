@@ -35,6 +35,8 @@ router.delete(
 
 router.get("/experiments/:id", experimentController.getExperiment);
 
+router.put("/experiments/:id", experimentController.editExperiment);
+
 router.post("/experiments", experimentController.createExperiment);
 
 router.get("/experiments/:id/analysis", experimentController.analyzeExperiment);

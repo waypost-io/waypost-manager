@@ -47,13 +47,15 @@ const createExperiment = async (req, res, next) => {
   }
 };
 
-const stopExperiment = async (flagId) => {
-  const updatedFields = { date_ended: getNowString() };
-  const where = {flag_id: flagId, date_ended: "NULL"};
+const editExperiment = async (req, res, next) => {
+  const id = req.params.id;
   try {
-    await experimentsTable.editRow(updatedFields, where);
+    const updatedFields = req.body;
+    const updatedExpt = await experimentsTable.editRow(updatedFields, { id: id });
+    res.status(200).send(updatedExpt);
   } catch (err) {
     console.log(err);
+    res.status(500).send(err.message)
   }
 };
 
@@ -65,5 +67,5 @@ const analyzeExperiment = async (req, res, next) => {
 exports.getExperimentsForFlag = getExperimentsForFlag;
 exports.getExperiment = getExperiment;
 exports.createExperiment = createExperiment;
-exports.stopExperiment = stopExperiment;
+exports.editExperiment = editExperiment;
 exports.analyzeExperiment = analyzeExperiment;
