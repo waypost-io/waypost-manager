@@ -34,6 +34,8 @@ const createExperiment = async (req, res, next) => {
       flag_id: req.body.flagId,
       duration: req.body.duration,
       metric_ids: `{${req.body.metricIds.join(', ')}}`,
+      name: req.body.name || '',
+      description: req.body.description || '',
       hash_offset
     };
 
