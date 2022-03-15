@@ -83,6 +83,20 @@ const apiClient = {
       .then(callback)
       .catch(logError);
   },
+  editMetric: function(id, updatedFields, callback) {
+    return axios
+      .put(`/api/metrics/${id}`, updatedFields)
+      .then(unwrapData)
+      .then(callback)
+      .catch(logError);
+  },
+  deleteMetric: function(id, callback) {
+    return axios
+      .delete(`/api/metrics/${id}`)
+      .then(unwrapData)
+      .then(callback)
+      .catch(logError);
+  },
   connectToDB: function(dbObj, callback) {
     return axios
       .post('/api/connection', dbObj)

@@ -6,6 +6,7 @@ import { fetchMetrics } from '../actions/metricActions';
 const MetricsPage = () => {
   const dispatch = useDispatch();
   const metrics = useSelector(state => state.metrics);
+
   useEffect(() => {
     dispatch(fetchMetrics());
   }, [dispatch]);
