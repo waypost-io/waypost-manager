@@ -1,14 +1,29 @@
 const PGTable = require("../db/PGTable");
-const { EXPERIMENTS_TABLE_NAME, GET_EXPERIMENTS_QUERY } = require("../constants/db");
+const { EXPERIMENTS_TABLE_NAME, EXPERIMENT_METRICS_TABLE_NAME, EXPOSURES_TABLE_NAME, GET_EXPERIMENTS_QUERY } = require("../constants/db");
 const { getNowString } = require("../utils");
 
 const experimentsTable = new PGTable(EXPERIMENTS_TABLE_NAME);
 experimentsTable.init();
+const experimentMetricsTable = new PGTable(EXPERIMENT_METRICS_TABLE_NAME);
+experimentMetricsTable.init();
+const exposuresTable = new PGTable(EXPOSURES_TABLE_NAME);
+exposuresTable.init();
 
-const getExperiments = async (req, res, next) => {
-  const flagId = req.params.flagId;
+const getExperiment = async (req, res, next) => {
+  const id = req.params.id;
   try {
-    const experiments = await experimentsTable.query(GET_EXPERIMENTS_QUERY, [flagId]);
+    const experiment = await experimentsTable.getRow(id);
+    res.status(200).send(experiment);
+  } catch (err) {
+    console.log(err);
+    res.status(500).send(err.message)
+  }
+};
+
+const getExperimentsForFlag = async (req, res, next) => {
+  const id = req.params.id;
+  try {
+    const experiments = await experimentsTable.query(GET_EXPERIMENTS_QUERY, [id]);
     res.status(200).send(experiments.rows);
   } catch (err) {
     console.log(err);
@@ -16,21 +31,63 @@ const getExperiments = async (req, res, next) => {
   }
 };
 
-const createExperiment = async (flagId) => {
-  const newExpt = await experimentsTable.insertRow({ flag_id: flagId });
-  return newExpt.id;
-};
-
-const stopExperiment = async (flagId) => {
-  const updatedFields = { date_ended: getNowString() };
-  const where = {flag_id: flagId, date_ended: "NULL"};
+const createExperiment = async (req, res, next) => {
   try {
-    await experimentsTable.editRow(updatedFields, where);
+    const hash_offset = Math.floor(Math.random() * 100);
+    const exptObj = {
+      flag_id: req.body.flag_id,
+      duration: req.body.duration,
+      name: req.body.name || '',
+      description: req.body.description || '',
+      hash_offset
+    };
+    const newExpt = await experimentsTable.insertRow(exptObj);
+    // Add each metric_id to experiment_metrics with the experiment_id
+    req.body.metric_ids.forEach(async (metricId) => {
+        await experimentMetricsTable.insertRow({ experiment_id: newExpt.id, metric_id: metricId });
+    });
+
+    res.status(200).send(newExpt);
   } catch (err) {
     console.log(err);
+    res.status(500).send(err.message)
   }
-}
+};
 
-exports.getExperiments = getExperiments;
+const editExperiment = async (req, res, next) => {
+  const id = req.params.id;
+  try {
+    const updatedFields = req.body;
+    const updatedExpt = await experimentsTable.editRow(updatedFields, { id: id });
+    // If regular edit, not stopping experiment, just send back updated expt
+    if (!updatedFields.date_ended) {
+      res.status(200).send(updatedExpt);
+      return;
+    }
+    // Else if stopping experiment, go to getAnalysis()
+    next();
+  } catch (err) {
+    console.log(err);
+    res.status(500).send(err.message)
+  }
+};
+
+const updateExperimentData = async (req, res, next) => {
+  const id = req.params.id;
+  // Adds row for test group and control group in the exposures table
+  // Updates the test mean and control mean in the experiment_metrics table
+  res.status(200).send("Todo");
+};
+
+const getAnalysis = async (req, res, next) => {
+  const id = req.params.id;
+  // Statistics and fill in the data in the experiments table
+  res.status(200).send("Analysis")
+};
+
+exports.getExperimentsForFlag = getExperimentsForFlag;
+exports.getExperiment = getExperiment;
 exports.createExperiment = createExperiment;
-exports.stopExperiment = stopExperiment;
+exports.editExperiment = editExperiment;
+exports.updateExperimentData = updateExperimentData;
+exports.getAnalysis = getAnalysis;
