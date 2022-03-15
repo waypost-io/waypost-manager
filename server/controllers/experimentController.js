@@ -59,6 +59,11 @@ const editExperiment = async (req, res, next) => {
   }
 };
 
+const updateExperiment = async (req, res, next) => {
+  const id = req.params.id;
+  res.status(200).send("Todo");
+};
+
 const analyzeExperiment = async (req, res, next) => {
   const id = req.params.id;
   res.status(200).send("Todo");
@@ -68,4 +73,5 @@ exports.getExperimentsForFlag = getExperimentsForFlag;
 exports.getExperiment = getExperiment;
 exports.createExperiment = createExperiment;
 exports.editExperiment = editExperiment;
+exports.updateExperiment = updateExperiment;
 exports.analyzeExperiment = analyzeExperiment;
