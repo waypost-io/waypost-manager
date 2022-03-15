@@ -62,13 +62,6 @@ const apiClient = {
       .then(callback)
       .catch(logError);
   },
-  toggleExperiment: function(id, status, callback) {
-    return axios
-      .put(`/api/flags/${id}`, { is_experiment: status })
-      .then(unwrapData)
-      .then(callback)
-      .catch(logError);
-  },
   getExperiments: function(id, callback) {
     return axios
       .get(`/api/experiments/${id}`)

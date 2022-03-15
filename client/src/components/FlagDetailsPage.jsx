@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchFlags, toggleFlag, toggleExperiment } from "../actions/flagActions";
-import { fetchExperiments } from "../actions/exptActions";
+import { fetchFlags, toggleFlag, editFlag } from "../actions/flagActions";
+import { fetchExperiments, editExperiment } from "../actions/exptActions";
 import { useParams, useNavigate } from "react-router-dom";
 import EditFlagForm from "./EditFlagForm";
 import ExperimentInfo from "./ExperimentInfo";
@@ -42,8 +42,11 @@ const FlagDetailsPage = () => {
     navigate(path);
   };
 
-  const handleStopExperiment = () => {
-    dispatch(toggleExperiment(flagId, false));
+  const handleStopExperiment = (e) => {
+    e.preventDefault();
+    const runningExptId = exptData.find(expt => expt.date_ended === null).id;
+    dispatch(editFlag(flagId, { is_experiment: false}));
+    dispatch(editExperiment(runningExptId, { date_ended: true}));
   };
 
   const handleToggle = (id) => {

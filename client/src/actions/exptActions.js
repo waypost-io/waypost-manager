@@ -19,3 +19,9 @@ export function createExperiment(exptObj) {
 export function createExperimentSuccess(newExpt) {
   return { type: "CREATE_EXPERIMENT_SUCCESS", newExpt };
 }
+
+export function editExperiment(exptId, updatedFields) {
+  return function(dispatch) {
+    apiClient.editExperiment(exptId, updatedFields);
+  }
+}

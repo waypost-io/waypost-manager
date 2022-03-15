@@ -35,8 +35,8 @@ const NewExperimentPage = () => {
   if (!flagData) return null;
   // if (!flagData || !metrics) return null;
   return (
-    <div>
-      <h1>Create an Experiment</h1>
+    <div className="ml-5 mt-5">
+      <h1 className="text-xl font-bold text-primary-oxfordblue">Create an Experiment</h1>
       <h3>This experiment will be on <strong>{`${flagData.name}`}</strong></h3>
       <NewExperimentForm metrics={metrics}/>
     </div>

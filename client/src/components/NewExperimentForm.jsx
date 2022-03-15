@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { editFlag } from "../actions/flagActions";
 import { createExperiment } from "../actions/exptActions";
+import MetricCheckbox from "./MetricCheckbox";
 
 const NewExperimentForm = ({ metrics }) => {
   const dispatch = useDispatch();
@@ -13,7 +14,7 @@ const NewExperimentForm = ({ metrics }) => {
   const [percentTest, setPercentTest] = useState(50);
   const [name, setName] = useState("")
   const [description, setDescription] = useState("");
-  const [metricIds, setMetricIds] = useState([1, 2]);
+  const [metricIds, setMetricIds] = useState([]);
 
   const backToFlag = `/flags/${flagId}`;
 
@@ -65,11 +66,12 @@ const NewExperimentForm = ({ metrics }) => {
     navigate(backToFlag);
   };
 
-  const handleChangeMetrics = (e) => {
-    // do some sort of handling of check boxes
-    // if checking a metric, add the id to the metricIds
-    // if unchecking a metric, remove the id to the metricIds
-    // look into checkbox events
+  const toggleMetric = (id) => {
+    if (metricIds.includes(id)) {
+      setMetricIds(metricIds.filter(existingId => existingId !== id))
+    } else {
+      setMetricIds([...metricIds, id]);
+    }
   }
 
   const handleCancel = (e) => {
@@ -79,7 +81,7 @@ const NewExperimentForm = ({ metrics }) => {
 
   return (
     <form>
-      <div>
+      <div className="mt-2.5">
         <label htmlFor="name" className="mr-2.5">
           Name (optional):{" "}
         </label>
@@ -130,12 +132,13 @@ const NewExperimentForm = ({ metrics }) => {
         />{" "}
         days
       </div>
-      <div className="mt-2.5">
-        <label htmlFor="metrics">Metrics</label>
-        <input type="checkbox" name="metric" id="clicks" value="Clicks" required />
-        <label for="clicks">
-          <div>Clicks</div>
-        </label>
+      <div id="metrics">
+        <h3 className="mt-2.5 font-bold text-base">Click the metrics you want to measure</h3>
+        <div className="flex mt-2.5 justify-start">
+        {metrics.map(({ name, id }) => (
+          <MetricCheckbox key={id} name={name} id={id} handleClick={() => toggleMetric(id)} selected={metricIds.includes(id)}/>
+        ))}
+        </div>
       </div>
       <button className="btn bg-primary-turquoise" onClick={handleSubmit}>
         Start New Experiment
