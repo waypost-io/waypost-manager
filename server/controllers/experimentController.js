@@ -58,9 +58,14 @@ const editExperiment = async (req, res, next) => {
   const id = req.params.id;
   try {
     const updatedFields = req.body;
-     // check if it is stopping the experiment, call the analyze func
     const updatedExpt = await experimentsTable.editRow(updatedFields, { id: id });
-    res.status(200).send(updatedExpt);
+    // If regular edit, not stopping experiment, just send back updated expt
+    if (!updatedFields.date_ended) {
+      res.status(200).send(updatedExpt);
+      return;
+    }
+    // Else if stopping experiment, go to getAnalysis()
+    next();
   } catch (err) {
     console.log(err);
     res.status(500).send(err.message)
@@ -73,11 +78,10 @@ const updateExperimentSize = async (req, res, next) => {
   res.status(200).send("Todo");
 };
 
-const analyzeExperiment = async (req, res, next) => {
+const getAnalysis = async (req, res, next) => {
   const id = req.params.id;
-  // call teh analyze func
   // Statistics and fill in the data in the experiments table
-  res.status(200).send("Todo");
+  res.status(200).send("Analysis")
 };
 
 exports.getExperimentsForFlag = getExperimentsForFlag;
@@ -85,4 +89,4 @@ exports.getExperiment = getExperiment;
 exports.createExperiment = createExperiment;
 exports.editExperiment = editExperiment;
 exports.updateExperimentSize = updateExperimentSize;
-exports.analyzeExperiment = analyzeExperiment;
+exports.getAnalysis = getAnalysis;

@@ -36,13 +36,13 @@ router.delete(
 
 router.get("/experiments/:id", experimentController.getExperiment);
 
-router.put("/experiments/:id", experimentController.editExperiment);
+router.put("/experiments/:id", experimentController.editExperiment, experimentController.getAnalysis);
 
 router.post("/experiments", experimentController.createExperiment);
 
 router.put("/experiments/:id/update", experimentController.updateExperimentSize);
 
-router.get("/experiments/:id/analysis", experimentController.analyzeExperiment);
+router.get("/experiments/:id/analysis", experimentController.getAnalysis);
 
 router.get("/metrics", metricsController.getMetrics);
 
