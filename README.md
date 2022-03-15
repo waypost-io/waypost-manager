@@ -237,6 +237,42 @@ Response example:
     "p_value": null
 }
 ```
+## Endpoint: GET api/metrics
+Returns an array of all metrics for the account.
+Example response:
+```
+[
+    {
+        "id": 1,
+        "name": "Created Account",
+        "query_string": "SELECT * FROM accounts;",
+        "type": "binomial"
+    },
+    {
+        "id": 2,
+        "name": "Pages per visit",
+        "query_string": "SELECT * FROM pages_per_visit;",
+        "type": "count"
+    },
+    {
+        "id": 3,
+        "name": "Time on site",
+        "query_string": "SELECT * FROM time_on_site;",
+        "type": "duration"
+    }
+]
+```
+## Endpoint: GET api/metrics/:id
+Returns the metric with the given id.
+Example response:
+```
+{
+    "id": 1,
+    "name": "Created Account",
+    "query_string": "SELECT * FROM accounts;",
+    "type": "binomial"
+}
+```
 
 ## Endpoint: POST api/connection
 

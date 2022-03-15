@@ -6,12 +6,24 @@ const metricsTable = new PGTable(METRICS_TABLE_NAME);
 metricsTable.init();
 
 const getMetrics = async (req, res, next) => {
-  res.status(200).send("TODO: Get Metrics");
+  try {
+    const metrics = await metricsTable.getAllRows();
+    res.status(200).send(metrics);
+  } catch (err) {
+    console.log(err);
+    res.status(500).send(err.message)
+  }
 };
 
 const getMetric = async (req, res, next) => {
   const id = req.params.id;
-  res.status(200).send("TODO: Get Metric");
+  try {
+    const metric = await metricsTable.getRow(id);
+    res.status(200).send(metric);
+  } catch (err) {
+    console.log(err);
+    res.status(500).send(err.message)
+  }
 };
 
 const createMetric = async (req, res, next) => {
