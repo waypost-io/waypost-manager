@@ -19,24 +19,24 @@ const NewExperimentForm = ({ metrics }) => {
   const backToFlag = `/flags/${flagId}`;
 
   const validPercent = (percent) => {
+    if (percent === "e") return false;
     percent = Number(percent);
-    return percent >= 0 && percent <= 100 && !isNaN(percentTest) && Math.floor(percent) === percent;
+    const result = percent >= 0 && percent <= 100 && !isNaN(percentTest) && Math.floor(percent) === percent;
+    return result
   }
 
   const validMetrics = (metricIds) => {
     const existingMetricIds = metrics.map((metric) => metric.id);
-    console.log("existingMetricIds", existingMetricIds);
-    console.log(metricIds);
-    console.log(typeof metricIds[0]);
     return metricIds.every(id => existingMetricIds.includes(id));
   }
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    let errMessage = ""
+  const validateInput = () => {
+    let errMessage = "";
+
     if (duration < 1) {
       errMessage += "- The duration has to be at least one day\n"
     }
+
     if (!validPercent(percentTest)) {
       errMessage += "- The percentage you're testing has to be an integer between 0-100\n"
     }
@@ -50,9 +50,20 @@ const NewExperimentForm = ({ metrics }) => {
     }
 
     if (!validMetrics(metricIds)) {
-      // maybe edit this error message to something better
-      errMessage += "- Please check to make sure your metrics are saved on the metrics page\n"
+      errMessage += "- Please check metrics page to make sure those you selected still exist\n"
     }
+
+    if (metricIds.length === 0) {
+      errMessage += "- Please select at least one metric. If your desired ones aren't present please visit the 'Metrics' tab and add them before starting the experiment\n"
+    }
+
+    return errMessage
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    let errMessage = validateInput();
+
     if (errMessage.length > 0) {
       alert(errMessage);
       return;
@@ -133,7 +144,7 @@ const NewExperimentForm = ({ metrics }) => {
         days
       </div>
       <div id="metrics">
-        <h3 className="mt-2.5 font-bold text-base">Click the metrics you want to measure</h3>
+        <h3 className="mt-2.5 font-bold text-base">Select the metrics you want to measure</h3>
         <div className="flex mt-2.5 justify-start">
         {metrics.map(({ name, id }) => (
           <MetricCheckbox key={id} name={name} id={id} handleClick={() => toggleMetric(id)} selected={metricIds.includes(id)}/>
