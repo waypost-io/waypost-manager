@@ -29,10 +29,12 @@ const getExperimentsForFlag = async (req, res, next) => {
 
 const createExperiment = async (req, res, next) => {
   try {
+    const hash_offset = Math.floor(Math.random() * 100);
     const exptObj = {
       flag_id: req.body.flagId,
       duration: req.body.duration,
-      metric_ids: `{${req.body.metricIds.join(', ')}}`
+      metric_ids: `{${req.body.metricIds.join(', ')}}`,
+      hash_offset
     };
 
     const newExpt = await experimentsTable.insertRow(exptObj);
