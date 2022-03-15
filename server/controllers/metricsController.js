@@ -62,7 +62,16 @@ const editMetric = async (req, res, next) => {
 
 const deleteMetric = async (req, res, next) => {
   const id = req.params.id;
-  res.status(200).send("TODO: Delete Metric");
+  try {
+    const result = await metricsTable.deleteRow(id);
+    if (result.rows.length === 0) {
+      throw new Error(`Metric with id ${id} doesn't exist`);
+    }
+    const deletedMetricName = result.rows[0].name;
+    res.status(200).send(`Metric '${deletedMetricName}' with id ${id} successfully deleted`);
+  } catch (e) {
+    res.status(500).send(e.message);
+  }
 };
 
 exports.getMetrics = getMetrics;
