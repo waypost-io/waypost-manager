@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchFlags, toggleFlag, toggleExperiment } from "../actions/flagActions";
-import { fetchExperiments } from "../actions/exptActions";
-import { useParams } from "react-router-dom";
+import { fetchFlags, toggleFlag, editFlag } from "../actions/flagActions";
+import { fetchExperiments, editExperiment } from "../actions/exptActions";
+import { useParams, useNavigate } from "react-router-dom";
 import EditFlagForm from "./EditFlagForm";
 import ExperimentInfo from "./ExperimentInfo";
 
 const FlagDetailsPage = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { flagId } = useParams();
   const flagData = useSelector((state) =>
     state.flags.find((flag) => flag.id === +flagId)
@@ -35,13 +36,17 @@ const FlagDetailsPage = () => {
     setIsEditing(true);
   };
 
-  const handleCreateExperiment = async (e) => {
-    await dispatch(toggleExperiment(flagId, true));
-    setExptsFetched(false);
+  const handleCreateExperiment = (e) => {
+    e.preventDefault();
+    let path = `/flags/${flagId}/create_experiment`;
+    navigate(path);
   };
 
-  const handleStopExperiment = () => {
-    dispatch(toggleExperiment(flagId, false));
+  const handleStopExperiment = (e) => {
+    e.preventDefault();
+    const runningExptId = exptData.find(expt => expt.date_ended === null).id;
+    dispatch(editFlag(flagId, { is_experiment: false}));
+    dispatch(editExperiment(runningExptId, { date_ended: true}));
   };
 
   const handleToggle = (id) => {
@@ -50,7 +55,7 @@ const FlagDetailsPage = () => {
     };
   };
 
-  if (!flagData) return null;
+  if (!flagData || !exptData) return null;
   return (
     <div className="py-5 px-8 w-full">
       <div className="flex justify-between items-center border-b border-b-primary-oxfordblue mb-5">

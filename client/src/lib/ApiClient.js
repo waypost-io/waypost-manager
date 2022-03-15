@@ -62,13 +62,6 @@ const apiClient = {
       .then(callback)
       .catch(logError);
   },
-  toggleExperiment: function(id, status, callback) {
-    return axios
-      .put(`/api/flags/${id}`, { is_experiment: status })
-      .then(unwrapData)
-      .then(callback)
-      .catch(logError);
-  },
   getExperiments: function(id, callback) {
     return axios
       .get(`/api/experiments/${id}`)
@@ -118,6 +111,34 @@ const apiClient = {
       .then(callback)
       .catch(logError)
   },
+  createExperiment: function(obj, callback) {
+    return axios
+      .post('/api/experiments', obj)
+      .then(unwrapData)
+      .then(callback)
+      .catch(logError)
+  },
+  editExperiment: function(id, obj, callback) {
+    return axios
+      .put(`/api/experiments/${id}`, obj)
+      .then(unwrapData)
+      .then(callback)
+      .catch(logError)
+  },
+  getExperiment: function(id, callback) {
+    return axios
+      .get(`/api/experiments/${id}`)
+      .then(unwrapData)
+      .then(callback)
+      .catch(logError)
+  },
+  fetchExperiments: function(flagId, callback) {
+    return axios
+      .get(`/api/flags/${flagId}/experiments`)
+      .then(unwrapData)
+      .then(callback)
+      .catch(logError)
+  }
 };
 
 export default apiClient;
