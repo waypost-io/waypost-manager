@@ -58,6 +58,9 @@ const editExperiment = async (req, res, next) => {
   const id = req.params.id;
   try {
     const updatedFields = req.body;
+    if (updatedFields.date_ended) {
+      updatedFields.date_ended = getNowString();
+    }
     const updatedExpt = await experimentsTable.editRow(updatedFields, { id: id });
     // If regular edit, not stopping experiment, just send back updated expt
     if (!updatedFields.date_ended) {

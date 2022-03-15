@@ -124,7 +124,7 @@ Response example:
 ```
 `Flag '${deletedFlagName}' with id = ${id} successfully deleted`
 ```
-## Endpoint: api/flags/:id/experiments
+## Endpoint: GET api/flags/:id/experiments
 No request body needed.
 Returns an array of all the experiments for the given flag.
 
@@ -209,7 +209,9 @@ Example response:
 ```
 
 ## Endpoint: PUT api/experiments/:id
-Request body should contain all updated fields and their new values. Can use this to end the experiment (set the date_ended), or to update other fields like duration, name, etc. Example:
+Request body should contain all updated fields and their new values. Can use this to end the experiment (to do this, set the "date_ended" to `true`), or to update other fields like duration, name, etc. When an experiment is ended, it automatically runs the analysis and will return the analysis instead.
+
+Example for changing duration, name, and description:
 ```
 {
   "duration": 30,
@@ -237,6 +239,14 @@ Response example:
     "p_value": null
 }
 ```
+Example for stopping an experiment:
+```
+{
+    "date_ended": true
+}
+```
+Response will contain the analysis data.
+
 ## Endpoint: GET api/metrics
 Returns an array of all metrics for the account.
 Example response:
