@@ -40,7 +40,7 @@ router.put("/experiments/:id", experimentController.editExperiment);
 
 router.post("/experiments", experimentController.createExperiment);
 
-router.put("/experiments/:id/update", experimentController.updateExperiment);
+router.put("/experiments/:id/update", experimentController.updateExperimentSize);
 
 router.get("/experiments/:id/analysis", experimentController.analyzeExperiment);
 
