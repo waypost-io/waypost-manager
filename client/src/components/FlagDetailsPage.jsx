@@ -2,12 +2,13 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchFlags, toggleFlag, toggleExperiment } from "../actions/flagActions";
 import { fetchExperiments } from "../actions/exptActions";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import EditFlagForm from "./EditFlagForm";
 import ExperimentInfo from "./ExperimentInfo";
 
 const FlagDetailsPage = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { flagId } = useParams();
   const flagData = useSelector((state) =>
     state.flags.find((flag) => flag.id === +flagId)
@@ -35,9 +36,10 @@ const FlagDetailsPage = () => {
     setIsEditing(true);
   };
 
-  const handleCreateExperiment = async (e) => {
-    await dispatch(toggleExperiment(flagId, true));
-    setExptsFetched(false);
+  const handleCreateExperiment = (e) => {
+    e.preventDefault();
+    let path = `/flags/${flagId}/create_experiment`;
+    navigate(path);
   };
 
   const handleStopExperiment = () => {
