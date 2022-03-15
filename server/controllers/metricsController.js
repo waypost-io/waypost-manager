@@ -1,5 +1,5 @@
 const PGTable = require("../db/PGTable");
-const { METRICS_TABLE_NAME } = require("../constants/db");
+const { METRICS_TABLE_NAME, METRIC_TYPES } = require("../constants/db");
 const { getNowString } = require("../utils");
 
 const metricsTable = new PGTable(METRICS_TABLE_NAME);
@@ -27,7 +27,26 @@ const getMetric = async (req, res, next) => {
 };
 
 const createMetric = async (req, res, next) => {
-  res.status(200).send("TODO: Create Metric");
+  try {
+    if (!METRIC_TYPES.includes(req.body.type)) {
+      res.status(400).send("Type not valid");
+      return;
+    }
+    // TODO: Validate the query by connecting to the database
+    // If no database connection, tell them to set that up first.
+
+    const metricObj = {
+      name: req.body.name,
+      query_string: req.body.query_string,
+      type: req.body.type
+    };
+
+    const newMetric = await metricsTable.insertRow(metricObj);
+    res.status(200).send(newMetric);
+  } catch (err) {
+    console.log(err);
+    res.status(500).send(err.message)
+  }
 };
 
 const editMetric = async (req, res, next) => {
