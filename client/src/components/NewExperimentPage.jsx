@@ -11,6 +11,12 @@ const NewExperimentPage = () => {
     state.flags.find((flag) => flag.id === +flagId)
   );
   const [flagFetched, setFlagFetched] = useState(false);
+  // const metrics = useSelector((metrics) => state.metrics);
+  // const [metricsFetched, setMetricsFetched] = useState(false);
+  const metrics = [
+    { id: 1, name: "Created Account", query_string: "", type: "binomial"},
+    { id: 2, name: "Time on site", query_string: "", type: "count"}
+  ]
 
   useEffect(() => {
     if (!flagFetched) {
@@ -19,12 +25,20 @@ const NewExperimentPage = () => {
     }
   }, [dispatch, flagId, flagFetched]);
 
+  // useEffect(() => {
+  //   if (!metricsFetched) {
+  //     dispatch(fetchMetrics());
+  //     setMetricsFetched(true);
+  //   }
+  // }, [dispatch, metrics, metricsFetched]);
+
   if (!flagData) return null;
+  // if (!flagData || !metrics) return null;
   return (
     <div>
       <h1>Create an Experiment</h1>
       <h3>This experiment will be on <strong>{`${flagData.name}`}</strong></h3>
-      <NewExperimentForm />
+      <NewExperimentForm metrics={metrics}/>
     </div>
   );
 };

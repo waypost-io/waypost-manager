@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { editFlag } from "../actions/flagActions";
+import { createExperiment } from "../actions/exptActions";
 
-const NewExperimentForm = () => {
+const NewExperimentForm = ({ metrics }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const flagId = useParams();
+  const { flagId } = useParams();
 
   const [duration, setDuration] = useState(14);
   const [percentTest, setPercentTest] = useState(50);
@@ -14,14 +15,19 @@ const NewExperimentForm = () => {
   const [description, setDescription] = useState("");
   const [metricIds, setMetricIds] = useState([1, 2]);
 
-  useEffect(() => {
-    // getMetrics data here, and update state if need be.
-    // is metrics data stored in state somewhere?
-  }, [])
+  const backToFlag = `/flags/${flagId}`;
 
   const validPercent = (percent) => {
     percent = Number(percent);
     return percent >= 0 && percent <= 100 && !isNaN(percentTest) && Math.floor(percent) === percent;
+  }
+
+  const validMetrics = (metricIds) => {
+    const existingMetricIds = metrics.map((metric) => metric.id);
+    console.log("existingMetricIds", existingMetricIds);
+    console.log(metricIds);
+    console.log(typeof metricIds[0]);
+    return metricIds.every(id => existingMetricIds.includes(id));
   }
 
   const handleSubmit = (e) => {
@@ -30,7 +36,7 @@ const NewExperimentForm = () => {
     if (duration < 1) {
       errMessage += "- The duration has to be at least one day\n"
     }
-    if (validPercent) {
+    if (!validPercent(percentTest)) {
       errMessage += "- The percentage you're testing has to be an integer between 0-100\n"
     }
 
@@ -41,16 +47,22 @@ const NewExperimentForm = () => {
     if (name.length > 50) {
       errMessage += "- The length of the name is too long (max 50 char)\n"
     }
+
+    if (!validMetrics(metricIds)) {
+      // maybe edit this error message to something better
+      errMessage += "- Please check to make sure your metrics are saved on the metrics page\n"
+    }
     if (errMessage.length > 0) {
       alert(errMessage);
       return;
     }
 
-    const experimentObj = { name, flag_id: flagId, description, duration, metric_ids: metricIds };
+    const exptObj = { name, flag_id: flagId, description, duration, metric_ids: metricIds };
     const flagObj = { percentage_split: percentTest, is_experiment: true };
 
     dispatch(editFlag(flagId, flagObj));
-    // dispatch(createExperiment()) need to create this first
+    dispatch(createExperiment(exptObj));
+    navigate(backToFlag);
   };
 
   const handleChangeMetrics = (e) => {
@@ -62,8 +74,7 @@ const NewExperimentForm = () => {
 
   const handleCancel = (e) => {
     e.preventDefault();
-    const path = `/flags/${flagId}`;
-    navigate(path);
+    navigate(backToFlag);
   }
 
   return (

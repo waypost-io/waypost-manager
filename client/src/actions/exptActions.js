@@ -9,3 +9,13 @@ export function fetchExperiments(flagId) {
 export function fetchExperimentsSuccess(experiments) {
   return { type: "FETCH_EXPERIMENTS_SUCCESS", experiments };
 }
+
+export function createExperiment(exptObj) {
+  return function(dispatch) {
+    apiClient.createExperiment(exptObj, data => dispatch(createExperimentSuccess(data)));
+  }
+}
+
+export function createExperimentSuccess(newExpt) {
+  return { type: "CREATE_EXPERIMENT_SUCCESS", newExpt };
+}
