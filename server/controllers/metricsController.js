@@ -51,7 +51,13 @@ const createMetric = async (req, res, next) => {
 
 const editMetric = async (req, res, next) => {
   const id = req.params.id;
-  res.status(200).send("TODO: Edit Metric");
+  const updatedFields = req.body;
+  try {
+    const updatedMetric = await metricsTable.editRow(updatedFields, { id });
+    res.status(200).send(updatedMetric);
+  } catch (e) {
+    res.status(500).send(e);
+  }
 };
 
 const deleteMetric = async (req, res, next) => {
