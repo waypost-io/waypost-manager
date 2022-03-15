@@ -51,9 +51,15 @@ const stopExperiment = async (flagId) => {
   } catch (err) {
     console.log(err);
   }
-}
+};
+
+const analyzeExperiment = async (req, res, next) => {
+  const id = req.params.id;
+  res.status(200).send("Todo");
+};
 
 exports.getExperimentsForFlag = getExperimentsForFlag;
 exports.getExperiment = getExperiment;
 exports.createExperiment = createExperiment;
 exports.stopExperiment = stopExperiment;
+exports.analyzeExperiment = analyzeExperiment;
