@@ -6,3 +6,4 @@ exports.METRICS_TABLE_NAME = "metrics";
 exports.GET_EXPERIMENTS_QUERY = `SELECT *  FROM experiments
                                  WHERE flag_id = $1
                                  ORDER BY date_started DESC;`;
+exports.METRIC_TYPES = ['binomial', 'count', 'duration', 'revenue'];

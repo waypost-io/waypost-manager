@@ -124,7 +124,7 @@ Response example:
 ```
 `Flag '${deletedFlagName}' with id = ${id} successfully deleted`
 ```
-## Endpoint: api/flags/:id/experiments
+## Endpoint: GET api/flags/:id/experiments
 No request body needed.
 Returns an array of all the experiments for the given flag.
 
@@ -209,7 +209,9 @@ Example response:
 ```
 
 ## Endpoint: PUT api/experiments/:id
-Request body should contain all updated fields and their new values. Can use this to end the experiment (set the date_ended), or to update other fields like duration, name, etc. Example:
+Request body should contain all updated fields and their new values. Can use this to end the experiment (to do this, set the "date_ended" to `true`), or to update other fields like duration, name, etc. When an experiment is ended, it automatically runs the analysis and will return the analysis instead.
+
+Example for changing duration, name, and description:
 ```
 {
   "duration": 30,
@@ -237,6 +239,95 @@ Response example:
     "p_value": null
 }
 ```
+Example for stopping an experiment:
+```
+{
+    "date_ended": true
+}
+```
+Response will contain the analysis data.
+
+## Endpoint: GET api/metrics
+Returns an array of all metrics for the account.
+Example response:
+```
+[
+    {
+        "id": 1,
+        "name": "Created Account",
+        "query_string": "SELECT * FROM accounts;",
+        "type": "binomial"
+    },
+    {
+        "id": 2,
+        "name": "Pages per visit",
+        "query_string": "SELECT * FROM pages_per_visit;",
+        "type": "count"
+    },
+    {
+        "id": 3,
+        "name": "Time on site",
+        "query_string": "SELECT * FROM time_on_site;",
+        "type": "duration"
+    }
+]
+```
+## Endpoint: GET api/metrics/:id
+Returns the metric with the given id.
+Example response:
+```
+{
+    "id": 1,
+    "name": "Created Account",
+    "query_string": "SELECT * FROM accounts;",
+    "type": "binomial"
+}
+```
+## Endpoint: POST api/metrics
+For creating a new metric. Required fields are:
+- name (string up to 50 chars, must be unique)
+- query_string (string representing the query to get this data from your database)
+- type (one of: 'binomial', 'count', 'duration', 'revenue')
+Example request body:
+```
+{
+  "name": "Pageviews",
+  "query_string": "SELECT * FROM pageviews;",
+  "type": "count"
+}
+```
+Returns the newly created metric.
+Example response body:
+```
+{
+    "id": 10,
+    "name": "Pageviews",
+    "query_string": "SELECT * FROM pageviews;",
+    "type": "count"
+}
+```
+## Endpoint: PUT api/metrics/:id
+For editing a specific metric. Fields can include name, query_string, or type.
+Example response body:
+```
+{
+  "name": "Pageviews per user"
+}
+```
+Returns the newly updated object.
+Example response body:
+```
+{
+    "id": 10,
+    "name": "Pageviews per user",
+    "query_string": "SELECT * FROM pageviews;",
+    "type": "count"
+}
+```
+## Endpoint: DELETE api/metrics/:id
+For deleting a specific metric. No request body needed.
+Example response body for `DELETE api/metrics/10`:
+`"Metric 'Pageviews per user' with id 10 successfully deleted"`
 
 ## Endpoint: POST api/connection
 
