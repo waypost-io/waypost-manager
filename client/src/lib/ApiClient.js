@@ -111,9 +111,16 @@ const apiClient = {
       .then(callback)
       .catch(logError)
   },
-  getExperiment: function(flagId, callback) {
+  getExperiment: function(id, callback) {
     return axios
-      .get(`/api/flags/${flagId}/experiment`)
+      .get(`/api/experiments/${id}`)
+      .then(unwrapData)
+      .then(callback)
+      .catch(logError)
+  },
+  fetchExperiments: function(flagId, callback) {
+    return axios
+      .get(`/api/flags/${flagId}/experiments`)
       .then(unwrapData)
       .then(callback)
       .catch(logError)

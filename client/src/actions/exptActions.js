@@ -2,7 +2,7 @@ import apiClient from '../lib/ApiClient';
 
 export function fetchExperiments(flagId) {
   return function(dispatch) {
-    apiClient.getExperiments(flagId, data => dispatch(fetchExperimentsSuccess(data)))
+    apiClient.fetchExperiments(flagId, data => dispatch(fetchExperimentsSuccess(data)))
   }
 }
 

@@ -52,7 +52,7 @@ const FlagDetailsPage = () => {
     };
   };
 
-  if (!flagData) return null;
+  if (!flagData || !exptData) return null;
   return (
     <div className="py-5 px-8 w-full">
       <div className="flex justify-between items-center border-b border-b-primary-oxfordblue mb-5">

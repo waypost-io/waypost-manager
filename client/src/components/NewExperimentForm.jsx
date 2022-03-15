@@ -132,7 +132,10 @@ const NewExperimentForm = ({ metrics }) => {
       </div>
       <div className="mt-2.5">
         <label htmlFor="metrics">Metrics</label>
-        Will have some checkboxes for each metric here
+        <input type="checkbox" name="metric" id="clicks" value="Clicks" required />
+        <label for="clicks">
+          <div>Clicks</div>
+        </label>
       </div>
       <button className="btn bg-primary-turquoise" onClick={handleSubmit}>
         Start New Experiment
