@@ -82,7 +82,6 @@ const getFlag = async (req, res, next) => {
 const createFlag = async (req, res, next) => {
   const errors = validationResult(req);
   if (errors.isEmpty()) {
-    console.log(req.body);
     const newFlag = createNewFlagObj(req.body);
 
     try {
