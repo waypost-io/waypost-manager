@@ -24,8 +24,8 @@ const FlagsList = ({ setModalOpen }) => {
 
   return (
     <div className="w-full py-2.5 px-12">
-      <div className="flex justify-between items-center p-5">
-        <h2 className="text-xl font-bold">Feature Flags</h2>
+      <div className="flex justify-between items-center">
+        <h2 className="text-3xl font-bold text-primary-violet">Feature Flags</h2>
         <button
           className="btn bg-primary-turquoise"
           type="button"
