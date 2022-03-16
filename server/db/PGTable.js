@@ -119,6 +119,12 @@ module.exports = class PGTable {
     const result = await dbQuery(queryString, id);
     return result;
   }
+
+  async deleteAllRows() {
+    const queryString = `DELETE FROM ${this.tableName} WHERE TRUE`;
+    const result = await dbQuery(queryString);
+    return result;
+  }
   // just a wrapper around the dbQuery function
   async query(string, params) {
     return await dbQuery(string, ...params);
