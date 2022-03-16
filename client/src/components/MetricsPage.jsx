@@ -14,7 +14,6 @@ const MetricsPage = () => {
   useEffect(() => {
     dispatch(fetchMetrics());
   }, [dispatch]);
-  // console.log(metrics);
 
   const handleOpenNewMetricForm = () => {
     navigate("/edit_metric/new");
