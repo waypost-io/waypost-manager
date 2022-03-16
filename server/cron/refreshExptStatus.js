@@ -50,16 +50,14 @@ const updateExposures = async (exposureData) => {
   try {
     // Insert into exposures table
     const formattedData = exposureData.map(row => `(${row.experiment_id}, '${row.treatment ? 'test' : 'control'}', ${row.num_users}, '${latest_date}')`).join(', ');
-    console.log(formattedData);
 
     const insertQuery = `
       INSERT INTO exposures (experiment_id, variant, num_users, date)
       VALUES ${formattedData};
     `;
     await exposuresTable.query(insertQuery);
-    console.log("Successfully inserted data into exposures table");
   } catch (err) {
-    console.log(err.message);
+    console.log(err);
     return;
   }
 };
@@ -68,7 +66,6 @@ const updateExposures = async (exposureData) => {
 (async () => {
   const experiments = await getActiveExperiments();
   const data = await countExposures(experiments);
-  console.log(data);
   if (data) updateExposures(data);
   // else... What to do if it fails? Send an email?
 })();
