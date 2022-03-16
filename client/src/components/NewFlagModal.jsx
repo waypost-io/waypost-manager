@@ -41,13 +41,13 @@ const NewFlagModal = ({ modalOpen, setModalOpen }) => {
         <h2 className="font-bold text-xl text-primary-violet mt-5">
           New Feature Flag
         </h2>
-        <form className="new-flag-form">
+        <form className="w-full p-2">
           <div className="mt-2.5 flex items-center">
             <label
               htmlFor="flag-title"
               className="inline-block flex-1 text-right mr-5"
             >
-              Name (will be used as unique identifier):
+              <p>Name</p><p className="italic">(will be used as unique identifier):</p>
             </label>
             <input
               id="flag-title"
