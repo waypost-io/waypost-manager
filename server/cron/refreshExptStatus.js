@@ -3,7 +3,7 @@ const PGTable = require("../db/PGTable");
 const { dbQuery } = require("../db/db-query");
 const { eventDbQuery } = require("../db/event-db-query");
 const { EXPOSURES_TABLE_NAME, EXPERIMENTS_TABLE_NAME } = require('../constants/db');
-
+const { createPlaceholdersArr } = require('../utils');
 const experimentsTable = new PGTable(EXPERIMENTS_TABLE_NAME);
 const exposuresTable = new PGTable(EXPOSURES_TABLE_NAME);
 experimentsTable.init();
@@ -25,8 +25,7 @@ const countExposures = async (exptIds) => {
   try {
     // Need the query for their experiments table first, replace below string
     const exptQuery = "SELECT * FROM experiments";
-    const exptAssignmentTable = new PGTable(`(${exptQuery})`);
-    const idPlaceholders = exptAssignmentTable.createPlaceholdersArr(exptIds);
+    const idPlaceholders = createPlaceholdersArr(exptIds);
     const datePlaceholder = `$${exptIds.length + 1}`;
     const countExposuresQuery = `
       SELECT experiment_id,

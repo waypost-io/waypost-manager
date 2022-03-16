@@ -40,7 +40,7 @@ const NewMetricForm = () => {
       alert("Please check your inputs and try again.");
       return false;
     }
-    console.log(query);
+
     if (query[query.length - 1] === ';') {
       alert("Semicolons not allowed, please remove and try again.");
       return false;
@@ -63,7 +63,6 @@ const NewMetricForm = () => {
       } else {
         success = await dispatch(editMetric(id, fields));
       }
-      console.log(success);
 
       if (success) {
         resetForm();

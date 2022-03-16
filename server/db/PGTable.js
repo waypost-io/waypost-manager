@@ -1,4 +1,5 @@
 const { dbQuery } = require("./db-query");
+const { createPlaceholdersArr } = require("../utils");
 // const bcrypt = require("bcrypt");
 
 module.exports = class PGTable {
@@ -16,16 +17,12 @@ module.exports = class PGTable {
     return this;
   }
 
-  createPlaceholdersArr(valuesArr, start = 1) {
-    return valuesArr.map((_, idx) => `$${idx+start}`);
-  }
-
   createInsertStatement(newRow) {
     const columns = this.fields.filter(
       (col) => ![null, "", undefined].includes(newRow[col])
     );
     const values = columns.map((col) => `${newRow[col]}`);
-    const placeholders = this.createPlaceholdersArr(values);
+    const placeholders = createPlaceholdersArr(values);
     const queryString = `INSERT INTO ${this.tableName}(${columns.join(", ")})
       VALUES (${placeholders.join(", ")}) RETURNING *`;
     return [queryString, values]
@@ -119,8 +116,14 @@ module.exports = class PGTable {
     const result = await dbQuery(queryString, id);
     return result;
   }
+
+  async deleteAllRows() {
+    const queryString = `DELETE FROM ${this.tableName} WHERE TRUE`;
+    const result = await dbQuery(queryString);
+    return result;
+  }
   // just a wrapper around the dbQuery function
-  async query(string, params=[]) {
+  async query(string, params = []) {
     return await dbQuery(string, ...params);
   }
 };

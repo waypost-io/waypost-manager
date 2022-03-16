@@ -7,45 +7,57 @@ const logQuery = (statement, parameters) => {
   console.log(formattedTimeStamp, statement, parameters);
 };
 
-module.exports = {
-  async eventDbQuery(statement, ...parameters) {
-    const selectQuery = `SELECT * FROM connection;`;
-    const queryResult = await dbQuery(selectQuery);
-    const credentials = queryResult.rows[0];
+const eventDbQuery = async (statement, ...parameters) => {
+  const selectQuery = `SELECT * FROM connection;`;
+  const queryResult = await dbQuery(selectQuery);
+  const credentials = queryResult.rows[0];
 
-    const client = new Client({
-      user: credentials.pg_user,
-      host: credentials.pg_host,
-      password: credentials.pg_password,
-      database: credentials.pg_database,
-      port: credentials.pg_port,
-    });
+  const client = new Client({
+    user: credentials.pg_user,
+    host: credentials.pg_host,
+    password: credentials.pg_password,
+    database: credentials.pg_database,
+    port: credentials.pg_port,
+  });
 
-    await client.connect();
+  await client.connect();
 
-    logQuery(statement, parameters);
-    const result = await client.query(statement, parameters);
+  logQuery(statement, parameters);
+  const result = await client.query(statement, parameters);
 
-    await client.end();
+  await client.end();
 
-    return result;
-  },
+  return result;
+}
 
-  async verifyConnection({ user, host, password, database, port }) {
-    const client = new Client({
-      user,
-      host,
-      password,
-      database,
-      port,
-    });
+const verifyConnection = async (credentials) => {
+  const client = new Client({
+    user: credentials.pg_user,
+    host: credentials.pg_host,
+    password: credentials.pg_password,
+    database: credentials.pg_database,
+    port: credentials.pg_port,
+  });
 
-    await client.connect();
+  await client.connect();
 
-    console.log(
-      `Connection to host: ${host} database: ${database} successfully verified.`
-    );
+  console.log(
+    `Connection to host: ${credentials.pg_host} database: ${credentials.pg_database} successfully verified.`
+  );
 
-    await client.end();
-  },
-};
+  await client.end();
+}
+
+const verifyQueryString = async (queryString, requiredCols, errMessage) => {
+  const queryResult = await eventDbQuery(`SELECT * FROM (${queryString}) AS provided_query WHERE FALSE;`)
+  const tableCols = queryResult.fields.map(field => field.name);
+  for (let i = 0; i < requiredCols.length; i++) {
+    if (!tableCols.includes(requiredCols[i])) {
+      throw new Error(errMessage);
+    }
+  };
+}
+
+module.exports.eventDbQuery = eventDbQuery;
+module.exports.verifyConnection = verifyConnection;
+module.exports.verifyQueryString = verifyQueryString;
