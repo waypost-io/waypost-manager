@@ -12,10 +12,44 @@ const EditExperiment = ({ id, name, description, duration, date_started, date_en
 
   const startDate = new Date(date_started).toLocaleDateString("en-US");
 
+  const getChangedData = () => {
+    const edits = {}
+    if (newName !== name) edits.name = newName;
+    if (Number(newDuration) !== Number(duration)) edits.duration = newDuration;
+    if (newDescription !== description) edits.description = newDescription;
+    return edits;
+  }
+
+  const validateInput = () => {
+    let errMessage = "";
+
+    if (newDuration < 1) {
+      errMessage += "- The duration has to be at least one day\n"
+    }
+
+    if (description.length > 255) {
+      errMessage += "- The length of the description is too long\n"
+    }
+
+    if (name.length > 50) {
+      errMessage += "- The length of the name is too long (max 50 char)\n"
+    }
+
+    return errMessage
+  }
+
   const submitEdits = (e) => {
     e.preventDefault();
-    const edits = { name: newName, description: newDescription, duration: newDuration };
-    dispatch(editExperiment(id, edits));
+    const edits = getChangedData();
+    const errMessage = validateInput();
+    if (errMessage.length > 0) {
+      alert(errMessage);
+      return
+    }
+    
+    if (Object.keys(edits).length !== 0) {
+      dispatch(editExperiment(id, edits));
+    }
     setIsEditing(false);
   }
   return (
@@ -31,6 +65,7 @@ const EditExperiment = ({ id, name, description, duration, date_started, date_en
       <p>Name: <input className={inputCSS} value={newName} onChange={(e) => setNewName(e.target.value)}/></p>
       <p>Duration: <input className={inputCSS} type="number" value={newDuration} onChange={(e) => setNewDuration(e.target.value)}/> days</p>
       <p>Description: <input className={inputCSS} value={newDescription} onChange={(e) => setNewDescription(e.target.value)}/></p>
+      <p className="text-primary-violet">Note: if you'd like to change the rollout of this experiment, edit the rollout of this flag by hitting the "Edit" button near the top of the page</p>
     </>
   )
 }
