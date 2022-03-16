@@ -12,7 +12,9 @@ const MetricsItem = ({ id, name, query_string, type }) => {
   };
 
   const handleDeleteMetric = () => {
-    dispatch(deleteMetric(id));
+    if (window.confirm("Are you sure you want to delete this?")) {
+      dispatch(deleteMetric(id));
+    };
   };
 
   return (
