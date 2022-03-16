@@ -26,7 +26,7 @@ const validateQuery = async (req, res, next) => {
 
 const getMetrics = async (req, res, next) => {
   try {
-    const metrics = await metricsTable.getAllRows();
+    const metrics = await metricsTable.getAllRowsNotDeleted();
     res.status(200).send(metrics);
   } catch (err) {
     console.log(err);
@@ -79,12 +79,11 @@ const editMetric = async (req, res, next) => {
 const deleteMetric = async (req, res, next) => {
   const id = req.params.id;
   try {
-    const result = await metricsTable.deleteRow(id);
-    if (result.rows.length === 0) {
+    const result = await metricsTable.editRow({ is_deleted: true }, { id: Number(id) });
+    if (!result) {
       throw new Error(`Metric with id ${id} doesn't exist`);
     }
-    const deletedMetricName = result.rows[0].name;
-    res.status(200).send(`Metric '${deletedMetricName}' with id ${id} successfully deleted`);
+    res.status(200).send(result);
   } catch (err) {
     res.status(500).send(err.message);
   }
