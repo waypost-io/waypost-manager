@@ -127,7 +127,18 @@ input:checked + .slider:before {
   margin: 50px auto;
   padding: 20px;
   width: min(60%, 700px);
-  height: 400px;
+  height: max(60%, 800px);
+  border-radius: 15px;
+  text-align: center;
+  position: relative;
+}
+
+.db-modal {
+  background-color: white;
+  margin: 50px auto;
+  padding: 20px;
+  width: min(60%, 700px);
+  height: 500px;
   border-radius: 15px;
   text-align: center;
   position: relative;

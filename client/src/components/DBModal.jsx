@@ -71,7 +71,7 @@ const DBModal = ({ modalOpen, setModalOpen }) => {
 
   return (
     <div className={`overlay ${modalOpen ? "" : "hidden"}`}>
-      <div className="new-flag-modal">
+      <div className="db-modal">
         <i className="x-icon icon close-modal" onClick={handleCloseModal}></i>
         <h2 className="font-bold text-xl text-primary-violet">Database Connection</h2>
         <form className="database-form">
@@ -85,7 +85,7 @@ const DBModal = ({ modalOpen, setModalOpen }) => {
           </div>
           <div className="mt-2.5">
             <label htmlFor="password" className="mr-5">Password: </label>
-            <input id="password" type="text" className="border border-primary-oxfordblue rounded-lg px-2" value={password} onChange={(e) => setPassword(e.target.value)} />
+            <input id="password" type="password" className="border border-primary-oxfordblue rounded-lg px-2" value={password} onChange={(e) => setPassword(e.target.value)} />
           </div>
           <div className="mt-2.5">
             <label htmlFor="database" className="mr-5">Database: </label>
@@ -95,11 +95,13 @@ const DBModal = ({ modalOpen, setModalOpen }) => {
             <label htmlFor="port" className="mr-5">Port: </label>
             <input id="port" type="text" className="border border-primary-oxfordblue rounded-lg px-2" value={port} onChange={(e) => setPort(e.target.value)} />
           </div>
-          <div className="mt-2.5">
-            <label htmlFor="query" className="mr-5">Query: </label>
-            <input id="query" type="text" className="border border-primary-oxfordblue rounded-lg px-2" value={query} onChange={(e) => setQuery(e.target.value)} />
+          <div className="mt-2.5 flex items-center">
+            <label htmlFor="query" className="inline-block w-1/3 text-center mr-5">
+              <p>Query to retrieve experiment data:</p>
+              <p className="text-sm italic">Do not include semicolon. Query should result in <code>user_id</code>, <code>timestamp</code>, and <code>treatment</code> columns</p>
+            </label>
+            <textarea id="query" rows={4} cols={35} value={query} onChange={(e) => setQuery(e.target.value)} className="border border-slate rounded-lg p-2" />
           </div>
-          <p className="text-sm italic">Do not include semicolon. Query should result in <code>user_id</code>, <code>experiment_id</code>, and <code>treatment</code> columns</p>
           <button type="submit" className="btn bg-primary-violet" onClick={handleSubmit}>Submit</button>
         </form>
       </div>

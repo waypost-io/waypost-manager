@@ -123,7 +123,7 @@ module.exports = class PGTable {
     return result;
   }
   // just a wrapper around the dbQuery function
-  async query(string, params) {
+  async query(string, params = []) {
     return await dbQuery(string, ...params);
   }
 };
