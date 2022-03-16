@@ -1,35 +1,64 @@
 import React, { useState } from 'react';
+import { useParams, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { createMetric } from '../actions/metricActions';
 
-const NewMetricForm = ({ setIsEditing }) => {
+const NewMetricForm = () => {
+  const { id } = useParams();
+  const isNew = id === 'new';
+  console.log("is new: ", isNew);
+  // origMetric will be undefined for "Create New"
+  const origMetric = useSelector(state => state.metrics.find(metric => metric.id === Number(id)));
+  const [ name, setName ] = useState(origMetric ? origMetric.name : '');
+  const [ type, setType ] = useState(origMetric ? origMetric.type : '');
+  const [ query, setQuery ] = useState(origMetric ? origMetric.query_string : '');
   const dbName = useSelector(state => state.dbName);
-  const [ name, setName ] = useState('');
-  const [ type, setType ] = useState('');
-  const [ query, setQuery ] = useState('');
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const onTypeSelection = (e) => {
     setType(e.target.value);
   };
 
-  const handleSave = (e) => {
-    e.preventDefault();
-
-    if (!dbName) {
-      alert("Please set up your database connection first before creating a metric.");
-      return;
-    }
-    dispatch(createMetric({ name, type, query_string: query }));
+  const resetForm = () => {
     setName('');
     setType('');
     setQuery('');
-    setIsEditing(false);
+  }
+
+  const validateInputs = () => {
+    if (!dbName) {
+      alert("Please set up your database connection first before creating a metric.");
+      return false;
+    }
+    setQuery(query.trim());
+    if (name.length === 0 || type === '' || query === '') {
+      alert("Please check your inputs and try again.");
+      return false;
+    }
+    if (query[query.length - 1] === ';') {
+      alert("Semicolons not allowed, please remove and try again.");
+      return false;
+    }
+    return true;
+  };
+
+  const handleCancel = (e) => {
+    navigate('/metrics');
+  };
+
+  const handleSave = (e) => {
+    e.preventDefault();
+    if (validateInputs()) {
+      dispatch(createMetric({ name, type, query_string: query }));
+      resetForm();
+      navigate('/metrics');
+    }
   };
 
   return (
-  <div>
-    <h2 className="text-xl font-bold border-b border-b-primary-black">New Metric</h2>
+  <div className="w-full py-2.5 px-12">
+    <h2 className="text-3xl font-bold text-primary-violet my-3">{isNew ? "New Metric" : "Edit Metric"}</h2>
     <form className="flex flex-col items-center">
       <div>
         <div className="mt-2.5">
@@ -67,7 +96,7 @@ const NewMetricForm = ({ setIsEditing }) => {
         </div>
       <div>
         <button onClick={handleSave} className="btn bg-primary-turquoise">Save Changes</button>
-        <button onClick={() => setIsEditing(false)} className="btn bg-slate">Cancel</button>
+        <button onClick={handleCancel} className="btn bg-slate">Cancel</button>
       </div>
     </form>
   </div>
