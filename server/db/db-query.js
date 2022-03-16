@@ -9,20 +9,24 @@ const logQuery = (statement, parameters) => {
 
 module.exports = {
   async dbQuery(statement, ...parameters) {
-    const client = new Client({
-      user: process.env.DB_USER,
-      host: "localhost",
-      password: process.env.DB_PASSWORD,
-      database: process.env.DB,
-      port: 5432,
-    });
+    try {
+      const client = new Client({
+        user: process.env.DB_USER,
+        host: "localhost",
+        password: process.env.DB_PASSWORD,
+        database: process.env.DB,
+        port: 5432,
+      });
 
-    await client.connect();
+      await client.connect();
 
-    logQuery(statement, parameters);
-    const result = await client.query(statement, parameters);
-    await client.end();
+      logQuery(statement, parameters);
+      const result = await client.query(statement, parameters);
+      await client.end();
 
-    return result;
+      return result;
+    } catch (err) {
+      console.log(err.message);
+    }
   },
 };
