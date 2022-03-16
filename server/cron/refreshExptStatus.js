@@ -4,6 +4,7 @@ const { dbQuery } = require("../db/db-query");
 const { eventDbQuery } = require("../db/event-db-query");
 const { EXPOSURES_TABLE_NAME, EXPERIMENTS_TABLE_NAME } = require('../constants/db');
 const { createPlaceholdersArr } = require('../utils');
+
 const experimentsTable = new PGTable(EXPERIMENTS_TABLE_NAME);
 const exposuresTable = new PGTable(EXPOSURES_TABLE_NAME);
 experimentsTable.init();
@@ -21,10 +22,14 @@ const getYesterdayString = (today) => {
 
 const latest_date = getYesterdayString(new Date());
 
+const getExptQuery = async () => {
+  const query = "SELECT expt_table_query FROM connection";
+  return (await dbQuery(query)).rows[0]['expt_table_query'];
+};
+
 const countExposures = async (exptIds) => {
   try {
-    // Need the query for their experiments table first, replace below string
-    const exptQuery = "SELECT * FROM experiments";
+    const exptQuery = await getExptQuery();
     const idPlaceholders = createPlaceholdersArr(exptIds);
     const datePlaceholder = `$${exptIds.length + 1}`;
     const countExposuresQuery = `
@@ -84,5 +89,6 @@ For once daily at 3am, use '0 3 * * *'
 */
 // cron.schedule('0 3 * * *', async () => {
 //   const experiments = await getActiveExperiments();
-//   updateExposures(experiments);
+  // const data = await countExposures(experiments);
+  // if (data) updateExposures(data);
 // });
