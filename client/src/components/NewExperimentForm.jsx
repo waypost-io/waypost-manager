@@ -92,19 +92,19 @@ const NewExperimentForm = ({ metrics }) => {
 
   return (
     <form>
-      <div className="mt-2.5">
-        <label htmlFor="name" className="mr-2.5">
+      <div className="mt-2.5 flex items-center">
+        <label htmlFor="name" className="inline-block w-1/3 text-right mr-5">
           Name (optional):{" "}
         </label>
         <input
           type="text"
           value={name}
           onChange={(e) => setName(e.target.value)}
-          className="border border-primary-oxfordblue rounded-lg px-2"
+          className="border border-slate rounded-lg p-2"
         />
       </div>
-      <div className="mt-2.5">
-        <label htmlFor="description">Description (optional, max 255 characters): </label>
+      <div className="mt-2.5 flex items-center">
+        <label htmlFor="description" className="inline-block w-1/3 text-right mr-5">Description (optional, max 255 characters): </label>
         <textarea
           id="description"
           type="textarea"
@@ -112,36 +112,36 @@ const NewExperimentForm = ({ metrics }) => {
           cols="30"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
-          className="block border border-primary-oxfordblue rounded-lg px-2"
+          className="border border-slate rounded-lg p-2"
         />
       </div>
-      <div className="mt-2.5">
-        <label htmlFor="percent-test">Percent of Users Tested: </label>
+      <div className="mt-2.5 flex items-center">
+        <label htmlFor="percent-test" className="inline-block w-1/3 text-right mr-5">Percent of Users Tested: </label>
         <input
           id="percent-test"
           type="number"
           max={100}
           min={0}
           size="3"
-          className="border border-primary-oxfordblue rounded-lg px-2"
+          className="border border-slate rounded-lg p-2"
           value={percentTest}
           onChange={(e) => setPercentTest(e.target.value)}
         />{" "}
-        %
-        <p>{validPercent(percentTest) ? `(${100-percentTest}% of users in control group)` : "Please enter an integer from 0-100"}</p>
+        <span className="ml-2">%</span>
+        <p className="inline-block ml-5">{validPercent(percentTest) ? `(${100-percentTest}% of users in control group)` : "Please enter an integer from 0-100"}</p>
       </div>
-      <div className="mt-2.5">
-        <label htmlFor="duration">Duration: </label>
+      <div className="mt-2.5 flex items-center">
+        <label htmlFor="duration" className="inline-block w-1/3 text-right mr-5">Duration: </label>
         <input
           id="duration"
           type="number"
           min={0}
           size="3"
-          className="border border-primary-oxfordblue rounded-lg px-2"
+          className="border border-slate rounded-lg p-2"
           value={duration}
           onChange={(e) => setDuration(e.target.value)}
         />{" "}
-        days
+        <span className="ml-2">days</span>
       </div>
       <div id="metrics">
         <h3 className="mt-2.5 font-bold text-base">Select the metrics you want to measure</h3>
