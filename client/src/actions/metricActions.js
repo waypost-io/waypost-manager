@@ -12,7 +12,14 @@ export function fetchMetricsSuccess(metrics) {
 
 export function editMetric(id, updatedFields) {
   return function(dispatch) {
-    apiClient.editMetric(id, updatedFields, data => dispatch(editMetricSuccess(data)));
+    return apiClient.editMetric(id, updatedFields, (data) => {
+      if (data.ok) {
+        dispatch(editMetricSuccess(data));
+        return true;
+      }
+      alert(`Editing metric failed: ${data.error_message}`);
+      return false;
+    });
   }
 }
 
@@ -32,7 +39,7 @@ export function deleteMetricSuccess(id) {
 
 export function createMetric(fields) {
   return function(dispatch) {
-    apiClient.createMetric(fields, (data) => {
+    return apiClient.createMetric(fields, (data) => {
       if (data.ok) {
         dispatch(createMetricSuccess(data.metric));
         return true;

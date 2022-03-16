@@ -6,6 +6,24 @@ const { eventDbQuery } = require("../db/event-db-query");
 const metricsTable = new PGTable(METRICS_TABLE_NAME);
 metricsTable.init();
 
+const validateQuery = async (req, res, next) => {
+  try {
+    const queryResult = await eventDbQuery(`${req.body.query_string} WHERE FALSE;`);
+    const tableCols = queryResult.fields.map(field => field.name);
+    const required = ['user_id', 'timestamp', 'value'];
+    for (let i = 0; i < required.length; i++) {
+      if (!tableCols.includes(required[i])) {
+        throw new Error("Columns not correct");
+      }
+    };
+  } catch (err) {
+    console.log(err);
+    res.status(200).send({ ok: false, error_message: err.message });
+    return;
+  }
+  next();
+};
+
 const getMetrics = async (req, res, next) => {
   try {
     const metrics = await metricsTable.getAllRows();
@@ -32,22 +50,6 @@ const createMetric = async (req, res, next) => {
     res.status(400).send("Type not valid");
     return;
   }
-  // Validate the query
-  try {
-    const queryResult = await eventDbQuery(`${req.body.query_string} WHERE FALSE;`);
-    const tableCols = queryResult.fields.map(field => field.name);
-    const required = ['user_id', 'timestamp', 'value'];
-    for (let i = 0; i < required.length; i++) {
-      if (!tableCols.includes(required[i])) {
-        throw new Error("Columns not correct");
-      }
-    };
-  } catch (err) {
-    console.log(err);
-    res.status(200).send({ ok: false, error_message: err.message })
-    return;
-  }
-  // Now insert data
   try {
     const metricObj = {
       name: req.body.name,
@@ -68,9 +70,9 @@ const editMetric = async (req, res, next) => {
   const updatedFields = req.body;
   try {
     const updatedMetric = await metricsTable.editRow(updatedFields, { id });
-    res.status(200).send(updatedMetric);
-  } catch (e) {
-    res.status(500).send(e);
+    res.status(200).send({ ok: true, metric: updatedMetric });
+  } catch (err) {
+    res.status(500).send(err.message);
   }
 };
 
@@ -83,11 +85,12 @@ const deleteMetric = async (req, res, next) => {
     }
     const deletedMetricName = result.rows[0].name;
     res.status(200).send(`Metric '${deletedMetricName}' with id ${id} successfully deleted`);
-  } catch (e) {
-    res.status(500).send(e.message);
+  } catch (err) {
+    res.status(500).send(err.message);
   }
 };
 
+exports.validateQuery = validateQuery;
 exports.getMetrics = getMetrics;
 exports.getMetric = getMetric;
 exports.createMetric = createMetric;

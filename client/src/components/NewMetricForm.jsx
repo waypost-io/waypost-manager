@@ -1,17 +1,17 @@
 import React, { useState } from 'react';
 import { useParams, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { createMetric } from '../actions/metricActions';
+import { createMetric, editMetric } from '../actions/metricActions';
 
 const NewMetricForm = () => {
   const { id } = useParams();
   const isNew = id === 'new';
-  console.log("is new: ", isNew);
   // origMetric will be undefined for "Create New"
   const origMetric = useSelector(state => state.metrics.find(metric => metric.id === Number(id)));
   const [ name, setName ] = useState(origMetric ? origMetric.name : '');
   const [ type, setType ] = useState(origMetric ? origMetric.type : '');
   const [ query, setQuery ] = useState(origMetric ? origMetric.query_string : '');
+  const metrics = useSelector(state => state.metrics);
   const dbName = useSelector(state => state.dbName);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -29,6 +29,11 @@ const NewMetricForm = () => {
   const validateInputs = () => {
     if (!dbName) {
       alert("Please set up your database connection first before creating a metric.");
+      return false;
+    }
+    const existingNames = metrics.filter(metric => metric.id !== Number(id)).map(metric => metric.name);
+    if (existingNames.includes(name)) {
+      alert("Name must be unique");
       return false;
     }
     setQuery(query.trim());
@@ -49,8 +54,16 @@ const NewMetricForm = () => {
 
   const handleSave = async (e) => {
     e.preventDefault();
+    let success;
     if (validateInputs()) {
-      const success = await dispatch(createMetric({ name, type, query_string: query }));
+      const fields = { name, type, query_string: query };
+      if (isNew) {
+        success = await dispatch(createMetric(fields));
+      } else {
+        success = await dispatch(editMetric(id, fields));
+      }
+      console.log(success);
+
       if (success) {
         resetForm();
         navigate('/metrics');

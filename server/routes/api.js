@@ -59,9 +59,9 @@ router.get("/metrics", metricsController.getMetrics);
 
 router.get("/metrics/:id", metricsController.getMetric);
 
-router.post("/metrics", metricsController.createMetric);
+router.post("/metrics", metricsController.validateQuery, metricsController.createMetric);
 
-router.put("/metrics/:id", metricsController.editMetric);
+router.put("/metrics/:id", metricsController.validateQuery, metricsController.editMetric);
 
 router.delete("/metrics/:id", metricsController.deleteMetric);
 
