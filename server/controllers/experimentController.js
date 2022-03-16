@@ -62,6 +62,7 @@ const editExperiment = async (req, res, next) => {
       updatedFields.date_ended = getNowString();
     }
     const updatedExpt = await experimentsTable.editRow(updatedFields, { id: id });
+    req.updatedExpt = updatedExpt;
     // If regular edit, not stopping experiment, just send back updated expt
     if (!updatedFields.date_ended) {
       res.status(200).send(updatedExpt);
@@ -85,7 +86,8 @@ const updateExperimentData = async (req, res, next) => {
 const getAnalysis = async (req, res, next) => {
   const id = req.params.id;
   // Statistics and fill in the data in the experiments table
-  res.status(200).send("Analysis")
+  res.status(200).send(req.updatedExpt); // use for now until analysis is created
+  // res.status(200).send("Analysis")
 };
 
 exports.getExperimentsForFlag = getExperimentsForFlag;
