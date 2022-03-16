@@ -1,13 +1,12 @@
 import React from 'react';
 import { useDispatch } from "react-redux";
-import { editMetric, deleteMetric } from '../actions/metricActions';
+import { deleteMetric } from '../actions/metricActions';
 
-const MetricsItem = ({ id, name, query_string, type }) => {
+const MetricsItem = ({ id, name, query_string, type, setIsEditing }) => {
   const dispatch = useDispatch();
 
   const handleEditMetric = () => {
-    const updates = {};
-    dispatch(editMetric(id, updates));
+    setIsEditing(true);
   };
 
   const handleDeleteMetric = () => {

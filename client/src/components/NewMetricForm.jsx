@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useSelector, useDispatch } from "react-redux";
 import { createMetric } from '../actions/metricActions';
 
-const NewMetricForm = ({ setIsCreating }) => {
+const NewMetricForm = ({ setIsEditing }) => {
   const dbName = useSelector(state => state.dbName);
   const [ name, setName ] = useState('');
   const [ type, setType ] = useState('');
@@ -24,7 +24,7 @@ const NewMetricForm = ({ setIsCreating }) => {
     setName('');
     setType('');
     setQuery('');
-    setIsCreating(false);
+    setIsEditing(false);
   };
 
   return (
@@ -65,7 +65,10 @@ const NewMetricForm = ({ setIsCreating }) => {
             <textarea id="metric-query" rows={6} cols={35} value={query} onChange={(e) => setQuery(e.target.value)} className="border border-slate rounded-lg p-2" />
           </div>
         </div>
-      <button onClick={handleSave} className="btn bg-primary-turquoise m-auto">Save Changes</button>
+      <div>
+        <button onClick={handleSave} className="btn bg-primary-turquoise">Save Changes</button>
+        <button onClick={() => setIsEditing(false)} className="btn bg-slate">Cancel</button>
+      </div>
     </form>
   </div>
   );

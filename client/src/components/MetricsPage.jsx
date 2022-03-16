@@ -8,7 +8,7 @@ const MetricsPage = () => {
   const dispatch = useDispatch();
   const metrics = useSelector(state => state.metrics);
   const dbName = useSelector(state => state.dbName);
-  const [ isCreating, setIsCreating ] = useState(false);
+  const [ isEditing, setIsEditing ] = useState(false);
   const isConnected = dbName ? true : false;
 
   useEffect(() => {
@@ -17,7 +17,7 @@ const MetricsPage = () => {
   // console.log(metrics);
 
   const handleOpenNewMetricForm = () => {
-    setIsCreating(true);
+    setIsEditing(true);
   };
 
   return (
@@ -27,9 +27,9 @@ const MetricsPage = () => {
           Note: Before you can create a metric, you must first set up the connection to your database in which your event data is stored.
         </div>
       }
-      <div className="flex justify-between items-center">
+      <div className="flex justify-between items-center my-3">
         <h2 className="text-3xl font-bold text-primary-violet">Metrics</h2>
-        {!isCreating ? (
+        {!isEditing &&
           <button
             className="btn bg-primary-turquoise"
             type="button"
@@ -37,21 +37,12 @@ const MetricsPage = () => {
           >
             Create New
           </button>
-        ) : (
-          <button
-            className="btn bg-slate"
-            type="button"
-            onClick={() => setIsCreating(false)}
-          >
-            Cancel
-          </button>
-        )
         }
       </div>
-      {isCreating && <NewMetricForm setIsCreating={setIsCreating} />}
+      {isEditing && <NewMetricForm setIsEditing={setIsEditing} />}
       <div>
         {metrics.length > 0 &&
-          metrics.map(metric => <MetricItem key={metric.id} {...metric} />)
+          metrics.map(metric => <MetricItem key={metric.id} {...metric} setIsEditing={setIsEditing} />)
         }
       </div>
     </div>
