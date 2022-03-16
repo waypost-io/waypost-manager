@@ -36,11 +36,11 @@ const NewMetricForm = () => {
       alert("Name must be unique");
       return false;
     }
-    setQuery(query.trim());
     if (name.length === 0 || type === '' || query === '') {
       alert("Please check your inputs and try again.");
       return false;
     }
+    console.log(query);
     if (query[query.length - 1] === ';') {
       alert("Semicolons not allowed, please remove and try again.");
       return false;
@@ -55,6 +55,7 @@ const NewMetricForm = () => {
   const handleSave = async (e) => {
     e.preventDefault();
     let success;
+    setQuery(query.trim());
     if (validateInputs()) {
       const fields = { name, type, query_string: query };
       if (isNew) {
