@@ -121,7 +121,7 @@ const FlagDetailsPage = () => {
       )}
       {exptData &&
         exptData.map((expt) => {
-          return <ExperimentInfo key={expt.id} {...expt} />;
+          return <ExperimentInfo key={expt.id} data={expt} />;
         })}
     </div>
   );
