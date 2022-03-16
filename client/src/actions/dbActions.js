@@ -12,11 +12,13 @@ export function disconnectDBSuccess() {
 
 export function connectDB(dbObj) {
   return function(dispatch) {
-    apiClient.connectToDB(dbObj, (data) => {
-      if (data.connected) {
-        dispatch(connectDBSuccess(dbObj.database));
-      } else {
-        alert("The connection didn't work, please check your inputs and try again");
+    return apiClient.connectToDB(dbObj, (data) => {
+      if (data.connected && data.ok) {
+        dispatch(connectDBSuccess(dbObj.pg_database));
+        return true;
+      } else  {
+        alert(`Adding connection failed: ${data.error_message}`);
+        return false;
       }
     })
   }
