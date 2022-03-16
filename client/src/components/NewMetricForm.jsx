@@ -58,7 +58,10 @@ const NewMetricForm = ({ setIsCreating }) => {
             </ul>
           </div>
           <div className="mt-2.5 flex items-center">
-            <label htmlFor="metric-query" className="inline-block w-1/3 text-right mr-5">Query to retrieve data (do not include semicolon): </label>
+            <label htmlFor="metric-query" className="inline-block w-1/3 text-center mr-5">
+              <p>Query to retrieve data:</p>
+              <p className="text-sm italic">Do not include semicolon. Query should result in <code>user_id</code>, <code>timestamp</code>, and <code>value</code> columns</p>
+            </label>
             <textarea id="metric-query" rows={6} cols={35} value={query} onChange={(e) => setQuery(e.target.value)} className="border border-slate rounded-lg p-2" />
           </div>
         </div>
