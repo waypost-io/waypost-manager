@@ -8,7 +8,7 @@ metricsTable.init();
 
 const validateQuery = async (req, res, next) => {
   try {
-    const queryResult = await eventDbQuery(`${req.body.query_string} WHERE FALSE;`);
+    const queryResult = await eventDbQuery(`SELECT * FROM (${req.body.query_string}) AS provided_query WHERE FALSE;`);
     const tableCols = queryResult.fields.map(field => field.name);
     const required = ['user_id', 'timestamp', 'value'];
     for (let i = 0; i < required.length; i++) {
