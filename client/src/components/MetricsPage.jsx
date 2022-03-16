@@ -12,6 +12,10 @@ const MetricsPage = () => {
   }, [dispatch]);
   console.log(metrics);
 
+  const handleOpenCreateForm = () => {
+
+  };
+
   return (
     <div className="w-full py-2.5 px-12">
       <div className="flex justify-between items-center">
@@ -19,7 +23,7 @@ const MetricsPage = () => {
         <button
           className="btn bg-primary-turquoise"
           type="button"
-          onClick={() => {}}
+          onClick={handleOpenCreateForm}
         >
           Create New
         </button>
