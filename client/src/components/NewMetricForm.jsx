@@ -47,12 +47,14 @@ const NewMetricForm = () => {
     navigate('/metrics');
   };
 
-  const handleSave = (e) => {
+  const handleSave = async (e) => {
     e.preventDefault();
     if (validateInputs()) {
-      dispatch(createMetric({ name, type, query_string: query }));
-      resetForm();
-      navigate('/metrics');
+      const success = await dispatch(createMetric({ name, type, query_string: query }));
+      if (success) {
+        resetForm();
+        navigate('/metrics');
+      }
     }
   };
 

@@ -28,23 +28,27 @@ const getMetric = async (req, res, next) => {
 };
 
 const createMetric = async (req, res, next) => {
+  if (!METRIC_TYPES.includes(req.body.type)) {
+    res.status(400).send("Type not valid");
+    return;
+  }
+  // Validate the query
   try {
-    if (!METRIC_TYPES.includes(req.body.type)) {
-      res.status(400).send("Type not valid");
-      return;
-    }
-    // Validate the query structure
     const queryResult = await eventDbQuery(`${req.body.query_string} WHERE FALSE;`);
     const tableCols = queryResult.fields.map(field => field.name);
     const required = ['user_id', 'timestamp', 'value'];
     for (let i = 0; i < required.length; i++) {
       if (!tableCols.includes(required[i])) {
-        res.status(400).send("Query must return user_id, timestamp, and value columns");
-        return;
+        throw new Error("Columns not correct");
       }
     };
-    console.log("Query validated");
-
+  } catch (err) {
+    console.log(err);
+    res.status(200).send({ ok: false, error_message: err.message })
+    return;
+  }
+  // Now insert data
+  try {
     const metricObj = {
       name: req.body.name,
       query_string: req.body.query_string,
@@ -52,7 +56,7 @@ const createMetric = async (req, res, next) => {
     };
 
     const newMetric = await metricsTable.insertRow(metricObj);
-    res.status(200).send(newMetric);
+    res.status(200).send({ok: true, metric: newMetric });
   } catch (err) {
     console.log(err);
     res.status(500).send(err.message)

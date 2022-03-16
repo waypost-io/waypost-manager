@@ -32,7 +32,14 @@ export function deleteMetricSuccess(id) {
 
 export function createMetric(fields) {
   return function(dispatch) {
-    apiClient.createMetric(fields, (data) => dispatch(createMetricSuccess(data)));
+    apiClient.createMetric(fields, (data) => {
+      if (data.ok) {
+        dispatch(createMetricSuccess(data.metric));
+        return true;
+      }
+      alert(`Creating metric failed: ${data.error_message}`);
+      return false;
+    });
   }
 }
 
