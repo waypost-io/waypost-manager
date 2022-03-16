@@ -5,11 +5,6 @@ const { FLAG_TABLE_NAME } = require("../constants/db");
 const { getNowString } = require("../utils");
 const { sendWebhook } = require("../lib/sendWebhook.js");
 const { getFlagsForWebhook } = require("../db/flags.js");
-const {
-  createExperiment,
-  stopExperiment,
-} = require("./experimentController.js");
-// const { status } = require("./streamController");
 
 const flagTable = new PGTable(FLAG_TABLE_NAME);
 flagTable.init();
@@ -34,15 +29,6 @@ const createNewFlagObj = ({
     is_deleted: false,
   };
 };
-
-// const createUpdateFlagObj = (fieldsToUpdate) => {
-//   const now = getNowString();
-//
-//   if (fieldsToUpdate.status !== undefined) fieldsToUpdate["last_toggle"] = now;
-//   fieldsToUpdate["date_edited"] = now;
-//
-//   return fieldsToUpdate;
-// }
 
 const getAllFlags = async (req, res, next) => {
   try {
@@ -147,7 +133,6 @@ const sendFlagsWebhook = async (req, res, next) => {
     console.log("webhook sent");
     res.status(200);
   } catch (err) {
-    console.log(err);
     console.log("Could not send webhook");
   }
 };
