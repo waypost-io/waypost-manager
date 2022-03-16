@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchFlags } from "../actions/flagActions";
+import { fetchMetrics } from "../actions/metricActions";
 import NewExperimentForm from './NewExperimentForm';
 
 const NewExperimentPage = () => {
@@ -11,12 +12,8 @@ const NewExperimentPage = () => {
     state.flags.find((flag) => flag.id === +flagId)
   );
   const [flagFetched, setFlagFetched] = useState(false);
-  // const metrics = useSelector((metrics) => state.metrics);
-  // const [metricsFetched, setMetricsFetched] = useState(false);
-  const metrics = [
-    { id: 1, name: "Created Account", query_string: "", type: "binomial"},
-    { id: 2, name: "Time on site", query_string: "", type: "count"}
-  ]
+  const metrics = useSelector((state) => state.metrics);
+  const [metricsFetched, setMetricsFetched] = useState(false);
 
   useEffect(() => {
     if (!flagFetched) {
@@ -25,15 +22,14 @@ const NewExperimentPage = () => {
     }
   }, [dispatch, flagId, flagFetched]);
 
-  // useEffect(() => {
-  //   if (!metricsFetched) {
-  //     dispatch(fetchMetrics());
-  //     setMetricsFetched(true);
-  //   }
-  // }, [dispatch, metrics, metricsFetched]);
+  useEffect(() => {
+    if (!metricsFetched) {
+      dispatch(fetchMetrics());
+      setMetricsFetched(true);
+    }
+  }, [dispatch, metrics, metricsFetched]);
 
-  if (!flagData) return null;
-  // if (!flagData || !metrics) return null;
+  if (!flagData || !metrics) return null;
   return (
     <div className="ml-5 mt-5 w-full">
       <h1 className="text-xl font-bold text-primary-oxfordblue">Create an Experiment</h1>

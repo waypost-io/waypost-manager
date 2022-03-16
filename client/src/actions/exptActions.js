@@ -22,6 +22,12 @@ export function createExperimentSuccess(newExpt) {
 
 export function editExperiment(exptId, updatedFields) {
   return function(dispatch) {
-    apiClient.editExperiment(exptId, updatedFields);
+    apiClient.editExperiment(exptId, updatedFields, data => {
+      dispatch(editExperimentSuccess(data));
+    });
   }
+}
+
+export function editExperimentSuccess(editedExpt) {
+  return { type: "EDIT_EXPERIMENT_SUCCESS", editedExpt };
 }
