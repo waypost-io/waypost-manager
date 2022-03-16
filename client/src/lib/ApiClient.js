@@ -76,6 +76,13 @@ const apiClient = {
       .then(callback)
       .catch(logError);
   },
+  createMetric: function(metricObj, callback) {
+    return axios
+      .post('/api/metrics', metricObj)
+      .then(unwrapData)
+      .then(callback)
+      .catch(logError);
+  },
   editMetric: function(id, updatedFields, callback) {
     return axios
       .put(`/api/metrics/${id}`, updatedFields)

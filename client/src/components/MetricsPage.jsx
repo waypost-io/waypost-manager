@@ -14,7 +14,7 @@ const MetricsPage = () => {
   useEffect(() => {
     dispatch(fetchMetrics());
   }, [dispatch]);
-  console.log(metrics);
+  // console.log(metrics);
 
   const handleOpenNewMetricForm = () => {
     setIsCreating(true);

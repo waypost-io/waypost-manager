@@ -29,3 +29,13 @@ export function deleteMetric(id) {
 export function deleteMetricSuccess(id) {
   return { type: "DELETE_METRIC_SUCCESS", id: id };
 }
+
+export function createMetric(fields) {
+  return function(dispatch) {
+    apiClient.createMetric(fields, (data) => dispatch(createMetricSuccess(data)));
+  }
+}
+
+export function createMetricSuccess(metric) {
+  return { type: "CREATE_METRIC_SUCCESS", metric };
+}

@@ -3,6 +3,9 @@ export default function metrics(state = [], action) {
     case "FETCH_METRICS_SUCCESS": {
       return action.metrics;
     }
+    case "CREATE_METRIC_SUCCESS": {
+      return [ ...state, action.metric ];
+    }
     case "EDIT_METRIC_SUCCESS": {
       return state.map(metric => {
         if (metric.id === action.metric.id) {
