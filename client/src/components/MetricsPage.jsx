@@ -33,6 +33,7 @@ const MetricsPage = () => {
           className="btn bg-primary-turquoise"
           type="button"
           onClick={handleOpenNewMetricForm}
+          disabled={!isConnected}
         >
           Create New
         </button>
