@@ -6,9 +6,27 @@ const { eventDbQuery } = require("../db/event-db-query");
 const metricsTable = new PGTable(METRICS_TABLE_NAME);
 metricsTable.init();
 
+const validateQuery = async (req, res, next) => {
+  try {
+    const queryResult = await eventDbQuery(`SELECT * FROM (${req.body.query_string}) AS provided_query WHERE FALSE;`);
+    const tableCols = queryResult.fields.map(field => field.name);
+    const required = ['user_id', 'timestamp', 'value'];
+    for (let i = 0; i < required.length; i++) {
+      if (!tableCols.includes(required[i])) {
+        throw new Error("Columns not correct");
+      }
+    };
+  } catch (err) {
+    console.log(err);
+    res.status(200).send({ ok: false, error_message: err.message });
+    return;
+  }
+  next();
+};
+
 const getMetrics = async (req, res, next) => {
   try {
-    const metrics = await metricsTable.getAllRows();
+    const metrics = await metricsTable.getAllRowsNotDeleted();
     res.status(200).send(metrics);
   } catch (err) {
     console.log(err);
@@ -28,23 +46,11 @@ const getMetric = async (req, res, next) => {
 };
 
 const createMetric = async (req, res, next) => {
+  if (!METRIC_TYPES.includes(req.body.type)) {
+    res.status(400).send("Type not valid");
+    return;
+  }
   try {
-    if (!METRIC_TYPES.includes(req.body.type)) {
-      res.status(400).send("Type not valid");
-      return;
-    }
-    // Validate the query structure
-    const queryResult = await eventDbQuery(`${req.body.query_string} WHERE FALSE;`);
-    const tableCols = queryResult.fields.map(field => field.name);
-    const required = ['user_id', 'timestamp', 'value'];
-    for (let i = 0; i < required.length; i++) {
-      if (!tableCols.includes(required[i])) {
-        res.status(400).send("Query must return user_id, timestamp, and value columns");
-        return;
-      }
-    };
-    console.log("Query validated");
-
     const metricObj = {
       name: req.body.name,
       query_string: req.body.query_string,
@@ -52,7 +58,7 @@ const createMetric = async (req, res, next) => {
     };
 
     const newMetric = await metricsTable.insertRow(metricObj);
-    res.status(200).send(newMetric);
+    res.status(200).send({ok: true, metric: newMetric });
   } catch (err) {
     console.log(err);
     res.status(500).send(err.message)
@@ -64,26 +70,26 @@ const editMetric = async (req, res, next) => {
   const updatedFields = req.body;
   try {
     const updatedMetric = await metricsTable.editRow(updatedFields, { id });
-    res.status(200).send(updatedMetric);
-  } catch (e) {
-    res.status(500).send(e);
+    res.status(200).send({ ok: true, metric: updatedMetric });
+  } catch (err) {
+    res.status(500).send(err.message);
   }
 };
 
 const deleteMetric = async (req, res, next) => {
   const id = req.params.id;
   try {
-    const result = await metricsTable.deleteRow(id);
-    if (result.rows.length === 0) {
+    const result = await metricsTable.editRow({ is_deleted: true }, { id: Number(id) });
+    if (!result) {
       throw new Error(`Metric with id ${id} doesn't exist`);
     }
-    const deletedMetricName = result.rows[0].name;
-    res.status(200).send(`Metric '${deletedMetricName}' with id ${id} successfully deleted`);
-  } catch (e) {
-    res.status(500).send(e.message);
+    res.status(200).send(result);
+  } catch (err) {
+    res.status(500).send(err.message);
   }
 };
 
+exports.validateQuery = validateQuery;
 exports.getMetrics = getMetrics;
 exports.getMetric = getMetric;
 exports.createMetric = createMetric;

@@ -1,17 +1,20 @@
-import React from 'react';
+import React from "react";
+import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { editMetric, deleteMetric } from '../actions/metricActions';
+import { deleteMetric } from "../actions/metricActions";
 
 const MetricsItem = ({ id, name, query_string, type }) => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleEditMetric = () => {
-    const updates = {};
-    dispatch(editMetric(id, updates));
+    navigate(`/edit_metric/${id}`);
   };
 
   const handleDeleteMetric = () => {
-    dispatch(deleteMetric(id));
+    if (window.confirm("Are you sure you want to delete this?")) {
+      dispatch(deleteMetric(id));
+    };
   };
 
   return (
@@ -21,11 +24,21 @@ const MetricsItem = ({ id, name, query_string, type }) => {
         <p>Type: {type}</p>
       </div>
       <div>
-        <button onClick={handleEditMetric} className="border border-primary-violet text-primary-black rounded py-2 px-5 hover:text-primary-violet mr-2">Edit</button>
-        <button onClick={handleDeleteMetric} className="border border-primary-violet text-primary-black rounded py-2 px-5 hover:text-primary-violet">Delete</button>
+        <button
+          onClick={handleEditMetric}
+          className="border border-primary-violet text-primary-black rounded py-2 px-5 hover:text-primary-violet mr-2"
+        >
+          Edit
+        </button>
+        <button
+          onClick={handleDeleteMetric}
+          className="border border-primary-violet text-primary-black rounded py-2 px-5 hover:text-primary-violet"
+        >
+          Delete
+        </button>
       </div>
     </div>
   );
-}
+};
 
 export default MetricsItem;

@@ -89,6 +89,12 @@ module.exports = class PGTable {
     return result.rows;
   }
 
+  async getAllRowsNotDeleted() {
+    const statement = `SELECT * FROM ${this.tableName} WHERE is_deleted = FALSE`;
+    const result = await dbQuery(statement);
+    return result.rows;
+  }
+
   async getRow(id) {
     const statement = `SELECT * FROM ${this.tableName} WHERE id = ${id}`;
     const result = await dbQuery(statement);

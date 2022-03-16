@@ -12,7 +12,14 @@ export function fetchMetricsSuccess(metrics) {
 
 export function editMetric(id, updatedFields) {
   return function(dispatch) {
-    apiClient.editMetric(id, updatedFields, data => dispatch(editMetricSuccess(data)));
+    return apiClient.editMetric(id, updatedFields, (data) => {
+      if (data.ok) {
+        dispatch(editMetricSuccess(data));
+        return true;
+      }
+      alert(`Editing metric failed: ${data.error_message}`);
+      return false;
+    });
   }
 }
 
@@ -28,4 +35,21 @@ export function deleteMetric(id) {
 
 export function deleteMetricSuccess(id) {
   return { type: "DELETE_METRIC_SUCCESS", id: id };
+}
+
+export function createMetric(fields) {
+  return function(dispatch) {
+    return apiClient.createMetric(fields, (data) => {
+      if (data.ok) {
+        dispatch(createMetricSuccess(data.metric));
+        return true;
+      }
+      alert(`Creating metric failed: ${data.error_message}`);
+      return false;
+    });
+  }
+}
+
+export function createMetricSuccess(metric) {
+  return { type: "CREATE_METRIC_SUCCESS", metric };
 }

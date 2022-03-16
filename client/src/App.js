@@ -11,6 +11,7 @@ import MetricsPage from './components/MetricsPage';
 import Header from './components/Header';
 import DBModal from './components/DBModal';
 import NewExperimentPage from './components/NewExperimentPage';
+import NewMetricForm from './components/NewMetricForm';
 
 function App() {
   const dispatch = useDispatch();
@@ -32,6 +33,7 @@ function App() {
             <Route path="/flags/:flagId" element={<FlagDetailsPage />} />
             <Route path="/flags/:flagId/create_experiment" element={<NewExperimentPage />} />
             <Route path="/metrics" element={<MetricsPage />} />
+            <Route path="/edit_metric/:id" element={<NewMetricForm />} />
           </Routes>
         </BrowserRouter>
       </main>
