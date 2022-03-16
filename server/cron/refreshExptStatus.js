@@ -19,28 +19,39 @@ const getYesterdayString = (today) => {
   return `${today.getFullYear()}-${(today.getMonth() + 1).toString().padStart(2, '0')}-${(today.getDate() - 1).toString().padStart(2, '0')}`;
 };
 
-const updateExposures = async (exptIds) => {
+const latest_date = getYesterdayString(new Date());
+
+const countExposures = async (exptIds) => {
   try {
+    // Need the query for their experiments table first, replace below string
     const exptQuery = "SELECT * FROM experiments";
+    const exptAssignmentTable = new PGTable(`(${exptQuery})`);
+    const idPlaceholders = exptAssignmentTable.createPlaceholdersArr(exptIds);
+    const datePlaceholder = `$${exptIds.length + 1}`;
     const countExposuresQuery = `
       SELECT experiment_id,
-        variation_id,
+        treatment,
         COUNT(user_id) AS num_users
-      FROM ${exptQuery} AS expt_table
-      WHERE experiment_id IN $1
-        AND DATE(timestamp) = '$2'
+      FROM (${exptQuery}) AS expt_table
+      WHERE experiment_id IN (${idPlaceholders})
+        AND DATE(timestamp) = ${datePlaceholder}
       GROUP BY 1, 2;
     `;
-    const ids = `(${exptIds.join(', ')})`;
-    const latest_date = getYesterdayString(new Date());
-    const params = [ids, latest_date];
-    // Need the query for their experiments table first
-    // const exposureData = await eventDbQuery(countExposuresQuery, params);
-    // Dummy data:
-    const exposureData = [{ experiment_id: 1, variation_id: 0, num_users: 100 }, { experiment_id: 1, variation_id: 1, num_users: 101 }, { experiment_id: 2, variation_id: 0, num_users: 50 },  { experiment_id: 2, variation_id: 1, num_users: 51 }];
+    const params = [ ...exptIds, latest_date ];
+    const queryResult = await eventDbQuery(countExposuresQuery, ...params);
+    return queryResult.rows;
+  } catch (err) {
+    console.log(err);
+    return;
+  }
+};
+
+const updateExposures = async (exposureData) => {
+  try {
     // Insert into exposures table
-    const formattedData = exposureData.map(row => `(${row.experiment_id}, ${row.variation_id}, ${row.num_users}, '${latest_date}')`).join(', ');
+    const formattedData = exposureData.map(row => `(${row.experiment_id}, '${row.treatment ? 'test' : 'control'}', ${row.num_users}, '${latest_date}')`).join(', ');
     console.log(formattedData);
+
     const insertQuery = `
       INSERT INTO exposures (experiment_id, variant, num_users, date)
       VALUES ${formattedData};
@@ -56,7 +67,10 @@ const updateExposures = async (exptIds) => {
 // Runs once immediately for testing purposes
 (async () => {
   const experiments = await getActiveExperiments();
-  updateExposures(experiments);
+  const data = await countExposures(experiments);
+  console.log(data);
+  if (data) updateExposures(data);
+  // else... What to do if it fails? Send an email?
 })();
 /*
 crontab syntax:
