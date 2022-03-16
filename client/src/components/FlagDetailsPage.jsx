@@ -47,6 +47,7 @@ const FlagDetailsPage = () => {
     const runningExptId = exptData.find(expt => expt.date_ended === null).id;
     dispatch(editFlag(flagId, { is_experiment: false}));
     dispatch(editExperiment(runningExptId, { date_ended: true}));
+    setExptsFetched(false);
   };
 
   const handleToggle = (id) => {
