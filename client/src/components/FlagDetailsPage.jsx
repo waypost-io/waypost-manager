@@ -120,7 +120,7 @@ const FlagDetailsPage = () => {
         <EditFlagForm setIsEditing={setIsEditing} />
       )}
       {exptData &&
-        exptData.sort((a, b) => Number(b.id) - Number(a.id)).map((expt) => {
+        exptData.map((expt) => {
           return <ExperimentInfo key={expt.id} data={expt} />;
         })}
     </div>
