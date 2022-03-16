@@ -5,8 +5,8 @@ import { useDispatch } from "react-redux";
 
 const EditExperiment = ({ id, name, description, duration, date_started, date_ended, setIsEditing }) => {
   const dispatch = useDispatch();
-  const [newName, setNewName] = useState(name);
-  const [newDescription, setNewDescription] = useState(description);
+  const [newName, setNewName] = useState(name || "");
+  const [newDescription, setNewDescription] = useState(description || "");
   const [newDuration, setNewDuration] = useState(duration);
   const inputCSS = "border border-primary-oxfordblue rounded-lg px-2";
 
@@ -27,11 +27,11 @@ const EditExperiment = ({ id, name, description, duration, date_started, date_en
       errMessage += "- The duration has to be at least one day\n"
     }
 
-    if (description.length > 255) {
+    if (newDescription.length > 255) {
       errMessage += "- The length of the description is too long\n"
     }
 
-    if (name.length > 50) {
+    if (newName.length > 50) {
       errMessage += "- The length of the name is too long (max 50 char)\n"
     }
 
@@ -46,7 +46,7 @@ const EditExperiment = ({ id, name, description, duration, date_started, date_en
       alert(errMessage);
       return
     }
-    
+
     if (Object.keys(edits).length !== 0) {
       dispatch(editExperiment(id, edits));
     }
