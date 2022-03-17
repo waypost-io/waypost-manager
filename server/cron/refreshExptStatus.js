@@ -10,24 +10,29 @@ const exposuresTable = new PGTable(EXPOSURES_TABLE_NAME);
 experimentsTable.init();
 exposuresTable.init();
 
+const missingData = async (dateStr) => {
+  const result = await exposuresTable.query(`SELECT COUNT(1) FROM exposures WHERE date = $1`, [ dateStr ]);
+  return (result.rows[0].count === '0');
+};
+
 // Get all experiments
 const getActiveExperiments = async () => {
   const result = await experimentsTable.query('SELECT id FROM experiments WHERE date_ended IS NULL');
   return result.rows.map(row => row.id);
-}
-
-const getYesterdayString = (today) => {
-  return `${today.getFullYear()}-${(today.getMonth() + 1).toString().padStart(2, '0')}-${(today.getDate() - 1).toString().padStart(2, '0')}`;
 };
 
-const latest_date = getYesterdayString(new Date());
+const getNDaysAgoString = (today, numDays) => {
+  return `${today.getFullYear()}-${(today.getMonth() + 1).toString().padStart(2, '0')}-${(today.getDate() - numDays).toString().padStart(2, '0')}`;
+};
+
+const latest_date = getNDaysAgoString(new Date());
 
 const getExptQuery = async () => {
   const query = "SELECT expt_table_query FROM connection";
   return (await dbQuery(query)).rows[0]['expt_table_query'];
 };
 
-const countExposures = async (exptIds) => {
+const countExposures = async (exptIds, dateStr) => {
   try {
     const exptQuery = await getExptQuery();
     const idPlaceholders = createPlaceholdersArr(exptIds);
@@ -41,7 +46,7 @@ const countExposures = async (exptIds) => {
         AND DATE(timestamp) <= ${datePlaceholder}
       GROUP BY 1, 2;
     `;
-    const params = [ ...exptIds, latest_date ];
+    const params = [ ...exptIds, dateStr ];
     const queryResult = await eventDbQuery(countExposuresQuery, ...params);
     return queryResult.rows;
   } catch (err) {
@@ -50,10 +55,10 @@ const countExposures = async (exptIds) => {
   }
 };
 
-const updateExposures = async (exposureData) => {
+const updateExposures = async (exposureData, dateStr) => {
   try {
     // Insert into exposures table
-    const formattedData = exposureData.map(row => `(${row.experiment_id}, '${row.treatment ? 'test' : 'control'}', ${row.num_users}, '${latest_date}')`).join(', ');
+    const formattedData = exposureData.map(row => `(${row.experiment_id}, '${row.treatment ? 'test' : 'control'}', ${row.num_users}, '${dateStr}')`).join(', ');
 
     const insertQuery = `
       INSERT INTO exposures (experiment_id, variant, num_users, date)
@@ -66,22 +71,36 @@ const updateExposures = async (exposureData) => {
   }
 };
 
+// Updates previous day plus missing data in last 7 days
+const backfill7Days = async () => {
+  // Creates array of dates in SQL format from 7 days ago through yesterday
+  const last7Days = Array(7).fill().map((_, i) => i + 1).map(num => getNDaysAgoString(new Date(), num));
+
+  for (let i = 0; i < last7Days.length; i++) {
+    const dateStr = last7Days[i];
+    const missing = await missingData(dateStr);
+
+    if (missing) {
+      const experiments = await getActiveExperiments();
+      const data = await countExposures(experiments, dateStr);
+
+      if (data) {
+        if (data.length === 0) {
+          console.log(`No exposures available for ${dateStr}`);
+          continue;
+        }
+        updateExposures(data, dateStr);
+      }
+      else {
+        console.log(`Error with getting data for ${dateStr}`);
+      }
+    }
+  }
+};
+
 // Runs once immediately for testing purposes
 (async () => {
-  const experiments = await getActiveExperiments();
-  const data = await countExposures(experiments);
-  console.log(data);
-  if (data) {
-    if (data.length === 0) {
-      console.log("No exposures available");
-      return;
-    }
-    updateExposures(data);
-  }
-  else {
-    console.log("Error");
-  }
-  // else... What to do if it fails? Send an email?
+  backfill7Days();
 })();
 /*
 crontab syntax:
