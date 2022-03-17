@@ -1,6 +1,7 @@
 const PGTable = require("../db/PGTable");
 const { EXPERIMENTS_TABLE_NAME, EXPERIMENT_METRICS_TABLE_NAME, EXPOSURES_TABLE_NAME, GET_EXPERIMENTS_QUERY } = require("../constants/db");
 const { getNowString } = require("../utils");
+const { backfill } = require('../lib/experimentSummary');
 
 const experimentsTable = new PGTable(EXPERIMENTS_TABLE_NAME);
 experimentsTable.init();
@@ -76,11 +77,16 @@ const editExperiment = async (req, res, next) => {
   }
 };
 
-const updateExperimentData = async (req, res, next) => {
-  const id = req.params.id;
-  // Adds row for test group and control group in the exposures table
-  // Updates the test mean and control mean in the experiment_metrics table
-  res.status(200).send("Todo");
+const backfillData = async (req, res, next) => {
+  try {
+    const result = await experimentsTable.query("SELECT CURRENT_DATE - MIN(date_started) AS date_diff FROM experiments WHERE date_ended IS NULL");
+    const dayDiff = result.rows[0]['date_diff'];
+    await backfill(dayDiff);
+    res.status(200).send("Successfully updated");
+  } catch (err) {
+    console.log(err);
+    res.status(500).send(err.message);
+  }
 };
 
 const getAnalysis = async (req, res, next) => {
@@ -94,5 +100,5 @@ exports.getExperimentsForFlag = getExperimentsForFlag;
 exports.getExperiment = getExperiment;
 exports.createExperiment = createExperiment;
 exports.editExperiment = editExperiment;
-exports.updateExperimentData = updateExperimentData;
+exports.backfillData = backfillData;
 exports.getAnalysis = getAnalysis;
