@@ -1,5 +1,4 @@
 const { Client } = require("pg");
-require("dotenv").config();
 
 const logQuery = (statement, parameters) => {
   const timeStamp = new Date();
@@ -10,11 +9,11 @@ const logQuery = (statement, parameters) => {
 const dbQuery = async (statement, ...parameters) => {
   try {
     const client = new Client({
-      user: process.env.DB_USER,
-      host: "localhost",
-      password: process.env.DB_PASSWORD,
-      database: process.env.DB,
-      port: 5432,
+      user: process.env.POSTGRES_USER,
+      host: process.env.POSTGRES_HOST,
+      password: process.env.POSTGRES_PASSWORD,
+      database: process.env.POSTGRES_DB,
+      port: process.env.POSTGRES_PORT,
     });
 
     await client.connect();
@@ -25,7 +24,7 @@ const dbQuery = async (statement, ...parameters) => {
 
     return result;
   } catch (err) {
-    // console.log(err.message);
+    console.log(err.message);
     throw new Error(err.message);
   }
 };

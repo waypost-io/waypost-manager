@@ -2,9 +2,7 @@ const cron = require('node-cron');
 const { backfill } = require('../lib/experimentSummary');
 
 // Runs once immediately for testing purposes
-(async () => {
-  backfill();
-})();
+backfill();
 /*
 crontab syntax:
 A single asterisk means the task will be run for every instance of that unit of time
@@ -19,6 +17,7 @@ A single asterisk means the task will be run for every instance of that unit of 
 
 For once daily at 3am, use '0 3 * * *'
 */
-// cron.schedule('0 3 * * *', async () => {
-  // backfill7Days();
+// cron.schedule('10 * * * * *', async () => {
+//   backfill();
+//   console.log('CRON running')
 // });
