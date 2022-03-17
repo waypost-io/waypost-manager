@@ -11,9 +11,10 @@ export default function experiments(state = [], action) {
       const indexOfEdited = newState.findIndex((expt) => (
         expt.id === action.editedExpt.id
       ));
-      // save exposures to variable 
+      const exposures = newState[indexOfEdited].exposures;
       newState[indexOfEdited] = action.editedExpt;
-      // put exposures on new var
+      newState[indexOfEdited].exposures = exposures;
+
       return newState;
     }
     default: {

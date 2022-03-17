@@ -38,8 +38,8 @@ const separateMetricExperimentData = (metricExpt) => {
     metric_id,
     mean_test,
     mean_control,
-    standard_dev_test,
-    standard_dev_control,
+    interval_width_test,
+    interval_width_control,
     p_value,
     ...expt
   } = metricExpt;
@@ -48,8 +48,8 @@ const separateMetricExperimentData = (metricExpt) => {
     metric_id,
     mean_test,
     mean_control,
-    standard_dev_test,
-    standard_dev_control,
+    interval_width_test,
+    interval_width_control,
     p_value
   };
 
@@ -137,11 +137,35 @@ const createExperiment = async (req, res, next) => {
 const editExperiment = async (req, res, next) => {
   const id = req.params.id;
   try {
-    const updatedFields = req.body;
+    let { metric_ids, old_metric_ids, ...updatedFields} = req.body;
     if (updatedFields.date_ended) {
       updatedFields.date_ended = getNowString();
     }
-    const updatedExpt = await experimentsTable.editRow(updatedFields, { id: id });
+
+    if (metric_ids) {
+      for (let i = 0; i < metric_ids.length; i++) {
+        const newMId = metric_ids[i];
+        if (!old_metric_ids.includes(newMId)) {
+          await experimentMetricsTable.insertRow({ experiment_id: id, metric_id: newMId });
+        }
+      }
+
+      for (let i = 0; i < old_metric_ids.length; i++) {
+        const oldMId = old_metric_ids[i];
+        if (!metric_ids.includes(oldMId)) {
+          await experimentMetricsTable.deleteRow({ experiment_id: id, metric_id: oldMId});
+        }
+      }
+    }
+
+    let updatedExpt;
+    if (Object.keys(updatedFields).length > 0) {
+      updatedExpt = await experimentsTable.editRow(updatedFields, { id: id });
+    } else {
+      updatedExpt = await experimentsTable.getRow(id);
+    }
+    const updatedMetrics = await experimentMetricsTable.getRowsWhere({ experiment_id: id });
+    updatedExpt.metrics = updatedMetrics;
     req.updatedExpt = updatedExpt;
     // If regular edit, not stopping experiment, just send back updated expt
     if (!updatedFields.date_ended) {

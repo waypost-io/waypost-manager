@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
 import EditExperiment from "./EditExperiment";
 
-const ExperimentInfo = ({ data }) => {
-  const { id, name, description, duration, date_started, date_ended } = data;
+const ExperimentInfo = ({ data, allMetrics }) => {
+  const { id, name, description, duration, date_started, date_ended, metrics } = data;
   const [isEditing, setIsEditing] = useState(false);
   const startDate = new Date(date_started).toLocaleDateString("en-US");
   const endDate = date_ended ? new Date(date_ended).toLocaleDateString("en-US") : "Present";
+  const metricsNames = metrics.map((metric) => {
+    return allMetrics.find(m => m.id === metric.metric_id).name
+  }).join(", ");
+
 
   return (
     <div className="border border-dashed border-primary-oxfordblue rounded p-5 my-4">
@@ -19,11 +23,12 @@ const ExperimentInfo = ({ data }) => {
           {name && <p>Name: <span className="font-bold">{name}</span></p>}
           <p>Duration: <span className="font-bold">{duration + " days"}</span></p>
           {description && <p>Description: <span className="font-bold">{description}</span></p>}
+          <p>Metrics measured: <span className="font-bold">{metricsNames}</span></p>
           <p>Details about experiment analysis, charts and stats go here</p>
         </>
     ) : (
       <>
-        <EditExperiment setIsEditing={setIsEditing} {...data}/>
+        <EditExperiment setIsEditing={setIsEditing} allMetrics={allMetrics} {...data}/>
       </>
     )
       }
