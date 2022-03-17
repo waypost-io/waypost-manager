@@ -1,4 +1,5 @@
 const ttest = require('ttest');
+const chi2test = require( '@stdlib/stats-chi2test' );
 const PGTable = require("../db/PGTable");
 const { dbQuery } = require("../db/db-query");
 const { eventDbQuery } = require("../db/event-db-query");
@@ -124,6 +125,7 @@ const calcContinuousMetric = async (exptId, metricId, exptQuery, metricQuery) =>
     FROM exposures e
     LEFT JOIN (${metricQuery}) m
       ON e.user_id = m.user_id
+      AND m.timestamp >= e.timestamp
     GROUP BY 1
     ORDER BY 1
   `;
@@ -157,17 +159,35 @@ const calcDiscreteMetric = async (exptId, metricId, exptQuery, metricQuery) => {
     WHERE experiment_id = $1
   )
   SELECT e.treatment,
-    COUNT(m.user_id) AS total,
+    COUNT(m.user_id) AS count,
     COUNT(e.user_id) AS num_users,
     1.0 * COUNT(m.user_id) / COUNT(e.user_id) AS rate_per_user
   FROM exposures e
   LEFT JOIN (${metricQuery}) m
     ON e.user_id = m.user_id
+    AND m.timestamp >= e.timestamp
   GROUP BY 1
   ORDER BY 1
   `;
-  // result = await eventDbQuery(query, exptId);
-  // console.log(result.rows);
+  result = await eventDbQuery(query, exptId);
+  let obs = []
+  result.rows.forEach(group => {
+    let data = [ +group.count, +group.num_users - (+group.count) ];
+    if (data[0] < 5 || data[1] < 5) {
+      throw new Error("Sample size too small");
+    }
+    obs.push(data);
+  });
+  const stat = chi2test(obs);
+
+  // Insert into experiment_metrics table
+  const insertStatement = `
+    UPDATE experiment_metrics
+    SET mean_control = $1, mean_test = $2, p_value = $3
+    WHERE experiment_id = $4 AND metric_id = $5
+  `;
+  const [ control, test ] = result.rows;
+  await dbQuery(insertStatement, +control.rate_per_user, +test.rate_per_user, stat.pValue, exptId, metricId);
 };
 
 // Does one experiment, one metric at a time

@@ -12,6 +12,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "@stdlib/stats-chi2test": "^0.0.8",
     "axios": "^0.26.0",
     "chi-sq-test": "^2.0.1",
     "dotenv": "^16.0.0",
