@@ -72,9 +72,9 @@ const updateExposures = async (exposureData, dateStr) => {
 };
 
 // Updates previous day plus missing data in last 7 days
-const backfill7Days = async () => {
-  // Creates array of dates in SQL format from 7 days ago through yesterday
-  const last7Days = Array(7).fill().map((_, i) => i + 1).map(num => getNDaysAgoString(new Date(), num));
+const backfill = async (numDays = 7) => {
+  // Creates array of dates in SQL format from numDays (or 7) days ago through yesterday
+  const last7Days = Array(numDays).fill().map((_, i) => i + 1).map(num => getNDaysAgoString(new Date(), num));
 
   for (let i = 0; i < last7Days.length; i++) {
     const dateStr = last7Days[i];
@@ -100,7 +100,7 @@ const backfill7Days = async () => {
 
 // Runs once immediately for testing purposes
 (async () => {
-  backfill7Days();
+  backfill();
 })();
 /*
 crontab syntax:
