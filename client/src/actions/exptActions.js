@@ -12,7 +12,9 @@ export function fetchExperimentsSuccess(experiments) {
 
 export function createExperiment(exptObj) {
   return function(dispatch) {
-    apiClient.createExperiment(exptObj, data => dispatch(createExperimentSuccess(data)));
+    apiClient.createExperiment(exptObj, data => {
+      dispatch(createExperimentSuccess(data))
+    });
   }
 }
 

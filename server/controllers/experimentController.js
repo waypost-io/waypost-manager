@@ -123,10 +123,13 @@ const createExperiment = async (req, res, next) => {
     };
     const newExpt = await experimentsTable.insertRow(exptObj);
     // Add each metric_id to experiment_metrics with the experiment_id
-    req.body.metric_ids.forEach(async (metricId) => {
-        await experimentMetricsTable.insertRow({ experiment_id: newExpt.id, metric_id: metricId });
-    });
-    newExpt.metric_ids = req.body.metric_ids;
+    for (let i = 0; i < req.body.metric_ids.length; i++) {
+      const metricId = req.body.metric_ids[i];
+      await experimentMetricsTable.insertRow({ experiment_id: newExpt.id, metric_id: metricId });
+    }
+
+    const metrics = await experimentMetricsTable.getRowsWhere({ experiment_id: newExpt.id });
+    newExpt.metrics = metrics;
     res.status(200).send(newExpt);
   } catch (err) {
     console.log(err);
