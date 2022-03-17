@@ -6,7 +6,7 @@ const MetricCheckbox = ({ name, id, selected, handleClick }) => {
   return (
     <>
       <input className="invisible" type="checkbox" name="metric" id={name} value={id} required />
-      <label onClick={handleClick} className={`border-2 border-black bg-primary-${bgColor} text-primary-${txtColor} font-bold rounded-lg py-1 px-2`} htmlFor={name}>
+      <label onClick={handleClick} className={`border border-slate shadow-md bg-primary-${bgColor} text-primary-${txtColor} font-bold rounded-lg py-1 px-2 hover:cursor-pointer`} htmlFor={name}>
         <div>{name}</div>
       </label>
     </>
