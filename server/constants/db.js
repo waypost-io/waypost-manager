@@ -4,8 +4,8 @@ exports.EXPERIMENT_METRICS_TABLE_NAME = "experiment_metrics";
 exports.EXPOSURES_TABLE_NAME = "exposures";
 exports.METRICS_TABLE_NAME = "metrics";
 exports.CONNECTION_TABLE_NAME = "connection";
-exports.GET_EXPERIMENTS_QUERY = `SELECT * FROM experiments AS e
-                                 JOIN experiment_metrics AS em
+exports.GET_EXPERIMENTS_QUERY = `SELECT e.*, em.metric_id FROM experiments e
+                                 JOIN experiment_metrics em
                                  ON e.id=em.experiment_id
                                  WHERE flag_id = $1
                                  ORDER BY id DESC;`;

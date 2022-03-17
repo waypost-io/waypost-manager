@@ -20,12 +20,31 @@ const getExperiment = async (req, res, next) => {
   }
 };
 
+// takes arr of joined expt and metric_id data with duplicate experiments
+// returns arr with no duplicate experiments and metric_ids property is an arr
+const transformMetricExptData = (experiments) => {
+  let idMap = {};
+  experiments.forEach((expt) => {
+    if (idMap[expt.id]) {
+      idMap[expt.id].push(expt.metric_id)
+    } else {
+      idMap[expt.id] = [expt.metric_id];
+    }
+  });
+
+  return = Object.keys(idMap).map((exptId) => {
+    const { metric_id, ...expt } = experiments.find((e) => e.id === Number(exptId));
+    expt.metric_ids = idMap[exptId];
+    return expt;
+  })
+}
+
 const getExperimentsForFlag = async (req, res, next) => {
   const flagId = req.params.id;
   try {
-    const experiments = await experimentsTable.query(GET_EXPERIMENTS_QUERY, [flagId]);
-    console.log(experiments);
-    res.status(200).send(experiments.rows);
+    let { rows: experiments } = await experimentsTable.query(GET_EXPERIMENTS_QUERY, [flagId]);
+    experiments = transformMetricExptData(experiments);
+    res.status(200).send(experiments);
   } catch (err) {
     console.log(err);
     res.status(500).send(err.message)
@@ -47,7 +66,7 @@ const createExperiment = async (req, res, next) => {
     req.body.metric_ids.forEach(async (metricId) => {
         await experimentMetricsTable.insertRow({ experiment_id: newExpt.id, metric_id: metricId });
     });
-
+    newExpt.metric_ids = req.body.metric_ids;
     res.status(200).send(newExpt);
   } catch (err) {
     console.log(err);
