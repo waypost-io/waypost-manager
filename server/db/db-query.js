@@ -10,11 +10,11 @@ const logQuery = (statement, parameters) => {
 module.exports = {
   async dbQuery(statement, ...parameters) {
     const client = new Client({
-      user: process.env.DB_USER,
-      host: "localhost",
-      password: process.env.DB_PASSWORD,
-      database: process.env.DB,
-      port: 5432,
+      user: process.env.POSTGRES_USER,
+      host: process.env.POSTGRES_HOST,
+      password: process.env.POSTGRES_PASSWORD,
+      database: process.env.POSTGRES_DB,
+      port: process.env.POSTGRES_PORT,
     });
 
     await client.connect();
