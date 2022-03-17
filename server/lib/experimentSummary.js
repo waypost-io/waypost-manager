@@ -9,7 +9,7 @@ const exposuresTable = new PGTable(EXPOSURES_TABLE_NAME);
 experimentsTable.init();
 exposuresTable.init();
 
-const missingData = async (dateStr) => {
+const missingExposureData = async (dateStr) => {
   const result = await exposuresTable.query(`SELECT COUNT(1) FROM exposures WHERE date = $1`, [ dateStr ]);
   return (result.rows[0].count === '0');
 };
@@ -70,30 +70,37 @@ const updateExposures = async (exposureData, dateStr) => {
   }
 };
 
-const backfill = async (numDays = 7) => {
+const runExposuresPipeline = async (dateStr) => {
+  const experiments = await getActiveExperiments();
+  const data = await countExposures(experiments, dateStr);
+  if (data) {
+    if (data.length === 0) {
+      console.log(`No exposures available for ${dateStr}`);
+      return;
+    }
+    updateExposures(data, dateStr);
+  }
+  else {
+    console.log(`Error with getting data for ${dateStr}`);
+  }
+};
+
+const runAnalytics = async () => {
+
+};
+
+const backfillExposures = async (numDays = 7) => {
   // Creates array of dates in SQL format from numDays (or 7) days ago through yesterday
   const last7Days = Array(numDays).fill().map((_, i) => i + 1).map(num => getNDaysAgoString(new Date(), num));
 
   for (let i = 0; i < last7Days.length; i++) {
     const dateStr = last7Days[i];
-    const missing = await missingData(dateStr);
-
+    const missing = await missingExposureData(dateStr);
     if (missing) {
-      const experiments = await getActiveExperiments();
-      const data = await countExposures(experiments, dateStr);
-
-      if (data) {
-        if (data.length === 0) {
-          console.log(`No exposures available for ${dateStr}`);
-          continue;
-        }
-        updateExposures(data, dateStr);
-      }
-      else {
-        console.log(`Error with getting data for ${dateStr}`);
-      }
+      await runExposuresPipeline(dateStr);
     }
   }
 };
 
-exports.backfill = backfill;
+exports.backfillExposures = backfillExposures;
+exports.runAnalytics = runAnalytics;
