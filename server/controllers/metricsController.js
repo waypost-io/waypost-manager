@@ -1,21 +1,20 @@
 const PGTable = require("../db/PGTable");
 const { METRICS_TABLE_NAME, METRIC_TYPES } = require("../constants/db");
 const { getNowString } = require("../utils");
-const { eventDbQuery } = require("../db/event-db-query");
+const { eventDbQuery, verifyQueryString } = require("../db/event-db-query");
 
 const metricsTable = new PGTable(METRICS_TABLE_NAME);
 metricsTable.init();
 
 const validateQuery = async (req, res, next) => {
   try {
-    const queryResult = await eventDbQuery(`SELECT * FROM (${req.body.query_string}) AS provided_query WHERE FALSE;`);
-    const tableCols = queryResult.fields.map(field => field.name);
-    const required = ['user_id', 'timestamp', 'value'];
-    for (let i = 0; i < required.length; i++) {
-      if (!tableCols.includes(required[i])) {
-        throw new Error("Columns not correct");
-      }
-    };
+    let requiredCols;
+    if (req.body.type === 'binomial') {
+      requiredCols = ['user_id', 'timestamp'];
+    } else {
+      requiredCols = ['user_id', 'timestamp', 'value'];
+    }
+    await verifyQueryString(req.body.query_string, requiredCols, "Columns not correct");
   } catch (err) {
     console.log(err);
     res.status(200).send({ ok: false, error_message: err.message });
