@@ -21,9 +21,10 @@ const getExperiment = async (req, res, next) => {
 };
 
 const getExperimentsForFlag = async (req, res, next) => {
-  const id = req.params.id;
+  const flagId = req.params.id;
   try {
-    const experiments = await experimentsTable.query(GET_EXPERIMENTS_QUERY, [id]);
+    const experiments = await experimentsTable.query(GET_EXPERIMENTS_QUERY, [flagId]);
+    console.log(experiments);
     res.status(200).send(experiments.rows);
   } catch (err) {
     console.log(err);
