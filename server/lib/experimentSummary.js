@@ -14,10 +14,19 @@ const missingExposureData = async (dateStr) => {
   return (result.rows[0].count === '0');
 };
 
-// Get all experiments
 const getActiveExperiments = async () => {
   const result = await experimentsTable.query('SELECT id FROM experiments WHERE date_ended IS NULL');
   return result.rows.map(row => row.id);
+};
+
+const getExptMetrics = async (exptIds) => {
+  const placeholders = createPlaceholdersArr(exptIds);
+  const query = `
+    SELECT experiment_id, metric_id FROM experiment_metrics
+    WHERE experiment_id IN (${placeholders})
+  `
+  const result = await dbQuery(query, ...exptIds);
+  return result.rows;
 };
 
 const getNDaysAgoString = (today, numDays) => {
@@ -85,10 +94,6 @@ const runExposuresPipeline = async (dateStr) => {
   }
 };
 
-const runAnalytics = async () => {
-
-};
-
 const backfillExposures = async (numDays = 7) => {
   // Creates array of dates in SQL format from numDays (or 7) days ago through yesterday
   const last7Days = Array(numDays).fill().map((_, i) => i + 1).map(num => getNDaysAgoString(new Date(), num));
@@ -101,6 +106,20 @@ const backfillExposures = async (numDays = 7) => {
     }
   }
 };
+
+const updateStats = (exptMetric) => {
+  const { experiment_id: exptId, metric_id: metricId } = exptMetric;
+};
+
+const runAnalytics = async () => {
+  const experiments = await getActiveExperiments();
+  const exptMetrics = await getExptMetrics(experiments);
+  exptMetrics.forEach(combo => {
+    updateStats(combo);
+  });
+};
+
+runAnalytics();
 
 exports.backfillExposures = backfillExposures;
 exports.runAnalytics = runAnalytics;
