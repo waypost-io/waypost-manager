@@ -108,11 +108,12 @@ input:checked + .slider:before {
 }
 
 .overlay {
-  position: absolute;
+  position: fixed;
   left: 0;
   right: 0;
   top: 0;
   bottom: 0;
+  height: 100%;
   overflow: auto;
   background-color: darkgray;
   background-color: rgba(0, 0, 0, 0.6);
@@ -124,10 +125,15 @@ input:checked + .slider:before {
 
 .new-flag-modal {
   background-color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   margin: 50px auto;
   padding: 20px;
-  width: min(60%, 700px);
-  height: max(60%, 800px);
+  width: min(80%, 700px);
+  min-width: 450px;
+  max-width: 700px;
+  height: 400px;
   border-radius: 15px;
   text-align: center;
   position: relative;
@@ -140,7 +146,6 @@ input:checked + .slider:before {
   width: min(60%, 700px);
   height: 500px;
   border-radius: 15px;
-  text-align: center;
   position: relative;
 }
 
@@ -150,9 +155,30 @@ input:checked + .slider:before {
 }
 
 .x-icon {
-  width: 36px;
-  height: 36px;
   position: absolute;
-  right: 0px;
-  top: 0px;
+  right: 32px;
+  top: 32px;
+  width: 32px;
+  height: 32px;
+  opacity: 0.3;
+}
+
+.x-icon:hover {
+  opacity: 1;
+}
+
+.x-icon:before, .x-icon:after {
+  position: absolute;
+  left: 15px;
+  content: ' ';
+  height: 33px;
+  width: 2px;
+  background-color: #333;
+}
+
+.x-icon:before {
+  transform: rotate(45deg);
+}
+.x-icon:after {
+  transform: rotate(-45deg);
 }

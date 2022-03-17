@@ -16,9 +16,9 @@ const ExperimentInfo = ({ data }) => {
             {!date_ended && <button className="bg-primary-turquoise text-primary-offwhite rounded-lg py-1.5 px-6 ml-2" type="button" onClick={() => setIsEditing(true)}>Edit Experiment</button>}
           </div>
           <p>ID: <span className="font-bold">{id}</span></p>
-          <p>Name: <span className="font-bold">{name}</span></p>
+          {name && <p>Name: <span className="font-bold">{name}</span></p>}
           <p>Duration: <span className="font-bold">{duration + " days"}</span></p>
-          <p>Description: <span className="font-bold">{description}</span></p>
+          {description && <p>Description: <span className="font-bold">{description}</span></p>}
           <p>Details about experiment analysis, charts and stats go here</p>
         </>
     ) : (

@@ -48,18 +48,18 @@ const EditFlagForm = ({ setIsEditing }) => {
   return (
     <form>
       <div>
-        <label htmlFor="new-name" className="mr-2.5">
+        <label htmlFor="new-name" className="inline-block w-1/3 text-right mr-5">
           Name:{" "}
         </label>
         <input
           type="text"
           value={newName}
           onChange={(e) => setNewName(e.target.value)}
-          className="border border-primary-oxfordblue rounded-lg px-2"
+          className="border flex-1 border-slate rounded-lg p-2"
         />
       </div>
       <div className="mt-2.5">
-        <label htmlFor="new-description">Description: </label>
+        <label htmlFor="new-description" className="inline-block w-1/3 text-right mr-5">Description: </label>
         <textarea
           id="new-description"
           type="textarea"
@@ -67,27 +67,29 @@ const EditFlagForm = ({ setIsEditing }) => {
           cols="30"
           value={newDescription}
           onChange={(e) => setNewDescription(e.target.value)}
-          className="block border border-primary-oxfordblue rounded-lg px-2"
+          className="border flex-1 border-slate rounded-lg p-2"
         />
       </div>
       <div className="mt-2.5">
-        <label htmlFor="new-percent">Percent of Users Exposed: </label>
+        <label htmlFor="new-percent" className="inline-block w-1/3 text-right mr-5">Percent of Users Exposed: </label>
         <input
           id="new-percent"
           type="number"
           max={100}
           min={0}
           size="3"
-          className="border border-primary-oxfordblue rounded-lg px-2"
+          className="border flex-1 border-slate rounded-lg p-2"
           value={newPercent}
           onChange={(e) => setNewPercent(e.target.value)}
         />{" "}
         %
       </div>
-      <button className="btn bg-primary-turquoise" onClick={handleSaveEdits}>
-        Save Changes
-      </button>
-      <button className="btn bg-slate" onClick={() => setIsEditing(false)}>Cancel</button>
+      <div className="flex justify-end">
+        <button className="btn bg-primary-turquoise" onClick={handleSaveEdits}>
+          Save Changes
+        </button>
+        <button className="btn bg-slate" onClick={() => setIsEditing(false)}>Cancel</button>
+      </div>
     </form>
   );
 };
