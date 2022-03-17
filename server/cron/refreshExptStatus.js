@@ -38,7 +38,7 @@ const countExposures = async (exptIds) => {
         COUNT(user_id) AS num_users
       FROM (${exptQuery}) AS expt_table
       WHERE experiment_id IN (${idPlaceholders})
-        AND DATE(timestamp) = ${datePlaceholder}
+        AND DATE(timestamp) <= ${datePlaceholder}
       GROUP BY 1, 2;
     `;
     const params = [ ...exptIds, latest_date ];
@@ -70,7 +70,17 @@ const updateExposures = async (exposureData) => {
 (async () => {
   const experiments = await getActiveExperiments();
   const data = await countExposures(experiments);
-  if (data) updateExposures(data);
+  console.log(data);
+  if (data) {
+    if (data.length === 0) {
+      console.log("No exposures available");
+      return;
+    }
+    updateExposures(data);
+  }
+  else {
+    console.log("Error");
+  }
   // else... What to do if it fails? Send an email?
 })();
 /*
