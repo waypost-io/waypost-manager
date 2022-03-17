@@ -2,7 +2,7 @@ require("dotenv").config();
 const express = require('express');
 const routes = require('./routes/api');
 const cron = require('node-cron');
-const { backfillExposures } = require('./lib/experimentSummary');
+const { backfillExposures } = require('./lib/experimentExposures');
 
 const app = express();
 

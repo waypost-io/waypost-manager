@@ -46,12 +46,10 @@ router.get("/experiments/:id", experimentController.getExperiment);
 router.put(
   "/experiments/:id",
   experimentController.editExperiment,
-  experimentController.getAnalysis
+  experimentController.analyzeExperiment
 );
 
 router.post("/experiments", experimentController.createExperiment);
-
-router.get("/experiments/:id/analysis", experimentController.getAnalysis);
 
 router.get("/metrics", metricsController.getMetrics);
 
@@ -69,6 +67,10 @@ router.delete("/connection", connectionController.removeConnection);
 
 router.get("/connection", connectionController.testConnection);
 
-router.get("/backfill_expt_data", experimentController.backfillData);
+router.get("/backfill-exposure-data", experimentController.backfillData);
+
+router.get("/analyze-experiments/:id", experimentController.analyzeExperiment);
+
+router.get("/analyze-experiments", experimentController.analyzeAll);
 
 module.exports = router;

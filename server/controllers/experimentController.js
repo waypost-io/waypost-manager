@@ -1,7 +1,8 @@
 const PGTable = require("../db/PGTable");
 const { EXPERIMENTS_TABLE_NAME, EXPERIMENT_METRICS_TABLE_NAME, EXPOSURES_TABLE_NAME, GET_EXPERIMENTS_QUERY } = require("../constants/db");
 const { getNowString } = require("../utils");
-const { backfill } = require('../lib/experimentSummary');
+const { backfillExposures } = require('../lib/experimentExposures');
+const { runAnalytics } = require('../lib/statistics');
 
 const experimentsTable = new PGTable(EXPERIMENTS_TABLE_NAME);
 experimentsTable.init();
@@ -81,7 +82,7 @@ const backfillData = async (req, res, next) => {
   try {
     const result = await experimentsTable.query("SELECT CURRENT_DATE - MIN(date_started) AS date_diff FROM experiments WHERE date_ended IS NULL");
     const dayDiff = result.rows[0]['date_diff'];
-    await backfill(dayDiff);
+    await backfillExposures(dayDiff);
     res.status(200).send("Successfully updated");
   } catch (err) {
     console.log(err);
@@ -89,11 +90,25 @@ const backfillData = async (req, res, next) => {
   }
 };
 
-const getAnalysis = async (req, res, next) => {
+const analyzeAll = async (req, res, next) => {
+  try {
+    await runAnalytics();
+    res.status(200).send("Success");
+  } catch (err) {
+    console.log(err);
+    res.status(500).send(err.message);
+  }
+};
+
+const analyzeExperiment = async (req, res, next) => {
   const id = req.params.id;
-  // Statistics and fill in the data in the experiments table
-  res.status(200).send(req.updatedExpt); // use for now until analysis is created
-  // res.status(200).send("Analysis")
+  try {
+    await runAnalytics(id);
+    res.status(200).send("Success");
+  } catch (err) {
+    console.log(err);
+    res.status(500).send(err.message);
+  }
 };
 
 exports.getExperimentsForFlag = getExperimentsForFlag;
@@ -101,4 +116,5 @@ exports.getExperiment = getExperiment;
 exports.createExperiment = createExperiment;
 exports.editExperiment = editExperiment;
 exports.backfillData = backfillData;
-exports.getAnalysis = getAnalysis;
+exports.analyzeAll = analyzeAll;
+exports.analyzeExperiment = analyzeExperiment;
