@@ -14,4 +14,4 @@ exports.GET_EXPOSURES_ON_EXPT = `SELECT variant, num_users, date
                                  WHERE experiment_id = $1
                                  ORDER BY date ASC;`
 exports.METRIC_TYPES = ['binomial', 'count', 'duration', 'revenue'];
-exports.REQUIRED_EVENT_DB_COLS = ['user_id', 'timestamp', 'treatment'];
+exports.REQUIRED_EVENT_DB_COLS = ['experiment_id', 'user_id', 'timestamp', 'treatment'];
