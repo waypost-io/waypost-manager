@@ -1,5 +1,8 @@
+require("dotenv").config();
 const express = require('express');
 const routes = require('./routes/api');
+const cron = require('node-cron');
+const { backfill } = require('./lib/experimentSummary');
 
 const app = express();
 
@@ -30,4 +33,10 @@ app.use((err, req, res, next) => {
 
 app.listen(port, () => {
   console.log(`Server running on port ${port}`)
+});
+
+// Testing CRON job every 10 seconds
+cron.schedule('10 * * * * *', async () => {
+  // backfill();
+  console.log('CRON running')
 });
