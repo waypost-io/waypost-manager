@@ -117,7 +117,5 @@ A single asterisk means the task will be run for every instance of that unit of 
 For once daily at 3am, use '0 3 * * *'
 */
 // cron.schedule('0 3 * * *', async () => {
-//   const experiments = await getActiveExperiments();
-  // const data = await countExposures(experiments);
-  // if (data) updateExposures(data);
+  // backfill7Days();
 // });
