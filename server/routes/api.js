@@ -51,8 +51,6 @@ router.put(
 
 router.post("/experiments", experimentController.createExperiment);
 
-router.put("/experiments/:id/data", experimentController.updateExperimentData);
-
 router.get("/experiments/:id/analysis", experimentController.getAnalysis);
 
 router.get("/metrics", metricsController.getMetrics);
@@ -70,5 +68,7 @@ router.post("/connection", connectionController.createConnection);
 router.delete("/connection", connectionController.removeConnection);
 
 router.get("/connection", connectionController.testConnection);
+
+router.get("/backfill_expt_data", experimentController.backfillData);
 
 module.exports = router;

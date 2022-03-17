@@ -7,8 +7,8 @@ const logQuery = (statement, parameters) => {
   console.log(formattedTimeStamp, statement, parameters);
 };
 
-module.exports = {
-  async dbQuery(statement, ...parameters) {
+const dbQuery = async (statement, ...parameters) => {
+  try {
     const client = new Client({
       user: process.env.DB_USER,
       host: "localhost",
@@ -24,5 +24,11 @@ module.exports = {
     await client.end();
 
     return result;
-  },
+  } catch (err) {
+    // console.log(err.message);
+    throw new Error(err.message);
+  }
 };
+
+exports.dbQuery = dbQuery;
+
