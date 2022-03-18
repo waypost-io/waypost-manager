@@ -6,9 +6,7 @@ const ExposuresChart = ({ id }) => {
   const exptData = useSelector((state) => state.experiments.find(expt => expt.id === id));
   console.log(exptData);
   const controlDates = Object.keys(exptData.exposuresControl).sort();
-  console.log(controlDates);
   const controlVals = controlDates.map(date => exptData.exposuresControl[date]);
-  console.log(controlVals);
   const testDates = Object.keys(exptData.exposuresTest).sort();
   const testVals = testDates.map(date => exptData.exposuresTest[date]);
   const series = [
