@@ -6,6 +6,7 @@ import { updateStats } from '../actions/exptActions';
 const ExperimentResults = ({ id }) => {
   const metrics = useSelector((state) => state.experiments.find(expt => expt.id === id).metrics);
   console.log(metrics);
+  const hasResult = metrics.find(metric => metric.p_value !== null);
   const dispatch = useDispatch();
 
   const handleRefreshResults = () => {
@@ -18,7 +19,7 @@ const ExperimentResults = ({ id }) => {
         <h3 className="text-xl font-bold text-center">Results</h3>
         <button onClick={handleRefreshResults} className="btn bg-primary-violet">Refresh Results</button>
       </div>
-      {metrics.length > 0 && (
+      {hasResult && (
         <table className="w-full border border-primary-slate">
           <thead>
             <tr>
@@ -52,7 +53,7 @@ const ExperimentResults = ({ id }) => {
           </tbody>
         </table>
       )}
-      {metrics.length === 0 && <p>No results yet. Click "Refresh Results" when ready.</p>}
+      {!hasResult && <p>No results yet. Click "Refresh Results" when ready.</p>}
     </div>
   );
 };
