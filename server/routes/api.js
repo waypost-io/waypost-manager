@@ -67,10 +67,10 @@ router.delete("/connection", connectionController.removeConnection);
 
 router.get("/connection", connectionController.testConnection);
 
-router.get("/backfill-exposure-data", experimentController.backfillData);
+router.put("/experiments/exposures", experimentController.backfillData);
 
-router.get("/analyze-experiments/:id", experimentController.analyzeExperiment);
+router.put("/experiments/analysis/:id", experimentController.analyzeExperiment);
 
-router.get("/analyze-experiments", experimentController.analyzeAll);
+router.put("/experiments/analysis", experimentController.analyzeAll);
 
 module.exports = router;
