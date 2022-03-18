@@ -45,8 +45,8 @@ const calcContinuousMetric = async (exptId, metricId, exptQuery, metricQuery) =>
     { mean: +controlGroup.mean, variance: (+controlGroup.std_dev) ** 2, size: +controlGroup.num_users }
   );
   const pValue = stat.pValue();
-  confInterval = stat.confidence();
-  confIntervalPcnt = confInterval.map(num => num / +controlGroup.mean);
+  const confInterval = stat.confidence();
+  const confIntervalPcnt = confInterval.map(num => num / +controlGroup.mean);
 
   // Insert into experiment_metrics table
   const insertStatement = `
