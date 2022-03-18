@@ -4,7 +4,6 @@ import { useSelector } from "react-redux";
 
 const ExposuresChart = ({ id }) => {
   const exptData = useSelector((state) => state.experiments.find(expt => expt.id === id));
-  console.log(exptData);
   const controlDates = Object.keys(exptData.exposuresControl).sort();
   const controlVals = controlDates.map(date => exptData.exposuresControl[date]);
   const testDates = Object.keys(exptData.exposuresTest).sort();

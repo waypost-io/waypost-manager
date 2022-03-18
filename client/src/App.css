@@ -45,6 +45,12 @@ a:hover {
   font-weight: bold;
 }
 
+th, td {
+  border-width: 1px;
+  border-color:#0C182E;
+  padding: 15px;
+}
+
 .toggle {
   position: relative;
   display: inline-block;

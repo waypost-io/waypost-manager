@@ -42,6 +42,8 @@ const separateMetricExperimentData = (metricExpt) => {
     interval_start,
     interval_end,
     p_value,
+    name,
+    type,
     ...expt
   } = metricExpt;
 
@@ -51,7 +53,9 @@ const separateMetricExperimentData = (metricExpt) => {
     mean_control,
     interval_start,
     interval_end,
-    p_value
+    p_value,
+    name,
+    type
   };
 
   return [expt, metricObj];
@@ -97,15 +101,14 @@ const getExperimentsForFlag = async (req, res, next) => {
     const runningExpt = experiments.find((expt) => expt.date_ended === null);
     if (runningExpt) {
       let { rows: exposures } = await exposuresTable.query(GET_EXPOSURES_ON_EXPT, [1]);
+
       if (exposures.length > 0) {
-        console.log(String(exposures[1].date));
         const exposuresTest = createExposureObj(exposures, "test")
         const exposuresControl = createExposureObj(exposures, "control")
         runningExpt.exposuresTest = exposuresTest;
         runningExpt.exposuresControl = exposuresControl;
       }
     }
-
     res.status(200).send(experiments);
   } catch (err) {
     console.log(err);
