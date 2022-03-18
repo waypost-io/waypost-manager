@@ -39,8 +39,8 @@ const separateMetricExperimentData = (metricExpt) => {
     metric_id,
     mean_test,
     mean_control,
-    interval_width_test,
-    interval_width_control,
+    interval_start,
+    interval_end,
     p_value,
     ...expt
   } = metricExpt;
@@ -49,8 +49,8 @@ const separateMetricExperimentData = (metricExpt) => {
     metric_id,
     mean_test,
     mean_control,
-    interval_width_test,
-    interval_width_control,
+    interval_start,
+    interval_end,
     p_value
   };
 
