@@ -31,7 +31,7 @@ module.exports = class PGTable {
   // Ex. { id: 2, date_ended: "NOT NULL"} =>
   //  ["WHERE id = $1 AND date_ended IS NOT NULL", ['2']]
   // nextPlaceholderNum is a number that'll start the sequence of placeholders
-  createWhereStatement(obj, nextPlaceholderNum) {
+  createWhereStatement(obj, nextPlaceholderNum = 1) {
     if (Object.values(obj).length === 0) return "";
 
     const edits = [];
@@ -70,8 +70,16 @@ module.exports = class PGTable {
     return [queryString, values];
   }
 
-  createDeleteStatement() {
-    return `DELETE FROM ${this.tableName} WHERE id = $1 RETURNING *`;
+  createDeleteStatement(whereObj = {}) {
+    const [where, wValues] = this.createWhereStatement(whereObj);
+    const queryString = `DELETE FROM ${this.tableName} ${where} RETURNING *`;
+    return [queryString, wValues]
+  }
+
+  createSelectStatement(whereObj = {}) {
+    const [where, wValues] = this.createWhereStatement(whereObj);
+    const queryString = `SELECT * FROM ${this.tableName} ${where}`;
+    return [queryString, wValues]
   }
   // gets the column names
   async getFields() {
@@ -98,6 +106,12 @@ module.exports = class PGTable {
     return result.rows[0];
   }
 
+  async getRowsWhere(whereObj) {
+    const [queryString, params] = this.createSelectStatement(whereObj);
+    const result = await dbQuery(queryString, ...params);
+    return result.rows;
+  }
+
   async insertRow(obj) {
     const [queryString, params] = this.createInsertStatement(obj);
     const result = await dbQuery(queryString, ...params);
@@ -111,9 +125,9 @@ module.exports = class PGTable {
     return result.rows[0];
   }
 
-  async deleteRow(id) {
-    const queryString = this.createDeleteStatement();
-    const result = await dbQuery(queryString, id);
+  async deleteRow(where = {}) {
+    const [queryString, params] = this.createDeleteStatement(where);
+    const result = await dbQuery(queryString, ...params);
     return result;
   }
 

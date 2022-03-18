@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchFlags, toggleFlag, editFlag } from "../actions/flagActions";
 import { fetchExperiments, editExperiment } from "../actions/exptActions";
+import { fetchMetrics } from "../actions/metricActions";
 import { useParams, useNavigate } from "react-router-dom";
 import EditFlagForm from "./EditFlagForm";
 import ExperimentInfo from "./ExperimentInfo";
@@ -14,8 +15,10 @@ const FlagDetailsPage = () => {
     state.flags.find((flag) => flag.id === +flagId)
   );
   const exptData = useSelector((state) => state.experiments);
+  const metricData = useSelector((state) => state.metrics);
   const [flagFetched, setFlagFetched] = useState(false);
   const [exptsFetched, setExptsFetched] = useState(false);
+  const [metricsFetched, setMetricsFetched] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
 
   useEffect(() => {
@@ -24,6 +27,13 @@ const FlagDetailsPage = () => {
       setFlagFetched(true);
     }
   }, [dispatch, flagId, flagFetched]);
+
+  useEffect(() => {
+    if (!metricsFetched) {
+      dispatch(fetchMetrics());
+      setMetricsFetched(true);
+    }
+  }, [dispatch, metricsFetched]);
 
   useEffect(() => {
     if (!exptsFetched) {
@@ -55,7 +65,7 @@ const FlagDetailsPage = () => {
     };
   };
 
-  if (!flagData || !exptData) return null;
+  if (!flagData || !exptData || !metricData) return null;
   return (
     <div className="py-5 px-8 w-full">
       <div className="flex justify-between items-center border-b border-b-primary-oxfordblue mb-5">
@@ -121,7 +131,7 @@ const FlagDetailsPage = () => {
       )}
       {exptData &&
         exptData.map((expt) => {
-          return <ExperimentInfo key={expt.id} data={expt} />;
+          return <ExperimentInfo key={expt.id} allMetrics={metricData} data={expt} />;
         })}
     </div>
   );
