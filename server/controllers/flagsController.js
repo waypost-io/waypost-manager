@@ -37,7 +37,7 @@ const getAllFlags = async (req, res, next) => {
     if (req.query.prov) {
       data = await getFlagsForWebhook();
     } else {
-      data = await flagTable.getAllRows();
+      data = await flagTable.getAllRowsNotDeleted();
 
       if (!data) {
         throw new Error(
@@ -111,11 +111,11 @@ const editFlag = async (req, res, next) => {
 const deleteFlag = async (req, res, next) => {
   const id = req.params.id;
   try {
-    const result = await flagTable.deleteRow({ id });
-    if (result.rows.length === 0)
+    const result = await flagTable.editRow({ is_deleted: true }, { id });
+    if (!result)
       throw new Error(`Flag with the id of ${id} doesn't exist`);
 
-    const deletedFlagName = result.rows[0].name;
+    const deletedFlagName = result.name;
     req.update = true;
 
     res
