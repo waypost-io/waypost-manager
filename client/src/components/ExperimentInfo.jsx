@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { useDispatch } from "react-redux";
+import { updateStats } from '../actions/exptActions';
 import EditExperiment from "./EditExperiment";
 
 const ExperimentInfo = ({ data, allMetrics }) => {
@@ -9,7 +11,11 @@ const ExperimentInfo = ({ data, allMetrics }) => {
   const metricsNames = metrics.map((metric) => {
     return allMetrics.find(m => m.id === metric.metric_id).name
   }).join(", ");
+  const dispatch = useDispatch();
 
+  const handleRefreshResults = () => {
+    dispatch(updateStats(id));
+  };
 
   return (
     <div className="border border-dashed border-primary-oxfordblue rounded p-5 my-4">
@@ -24,7 +30,8 @@ const ExperimentInfo = ({ data, allMetrics }) => {
           <p>Duration: <span className="font-bold">{duration + " days"}</span></p>
           {description && <p>Description: <span className="font-bold">{description}</span></p>}
           <p>Metrics measured: <span className="font-bold">{metricsNames}</span></p>
-          <p>Details about experiment analysis, charts and stats go here</p>
+          <h3 className="font-bold">Exposures</h3>
+          <button onClick={handleRefreshResults} className="btn bg-primary-violet">Refresh Results</button>
         </>
     ) : (
       <>

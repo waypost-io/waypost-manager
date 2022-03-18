@@ -33,3 +33,15 @@ export function editExperiment(exptId, updatedFields) {
 export function editExperimentSuccess(editedExpt) {
   return { type: "EDIT_EXPERIMENT_SUCCESS", editedExpt };
 }
+
+export function updateStats(id) {
+  return function(dispatch) {
+    apiClient.updateStats(id, data => {
+      dispatch(updateStatsSuccess(data));
+    });
+  }
+}
+
+export function updateStatsSuccess(stats) {
+  return { type: "UPDATE_STATS_SUCCESS", stats };
+}
