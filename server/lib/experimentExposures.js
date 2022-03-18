@@ -9,12 +9,11 @@ const exposuresTable = new PGTable(EXPOSURES_TABLE_NAME);
 experimentsTable.init();
 exposuresTable.init();
 
-const missingData = async (dateStr) => {
+const missingExposureData = async (dateStr) => {
   const result = await exposuresTable.query(`SELECT COUNT(1) FROM exposures WHERE date = $1`, [ dateStr ]);
   return (result.rows[0].count === '0');
 };
 
-// Get all experiments
 const getActiveExperiments = async () => {
   const result = await experimentsTable.query('SELECT id FROM experiments WHERE date_ended IS NULL');
   return result.rows.map(row => row.id);
@@ -23,8 +22,6 @@ const getActiveExperiments = async () => {
 const getNDaysAgoString = (today, numDays) => {
   return `${today.getFullYear()}-${(today.getMonth() + 1).toString().padStart(2, '0')}-${(today.getDate() - numDays).toString().padStart(2, '0')}`;
 };
-
-const latest_date = getNDaysAgoString(new Date());
 
 const getExptQuery = async () => {
   const query = "SELECT expt_table_query FROM connection";
@@ -70,30 +67,34 @@ const updateExposures = async (exposureData, dateStr) => {
   }
 };
 
-const backfill = async (numDays = 7) => {
+const runExposuresPipeline = async (dateStr) => {
+  const experiments = await getActiveExperiments();
+  const data = await countExposures(experiments, dateStr);
+  if (data) {
+    if (data.length === 0) {
+      console.log(`No exposures available for ${dateStr}`);
+      return;
+    }
+    updateExposures(data, dateStr);
+  }
+  else {
+    console.log(`Error with getting data for ${dateStr}`);
+  }
+};
+
+const backfillExposures = async (numDays = 7) => {
   // Creates array of dates in SQL format from numDays (or 7) days ago through yesterday
   const last7Days = Array(numDays).fill().map((_, i) => i + 1).map(num => getNDaysAgoString(new Date(), num));
 
   for (let i = 0; i < last7Days.length; i++) {
     const dateStr = last7Days[i];
-    const missing = await missingData(dateStr);
-
+    const missing = await missingExposureData(dateStr);
     if (missing) {
-      const experiments = await getActiveExperiments();
-      const data = await countExposures(experiments, dateStr);
-
-      if (data) {
-        if (data.length === 0) {
-          console.log(`No exposures available for ${dateStr}`);
-          continue;
-        }
-        updateExposures(data, dateStr);
-      }
-      else {
-        console.log(`Error with getting data for ${dateStr}`);
-      }
+      await runExposuresPipeline(dateStr);
     }
   }
 };
 
-exports.backfill = backfill;
+exports.getExptQuery = getExptQuery;
+exports.getActiveExperiments = getActiveExperiments;
+exports.backfillExposures = backfillExposures;

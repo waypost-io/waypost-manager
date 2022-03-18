@@ -1,4 +1,5 @@
 const { Client } = require("pg");
+require("dotenv").config();
 
 const logQuery = (statement, parameters) => {
   const timeStamp = new Date();
