@@ -1,7 +1,6 @@
 const PGTable = require("../db/PGTable");
 const { EXPERIMENTS_TABLE_NAME, EXPERIMENT_METRICS_TABLE_NAME, EXPOSURES_TABLE_NAME, GET_EXPT_METRICS_QUERY, GET_EXPOSURES_ON_EXPT } = require("../constants/db");
 const { getNowString } = require("../utils");
-const { backfillExposures } = require('../lib/experimentExposures');
 const { runAnalytics } = require('../lib/statistics');
 
 const experimentsTable = new PGTable(EXPERIMENTS_TABLE_NAME);
@@ -83,7 +82,7 @@ const createExposureObj = (exposuresArr, variant) => {
   const obj = {};
   exposuresArr = exposuresArr.filter((expo) => expo.variant === variant);
   exposuresArr.forEach((expo) => {
-    const date = String(expo.date).split("T")[0]
+    const date = expo.date.toISOString();
     obj[date] = expo.num_users
   })
   return obj;
@@ -99,10 +98,11 @@ const getExperimentsForFlag = async (req, res, next) => {
     if (runningExpt) {
       let { rows: exposures } = await exposuresTable.query(GET_EXPOSURES_ON_EXPT, [1]);
       if (exposures.length > 0) {
-        const exposures_test = createExposureObj(exposures, "test")
-        const exposures_control = createExposureObj(exposures, "control")
-        runningExpt.exposures_test = exposures_test;
-        runningExpt.exposures_control = exposures_control;
+        console.log(String(exposures[1].date));
+        const exposuresTest = createExposureObj(exposures, "test")
+        const exposuresControl = createExposureObj(exposures, "control")
+        runningExpt.exposuresTest = exposuresTest;
+        runningExpt.exposuresControl = exposuresControl;
       }
     }
 
@@ -183,18 +183,6 @@ const editExperiment = async (req, res, next) => {
   }
 };
 
-const backfillData = async (req, res, next) => {
-  try {
-    const result = await experimentsTable.query("SELECT CURRENT_DATE - MIN(date_started) AS date_diff FROM experiments WHERE date_ended IS NULL");
-    const dayDiff = result.rows[0]['date_diff'];
-    await backfillExposures(dayDiff);
-    res.status(200).send("Successfully updated");
-  } catch (err) {
-    console.log(err);
-    res.status(500).send(err.message);
-  }
-};
-
 const analyzeAll = async (req, res, next) => {
   try {
     await runAnalytics();
@@ -220,6 +208,5 @@ exports.getExperimentsForFlag = getExperimentsForFlag;
 exports.getExperiment = getExperiment;
 exports.createExperiment = createExperiment;
 exports.editExperiment = editExperiment;
-exports.backfillData = backfillData;
 exports.analyzeAll = analyzeAll;
 exports.analyzeExperiment = analyzeExperiment;

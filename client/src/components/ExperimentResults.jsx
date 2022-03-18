@@ -1,6 +1,6 @@
 import React from 'react';
 import Chart from "react-apexcharts";
-import { useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { updateStats } from '../actions/exptActions';
 
 const ExperimentResults = ({ id }) => {

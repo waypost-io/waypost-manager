@@ -1,15 +1,24 @@
 import React from 'react';
 import Chart from "react-apexcharts";
+import { useSelector } from "react-redux";
 
 const ExposuresChart = ({ id }) => {
+  const exptData = useSelector((state) => state.experiments.find(expt => expt.id === id));
+  console.log(exptData);
+  const controlDates = Object.keys(exptData.exposuresControl).sort();
+  console.log(controlDates);
+  const controlVals = controlDates.map(date => exptData.exposuresControl[date]);
+  console.log(controlVals);
+  const testDates = Object.keys(exptData.exposuresTest).sort();
+  const testVals = testDates.map(date => exptData.exposuresTest[date]);
   const series = [
-    { name: "control", data: [5, 10, 20, 35, 50, 70] },
-    { name: "test", data: [6, 9, 19, 36, 51, 69] }
+    { name: "control", data: controlVals },
+    { name: "test", data: testVals }
   ];
   const chartOptions = {
     chart: { id },
     xaxis: {
-      categories: ['2022-03-09', '2022-03-10', '2022-03-11', '2022-03-12', '2022-03-13', '2022-03-14']
+      categories: controlDates.map(date => new Date(date).toLocaleDateString('en-US'))
     },
     title: { text: "Total Exposures to Experiment (Sample Size)" },
     colors: ['#07C0C5', '#B94E9C'],
