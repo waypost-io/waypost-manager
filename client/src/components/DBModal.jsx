@@ -98,7 +98,7 @@ const DBModal = ({ modalOpen, setModalOpen }) => {
           <div className="mt-2.5 flex items-center">
             <label htmlFor="query" className="inline-block w-1/3 text-center mr-5">
               <p>Query to retrieve experiment data:</p>
-              <p className="text-sm italic">Do not include semicolon. Query should result in <code>user_id</code>, <code>timestamp</code>, and <code>treatment</code> columns</p>
+              <p className="text-sm italic">Do not include semicolon. Query should result in <code>experiment_id</code>, <code>user_id</code>, <code>timestamp</code>, and <code>treatment</code> columns</p>
             </label>
             <textarea id="query" rows={4} cols={35} value={query} onChange={(e) => setQuery(e.target.value)} className="border border-slate rounded-lg p-2" />
           </div>
