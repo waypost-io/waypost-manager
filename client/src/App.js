@@ -24,10 +24,10 @@ function App() {
 
   return (
     <>
-      <Header setDbModalOpen={setDbModalOpen} />
-      <main className="flex w-full h-full">
-        <SideNav />
-        <BrowserRouter>
+      <BrowserRouter>
+        <Header setDbModalOpen={setDbModalOpen} />
+        <main className="flex w-full h-full">
+          <SideNav />
           <Routes>
             <Route exact path="/" element={<FlagDashboard />} />
             <Route path="/flags/:flagId" element={<FlagDetailsPage />} />
@@ -35,9 +35,9 @@ function App() {
             <Route path="/metrics" element={<MetricsPage />} />
             <Route path="/edit_metric/:id" element={<NewMetricForm />} />
           </Routes>
-        </BrowserRouter>
-      </main>
-      <DBModal modalOpen={dbModalOpen} setModalOpen={setDbModalOpen} />
+        </main>
+        <DBModal modalOpen={dbModalOpen} setModalOpen={setDbModalOpen} />
+      </BrowserRouter>
     </>
   );
 }
