@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 const ExposuresChart = ({ id }) => {
   const exptData = useSelector((state) => state.experiments.find(expt => expt.id === id));
   if (!exptData.exposuresControl || !exptData.exposuresTest) {
-    return <p>No exposures yet</p>;
+    return <p>No exposure data yet</p>;
   }
 
   let controlDates  = Object.keys(exptData.exposuresControl).sort();;

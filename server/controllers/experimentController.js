@@ -100,7 +100,7 @@ const getExperimentsForFlag = async (req, res, next) => {
     // attaches exposures to running experiment
     const runningExpt = experiments.find((expt) => expt.date_ended === null);
     if (runningExpt) {
-      let { rows: exposures } = await exposuresTable.query(GET_EXPOSURES_ON_EXPT, [1]);
+      let { rows: exposures } = await exposuresTable.query(GET_EXPOSURES_ON_EXPT, [ runningExpt.id ]);
 
       if (exposures.length > 0) {
         const exposuresTest = createExposureObj(exposures, "test")
