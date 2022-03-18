@@ -15,18 +15,18 @@ const createNewFlagObj = ({
   percentage_split,
   status,
   is_experiment,
-  app_id,
 }) => {
+  const hash_offset = Math.floor(Math.random() * 100);
   const now = getNowString();
   return {
     name: name,
-    app_id: app_id || null,
     description: description || "",
     percentage_split: percentage_split || 100,
     status: status || false,
     is_experiment: is_experiment || false,
     date_created: now,
     is_deleted: false,
+    hash_offset
   };
 };
 
