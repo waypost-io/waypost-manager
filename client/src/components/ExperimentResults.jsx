@@ -53,7 +53,7 @@ const ExperimentResults = ({ id }) => {
           </tbody>
         </table>
       )}
-      {!hasResult && <p>No results yet. Click "Refresh Results" when ready.</p>}
+      {!hasResult && <p>No results to see yet! Click <span className="italic">Refresh Results</span> after there is sufficient sample size and the experiment has been running for enough time.</p>}
     </div>
   );
 };
