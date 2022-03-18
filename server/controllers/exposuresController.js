@@ -17,11 +17,6 @@ const backfillData = async (req, res, next) => {
   }
 };
 
-const getExposures = () => {
-
-};
-
 exports.backfillData = backfillData;
-exports.getExposures = getExposures;
 
 

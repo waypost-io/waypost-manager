@@ -70,8 +70,6 @@ router.get("/connection", connectionController.testConnection);
 
 router.put("/exposures", exposuresController.backfillData);
 
-router.get("/exposures/:id", exposuresController.getExposures);
-
 router.put("/experiments/:id/analysis", experimentController.analyzeExperiment);
 
 router.put("/analysis", experimentController.analyzeAll);
