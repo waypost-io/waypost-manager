@@ -4,14 +4,10 @@ const flagsController = require("../controllers/flagsController");
 const experimentController = require("../controllers/experimentController");
 const metricsController = require("../controllers/metricsController");
 const connectionController = require("../controllers/connectionController");
-const sdkController = require("../controllers/sdkController");
+const sdkKeyController = require("../controllers/sdkKeyController");
 const { validateNewFlag } = require("../validators/validators");
-// will implement later
-// const { validateSDKKey, validateNewFlag } = require("../validators/validators");
 
 router.get("/flags", flagsController.getAllFlags);
-
-// router.get("/flags", validateSDKKey, flagsController.getAllFlags);
 
 router.get("/flags/:id", flagsController.getFlag);
 
@@ -74,8 +70,8 @@ router.put("/experiments/:id/analysis", experimentController.analyzeExperiment);
 
 router.put("/analysis", experimentController.analyzeAll);
 
-router.post("/sdkKey", sdkController.removeKeys, sdkController.createKey);
+router.post("/sdkKey", sdkKeyController.removeKeys, sdkKeyController.createKey);
 
-router.get("/sdkKey", sdkController.fetchKey);
+router.get("/sdkKey", sdkKeyController.fetchKey);
 
 module.exports = router;

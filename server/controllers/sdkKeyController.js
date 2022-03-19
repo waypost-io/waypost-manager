@@ -19,7 +19,11 @@ const createKey = async (req, res, next) => {
 const fetchKey = async (req, res, next) => {
   try {
     const result = await keysTable.getAllRows();
-    res.status(200).send(result[0].sdk_key); // returns undefined if there isn't an existing key
+    if (result[0]) {
+      res.status(200).send(result[0].sdk_key);
+    } else {
+      res.status(200).send(undefined);
+    }
   } catch (err) {
     res.status(500).send("Error connecting to database")
   }
