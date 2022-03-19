@@ -46,9 +46,14 @@ a:hover {
 }
 
 th, td {
-  border-width: 1px;
-  border-color:#0C182E;
+  /* border-width: 1px; */
+  text-align: center;
   padding: 15px;
+}
+
+tr {
+  border-width: 1px;
+  border-color:#94a3b8;
 }
 
 .toggle {
