@@ -4,6 +4,7 @@ exports.EXPERIMENT_METRICS_TABLE_NAME = "experiment_metrics";
 exports.EXPOSURES_TABLE_NAME = "exposures";
 exports.METRICS_TABLE_NAME = "metrics";
 exports.CONNECTION_TABLE_NAME = "connection";
+exports.KEYS_TABLE_NAME = "keys";
 exports.GET_EXPT_METRICS_QUERY = `SELECT * FROM experiments e
                                  JOIN experiment_metrics em
                                  ON e.id=em.experiment_id

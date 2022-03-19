@@ -4,6 +4,7 @@ const flagsController = require("../controllers/flagsController");
 const experimentController = require("../controllers/experimentController");
 const metricsController = require("../controllers/metricsController");
 const connectionController = require("../controllers/connectionController");
+const sdkController = require("../controllers/sdkController");
 const { validateNewFlag } = require("../validators/validators");
 // will implement later
 // const { validateSDKKey, validateNewFlag } = require("../validators/validators");
@@ -72,5 +73,9 @@ router.put("/experiments/exposures", experimentController.backfillData);
 router.put("/experiments/:id/analysis", experimentController.analyzeExperiment);
 
 router.put("/analysis", experimentController.analyzeAll);
+
+router.post("/sdkKey", sdkController.removeKeys, sdkController.createKey);
+
+router.get("/sdkKey", sdkController.fetchKey);
 
 module.exports = router;
