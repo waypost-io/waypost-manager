@@ -81,7 +81,7 @@ const MetricResultRow = ({ metric_id, name, type, mean_control, mean_test, p_val
             />
           </div>
         ) : (
-          <p>No interval for binomial metrics</p>
+          <p>N/A</p>
         )}
       </td>
     </tr>
