@@ -11,7 +11,7 @@ const createKey = async (req, res, next) => {
   try {
     await keysTable.insertRow({ sdk_key: key });
     res.status(200).send(key);
-    req.sdk_key = key;
+    req.sdk_key = { key };
     next();
   } catch (err) {
     res.status(500).send("Error saving new key");
@@ -43,10 +43,10 @@ const removeKeys = async (req, res, next) => {
 
 const sendSdkWebhook = async (req, res, next) => {
   try {
-    await sendWebhook("/key", {key: req.sdk_key});
+    await sendWebhook("/key", req.sdk_key);
     console.log("SDK key webhook sent");
   } catch (err) {
-    console.log("Could not send SDK key webhook");
+    console.log(err.message);
   }
 };
 

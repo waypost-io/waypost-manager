@@ -6,8 +6,7 @@ async function sendWebhook(path, data) {
   try {
     await axios.post(url, data);
   } catch (err) {
-    console.log(err);
-    throw new Error("Error sending webhook");
+    throw new Error(`Error sending webhook to ${path}`);
   }
 }
 
