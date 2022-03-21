@@ -1,13 +1,29 @@
 const pg = require("pg");
 const { validationResult } = require("express-validator");
 const PGTable = require("../db/PGTable");
-const { FLAG_TABLE_NAME } = require("../constants/db");
+const { FLAG_TABLE_NAME, FLAG_EVENTS_TABLE_NAME } = require("../constants/db");
 const { getNowString } = require("../utils");
 const { sendWebhook } = require("../lib/sendWebhook.js");
 const { getFlagsForWebhook } = require("../db/flags.js");
 
 const flagTable = new PGTable(FLAG_TABLE_NAME);
+const flagEventsTable = new PGTable(FLAG_EVENTS_TABLE_NAME);
 flagTable.init();
+flagEventsTable.init();
+
+const logEvent = async (req, res, next) => {
+  try {
+    const event = {
+      flag_id: req.params.id || req.flagId,
+      event_type: req.eventType,
+      timestamp: getNowString()
+    };
+    const savedEvent = await flagEventsTable.insertRow(event);
+    res.status(200);
+  } catch (err) {
+    console.log(err.message);
+  }
+};
 
 const createNewFlagObj = ({
   name,
@@ -81,6 +97,8 @@ const createFlag = async (req, res, next) => {
     try {
       const savedFlag = await flagTable.insertRow(newFlag);
       req.update = true;
+      req.eventType = "FLAG_CREATED";
+      req.flagId = savedFlag.id;
       res.status(200).send(savedFlag);
       next();
     } catch (e) {
@@ -96,7 +114,11 @@ const editFlag = async (req, res, next) => {
   const id = req.params.id;
   const now = getNowString();
   const updatedFields = req.body;
-
+  if (Object.keys(updatedFields).includes('status')) {
+    req.eventType = "FLAG_TOGGLED";
+  } else {
+    req.eventType = "FLAG_EDITED";
+  }
   try {
     const updatedFlag = await flagTable.editRow(updatedFields, { id });
     req.update = true;
@@ -117,7 +139,7 @@ const deleteFlag = async (req, res, next) => {
 
     const deletedFlagName = result.name;
     req.update = true;
-
+    req.eventType = "FLAG_DELETED";
     res
       .status(200)
       .send(`Flag '${deletedFlagName}' with id = ${id} successfully deleted`);
@@ -132,6 +154,7 @@ const sendFlagsWebhook = async (req, res, next) => {
     await sendWebhook(req.flags);
     console.log("webhook sent");
     res.status(200);
+    next();
   } catch (err) {
     console.log("Could not send webhook");
   }
@@ -144,3 +167,4 @@ exports.deleteFlag = deleteFlag;
 exports.getFlag = getFlag;
 exports.setFlagsOnReq = setFlagsOnReq;
 exports.sendFlagsWebhook = sendFlagsWebhook;
+exports.logEvent = logEvent;

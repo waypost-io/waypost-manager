@@ -17,14 +17,16 @@ router.post(
   validateNewFlag,
   flagsController.createFlag,
   flagsController.setFlagsOnReq,
-  flagsController.sendFlagsWebhook
+  flagsController.sendFlagsWebhook,
+  flagsController.logEvent
 );
 
 router.put(
   "/flags/:id",
   flagsController.editFlag,
   flagsController.setFlagsOnReq,
-  flagsController.sendFlagsWebhook
+  flagsController.sendFlagsWebhook,
+  flagsController.logEvent
 );
 
 router.get(
@@ -36,7 +38,8 @@ router.delete(
   "/flags/:id",
   flagsController.deleteFlag,
   flagsController.setFlagsOnReq,
-  flagsController.sendFlagsWebhook
+  flagsController.sendFlagsWebhook,
+  flagsController.logEvent
 );
 
 router.get("/experiments/:id", experimentController.getExperiment);
