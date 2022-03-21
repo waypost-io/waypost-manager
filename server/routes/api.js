@@ -5,6 +5,7 @@ const experimentController = require("../controllers/experimentController");
 const metricsController = require("../controllers/metricsController");
 const connectionController = require("../controllers/connectionController");
 const sdkKeyController = require("../controllers/sdkKeyController");
+const exposuresController = require("../controllers/exposuresController");
 const { validateNewFlag } = require("../validators/validators");
 
 router.get("/flags", flagsController.getAllFlags);
