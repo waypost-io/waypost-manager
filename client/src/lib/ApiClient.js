@@ -146,6 +146,20 @@ const apiClient = {
       .then(callback)
       .catch(logError)
   },
+  fetchSdkKey: function(callback) {
+    return axios
+      .get('api/sdkKey')
+      .then(unwrapData)
+      .then(callback)
+      .catch(logError)
+  },
+  createSdkKey: function(callback) {
+    return axios
+      .post('api/sdkKey')
+      .then(unwrapData)
+      .then(callback)
+      .catch(logError)
+  },
   updateStats: function(exptId, callback) {
     return axios
       .put(`/api/experiments/${exptId}/analysis`)

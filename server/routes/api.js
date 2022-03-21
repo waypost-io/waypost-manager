@@ -4,14 +4,11 @@ const flagsController = require("../controllers/flagsController");
 const experimentController = require("../controllers/experimentController");
 const metricsController = require("../controllers/metricsController");
 const connectionController = require("../controllers/connectionController");
+const sdkKeyController = require("../controllers/sdkKeyController");
 const exposuresController = require("../controllers/exposuresController");
 const { validateNewFlag } = require("../validators/validators");
-// will implement later
-// const { validateSDKKey, validateNewFlag } = require("../validators/validators");
 
 router.get("/flags", flagsController.getAllFlags);
-
-// router.get("/flags", validateSDKKey, flagsController.getAllFlags);
 
 router.get("/flags/:id", flagsController.getFlag);
 
@@ -73,5 +70,9 @@ router.put("/exposures", exposuresController.backfillData);
 router.put("/experiments/:id/analysis", experimentController.analyzeExperiment);
 
 router.put("/analysis", experimentController.analyzeAll);
+
+router.post("/sdkKey", sdkKeyController.removeKeys, sdkKeyController.createKey);
+
+router.get("/sdkKey", sdkKeyController.fetchKey);
 
 module.exports = router;

@@ -4,6 +4,7 @@ exports.EXPERIMENT_METRICS_TABLE_NAME = "experiment_metrics";
 exports.EXPOSURES_TABLE_NAME = "exposures";
 exports.METRICS_TABLE_NAME = "metrics";
 exports.CONNECTION_TABLE_NAME = "connection";
+exports.KEYS_TABLE_NAME = "keys";
 exports.GET_METRIC_DATA = `
   SELECT em.experiment_id,
     em.metric_id,
@@ -35,6 +36,7 @@ exports.GET_EXPT_METRICS_QUERY = `SELECT e.* ,
                                   ON em.metric_id = m.id
                                  WHERE flag_id = $1
                                  ORDER BY e.id DESC;`;
+
 exports.GET_EXPOSURES_ON_EXPT = `SELECT variant, num_users, date
                                  FROM exposures
                                  WHERE experiment_id = $1
