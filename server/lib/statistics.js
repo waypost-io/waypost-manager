@@ -104,9 +104,9 @@ const updateStats = async (exptMetric) => {
   const exptQuery = await getExptQuery();
   const { query_string: metricQuery, type: metricType } = await getMetricData(metricId);
   if (metricType === 'binomial') {
-    calcDiscreteMetric(exptId, metricId, exptQuery, metricQuery);
+    await calcDiscreteMetric(exptId, metricId, exptQuery, metricQuery);
   } else {
-    calcContinuousMetric(exptId, metricId, exptQuery, metricQuery);
+    await calcContinuousMetric(exptId, metricId, exptQuery, metricQuery);
   }
 };
 
@@ -118,10 +118,9 @@ const runAnalytics = async (exptId) => {
     experiments = [ exptId ];
   }
   const exptMetrics = await getExptMetrics(experiments);
-  console.log(exptMetrics);
-  exptMetrics.forEach(combo => {
-    updateStats(combo);
-  });
+  for (let i = 0; i < exptMetrics.length; i++) {
+    await updateStats(exptMetrics[i]);
+  }
 };
 
 exports.runAnalytics = runAnalytics;
