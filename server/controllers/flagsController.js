@@ -136,11 +136,10 @@ const sendFlagsWebhook = async (req, res, next) => {
   try {
     await sendWebhook(req.flags);
     console.log("webhook sent");
-    res.status(200);
-    next();
   } catch (err) {
     console.log("Could not send webhook");
   }
+  next();
 };
 
 exports.getAllFlags = getAllFlags;

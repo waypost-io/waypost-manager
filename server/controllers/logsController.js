@@ -1,5 +1,6 @@
 const PGTable = require("../db/PGTable");
 const { FLAG_EVENTS_TABLE_NAME } = require("../constants/db");
+const { getNowString } = require("../utils");
 
 const flagEventsTable = new PGTable(FLAG_EVENTS_TABLE_NAME);
 flagEventsTable.init();
