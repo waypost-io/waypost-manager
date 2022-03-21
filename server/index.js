@@ -35,8 +35,7 @@ app.listen(port, () => {
   console.log(`Server running on port ${port}`)
 });
 
-// Testing CRON job every 10 seconds
-cron.schedule('10 * * * * *', async () => {
-  // backfillExposures();
-  console.log('CRON running')
+// Backfilling exposures every hour
+cron.schedule('0 * * * *', async () => {
+  backfillExposures();
 });

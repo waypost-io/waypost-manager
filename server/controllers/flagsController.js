@@ -33,7 +33,6 @@ const createNewFlagObj = ({
 const getAllFlags = async (req, res, next) => {
   try {
     let data;
-
     if (req.query.prov) {
       data = await getFlagsForWebhook();
     } else {
@@ -80,6 +79,10 @@ const createFlag = async (req, res, next) => {
 
     try {
       const savedFlag = await flagTable.insertRow(newFlag);
+      
+      req.eventType = "FLAG_CREATED";
+      req.flagId = savedFlag.
+      
       res.status(200).send(savedFlag);
       next();
     } catch (e) {
@@ -95,7 +98,11 @@ const editFlag = async (req, res, next) => {
   const id = req.params.id;
   const now = getNowString();
   const updatedFields = req.body;
-
+  if (Object.keys(updatedFields).includes('status')) {
+    req.eventType = "FLAG_TOGGLED";
+  } else {
+    req.eventType = "FLAG_EDITED";
+  }
   try {
     const updatedFlag = await flagTable.editRow(updatedFields, { id });
 
@@ -114,6 +121,7 @@ const deleteFlag = async (req, res, next) => {
       throw new Error(`Flag with the id of ${id} doesn't exist`);
 
     const deletedFlagName = result.name;
+    req.eventType = "FLAG_DELETED";
 
     res
       .status(200)
@@ -128,9 +136,11 @@ const sendFlagsWebhook = async (req, res, next) => {
   try {
     await sendWebhook("/flags", req.flags);
     console.log("flag webhook sent");
+
   } catch (err) {
     console.log(err.message);
   }
+  next();
 };
 
 exports.getAllFlags = getAllFlags;

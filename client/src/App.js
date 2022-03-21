@@ -13,6 +13,7 @@ import DBModal from './components/DBModal';
 import NewExperimentPage from './components/NewExperimentPage';
 import NewMetricForm from './components/NewMetricForm';
 import SdkKeyPage from './components/SdkKeyPage';
+import FlagLogPage from './components/FlagLogPage';
 
 function App() {
   const dispatch = useDispatch();
@@ -36,6 +37,7 @@ function App() {
             <Route path="/metrics" element={<MetricsPage />} />
             <Route path="/edit_metric/:id" element={<NewMetricForm />} />
             <Route path="/sdkKey" element={<SdkKeyPage />} />
+            <Route path="/log" element={<FlagLogPage />} />
           </Routes>
         </main>
         <DBModal modalOpen={dbModalOpen} setModalOpen={setDbModalOpen} />
