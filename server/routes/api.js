@@ -6,6 +6,7 @@ const metricsController = require("../controllers/metricsController");
 const connectionController = require("../controllers/connectionController");
 const sdkKeyController = require("../controllers/sdkKeyController");
 const exposuresController = require("../controllers/exposuresController");
+const logsController = require("../controllers/logsController");
 const { validateNewFlag } = require("../validators/validators");
 
 router.get("/flags", flagsController.getAllFlags);
@@ -18,7 +19,7 @@ router.post(
   flagsController.createFlag,
   flagsController.setFlagsOnReq,
   flagsController.sendFlagsWebhook,
-  flagsController.logEvent
+  logsController.logEvent
 );
 
 router.put(
@@ -26,7 +27,7 @@ router.put(
   flagsController.editFlag,
   flagsController.setFlagsOnReq,
   flagsController.sendFlagsWebhook,
-  flagsController.logEvent
+  logsController.logEvent
 );
 
 router.get(
@@ -39,7 +40,7 @@ router.delete(
   flagsController.deleteFlag,
   flagsController.setFlagsOnReq,
   flagsController.sendFlagsWebhook,
-  flagsController.logEvent
+  logsController.logEvent
 );
 
 router.get("/experiments/:id", experimentController.getExperiment);
@@ -73,6 +74,8 @@ router.put("/exposures", exposuresController.backfillData);
 router.put("/experiments/:id/analysis", experimentController.analyzeExperiment);
 
 router.put("/analysis", experimentController.analyzeAll);
+
+router.get("/log", logsController.getLog);
 
 router.post("/sdkKey", sdkKeyController.removeKeys, sdkKeyController.createKey);
 
