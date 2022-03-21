@@ -65,7 +65,7 @@ router.delete("/connection", connectionController.removeConnection);
 
 router.get("/connection", connectionController.testConnection);
 
-router.put("/experiments/exposures", experimentController.backfillData);
+router.put("/exposures", exposuresController.backfillData);
 
 router.put("/experiments/:id/analysis", experimentController.analyzeExperiment);
 

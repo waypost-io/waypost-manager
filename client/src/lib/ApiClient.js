@@ -161,11 +161,11 @@ const apiClient = {
       .catch(logError)
   },
   updateStats: function(exptId, callback) {
-  return axios
-    .put(`/api/experiments/${exptId}/analysis`)
-    .then(unwrapData)
-    .then(callback)
-    .catch(logError)
+    return axios
+      .put(`/api/experiments/${exptId}/analysis`)
+      .then(unwrapData)
+      .then(callback)
+      .catch(logError)
   }
 };
 
