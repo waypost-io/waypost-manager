@@ -3,11 +3,13 @@ import { useSelector, useDispatch } from "react-redux";
 import { fetchLog } from '../actions/logActions';
 
 const LogItem = ({ id, flag_name, event_type, timestamp }) => {
+  const eventDate = new Date(timestamp);
+
   return (
     <tr>
-      <td className="font-bold">{flag_name}</td>
+      <td>{flag_name}</td>
       <td>{event_type}</td>
-      <td>{timestamp}</td>
+      <td>{eventDate.toLocaleString()}</td>
     </tr>
   );
 };
