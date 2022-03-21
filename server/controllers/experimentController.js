@@ -1,7 +1,6 @@
 const PGTable = require("../db/PGTable");
-const { EXPERIMENTS_TABLE_NAME, EXPERIMENT_METRICS_TABLE_NAME, EXPOSURES_TABLE_NAME, GET_EXPT_METRICS_QUERY, GET_EXPOSURES_ON_EXPT } = require("../constants/db");
+const { EXPERIMENTS_TABLE_NAME, EXPERIMENT_METRICS_TABLE_NAME, EXPOSURES_TABLE_NAME, GET_EXPT_METRICS_QUERY, GET_EXPOSURES_ON_EXPT, GET_METRIC_DATA } = require("../constants/db");
 const { getNowString } = require("../utils");
-const { backfillExposures } = require('../lib/experimentExposures');
 const { runAnalytics } = require('../lib/statistics');
 
 const experimentsTable = new PGTable(EXPERIMENTS_TABLE_NAME);
@@ -40,9 +39,11 @@ const separateMetricExperimentData = (metricExpt) => {
     metric_id,
     mean_test,
     mean_control,
-    interval_width_test,
-    interval_width_control,
+    interval_start,
+    interval_end,
     p_value,
+    name,
+    type,
     ...expt
   } = metricExpt;
 
@@ -50,9 +51,11 @@ const separateMetricExperimentData = (metricExpt) => {
     metric_id,
     mean_test,
     mean_control,
-    interval_width_test,
-    interval_width_control,
-    p_value
+    interval_start,
+    interval_end,
+    p_value,
+    name,
+    type
   };
 
   return [expt, metricObj];
@@ -83,7 +86,7 @@ const createExposureObj = (exposuresArr, variant) => {
   const obj = {};
   exposuresArr = exposuresArr.filter((expo) => expo.variant === variant);
   exposuresArr.forEach((expo) => {
-    const date = String(expo.date).split("T")[0]
+    const date = expo.date.toISOString();
     obj[date] = expo.num_users
   })
   return obj;
@@ -97,15 +100,15 @@ const getExperimentsForFlag = async (req, res, next) => {
     // attaches exposures to running experiment
     const runningExpt = experiments.find((expt) => expt.date_ended === null);
     if (runningExpt) {
-      let { rows: exposures } = await exposuresTable.query(GET_EXPOSURES_ON_EXPT, [1]);
+      let { rows: exposures } = await exposuresTable.query(GET_EXPOSURES_ON_EXPT, [ runningExpt.id ]);
+
       if (exposures.length > 0) {
-        const exposures_test = createExposureObj(exposures, "test")
-        const exposures_control = createExposureObj(exposures, "control")
-        runningExpt.exposures_test = exposures_test;
-        runningExpt.exposures_control = exposures_control;
+        const exposuresTest = createExposureObj(exposures, "test")
+        const exposuresControl = createExposureObj(exposures, "control")
+        runningExpt.exposuresTest = exposuresTest;
+        runningExpt.exposuresControl = exposuresControl;
       }
     }
-
     res.status(200).send(experiments);
   } catch (err) {
     console.log(err);
@@ -167,7 +170,7 @@ const editExperiment = async (req, res, next) => {
     } else {
       updatedExpt = await experimentsTable.getRow(id);
     }
-    const updatedMetrics = await experimentMetricsTable.getRowsWhere({ experiment_id: id });
+    const updatedMetrics = (await experimentMetricsTable.query(GET_METRIC_DATA, [ id ])).rows;
     updatedExpt.metrics = updatedMetrics;
     req.updatedExpt = updatedExpt;
     // If regular edit, not stopping experiment, just send back updated expt
@@ -180,18 +183,6 @@ const editExperiment = async (req, res, next) => {
   } catch (err) {
     console.log(err);
     res.status(500).send(err.message)
-  }
-};
-
-const backfillData = async (req, res, next) => {
-  try {
-    const result = await experimentsTable.query("SELECT CURRENT_DATE - MIN(date_started) AS date_diff FROM experiments WHERE date_ended IS NULL");
-    const dayDiff = result.rows[0]['date_diff'];
-    await backfillExposures(dayDiff);
-    res.status(200).send("Successfully updated");
-  } catch (err) {
-    console.log(err);
-    res.status(500).send(err.message);
   }
 };
 
@@ -209,7 +200,8 @@ const analyzeExperiment = async (req, res, next) => {
   const id = req.params.id;
   try {
     await runAnalytics(id);
-    res.status(200).send("Success");
+    const result = await experimentsTable.query(GET_METRIC_DATA, [ id ]);
+    res.status(200).send(result.rows);
   } catch (err) {
     console.log(err);
     res.status(500).send(err.message);
@@ -220,6 +212,5 @@ exports.getExperimentsForFlag = getExperimentsForFlag;
 exports.getExperiment = getExperiment;
 exports.createExperiment = createExperiment;
 exports.editExperiment = editExperiment;
-exports.backfillData = backfillData;
 exports.analyzeAll = analyzeAll;
 exports.analyzeExperiment = analyzeExperiment;

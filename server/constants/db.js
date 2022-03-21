@@ -4,11 +4,37 @@ exports.EXPERIMENT_METRICS_TABLE_NAME = "experiment_metrics";
 exports.EXPOSURES_TABLE_NAME = "exposures";
 exports.METRICS_TABLE_NAME = "metrics";
 exports.CONNECTION_TABLE_NAME = "connection";
-exports.GET_EXPT_METRICS_QUERY = `SELECT * FROM experiments e
+exports.GET_METRIC_DATA = `
+  SELECT em.experiment_id,
+    em.metric_id,
+    m.name,
+    m.type,
+    em.mean_test,
+    em.mean_control,
+    em.interval_start,
+    em.interval_end,
+    em.p_value
+  FROM experiment_metrics em
+  JOIN metrics m
+    ON em.metric_id = m.id
+  WHERE em.experiment_id = $1
+`;
+exports.GET_EXPT_METRICS_QUERY = `SELECT e.* ,
+                                    em.metric_id,
+                                    m.name,
+                                    m.type,
+                                    em.mean_test,
+                                    em.mean_control,
+                                    em.interval_start,
+                                    em.interval_end,
+                                    em.p_value
+                                FROM experiments e
                                  JOIN experiment_metrics em
-                                 ON e.id=em.experiment_id
+                                  ON e.id=em.experiment_id
+                                 JOIN metrics m
+                                  ON em.metric_id = m.id
                                  WHERE flag_id = $1
-                                 ORDER BY id DESC;`;
+                                 ORDER BY e.id DESC;`;
 exports.GET_EXPOSURES_ON_EXPT = `SELECT variant, num_users, date
                                  FROM exposures
                                  WHERE experiment_id = $1
