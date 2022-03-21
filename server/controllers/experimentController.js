@@ -170,7 +170,7 @@ const editExperiment = async (req, res, next) => {
     } else {
       updatedExpt = await experimentsTable.getRow(id);
     }
-    const updatedMetrics = await experimentMetricsTable.getRowsWhere({ experiment_id: id });
+    const updatedMetrics = (await experimentMetricsTable.query(GET_METRIC_DATA, [ id ])).rows;
     updatedExpt.metrics = updatedMetrics;
     req.updatedExpt = updatedExpt;
     // If regular edit, not stopping experiment, just send back updated expt
