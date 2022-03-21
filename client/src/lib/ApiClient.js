@@ -166,6 +166,13 @@ const apiClient = {
       .then(unwrapData)
       .then(callback)
       .catch(logError)
+  },
+  fetchLog: function(callback) {
+    return axios
+      .get('/api/log')
+      .then(unwrapData)
+      .then(callback)
+      .catch(logError)
   }
 };
 

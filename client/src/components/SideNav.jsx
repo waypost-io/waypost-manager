@@ -4,7 +4,8 @@ import { useNavigate } from 'react-router-dom';
 const navLinks =[
   { id: 1, title: 'Flags Dashboard', path: "/" },
   { id: 2, title: 'Metrics', path: '/metrics' },
-  { id: 3, title: 'SDK Key', path: "/sdkKey"}
+  { id: 3, title: 'Flag Events Log', path: '/log' },
+  { id: 4, title: 'SDK Key', path: "/sdkKey"}
 ]
 
 const SideNav = () => {

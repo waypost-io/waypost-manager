@@ -1,4 +1,5 @@
 exports.FLAG_TABLE_NAME = "flags";
+exports.FLAG_EVENTS_TABLE_NAME = "flag_events";
 exports.EXPERIMENTS_TABLE_NAME = "experiments";
 exports.EXPERIMENT_METRICS_TABLE_NAME = "experiment_metrics";
 exports.EXPOSURES_TABLE_NAME = "exposures";
