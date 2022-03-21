@@ -24,7 +24,7 @@ const MetricsPage = () => {
       {!isConnected && (
         <div className="font-bold rounded bg-secondary-pink p-5 mt-10">
           Note: Before you can create a metric, you must first set up the
-          connection to your database in which your event data is stored.
+          connection to your database in which your event data is stored. Click the lock icon at the top-right to set it up.
         </div>
       )}
       <div className="flex justify-between items-center my-3">

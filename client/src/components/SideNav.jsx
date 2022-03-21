@@ -11,7 +11,7 @@ const navLinks =[
 const SideNav = () => {
   const navigate = useNavigate();
   return (
-    <div className="bg-primary-black text-primary-offwhite min-h-screen w-64 min-w-min">
+    <div className="font-display bg-primary-black text-primary-offwhite min-h-screen w-64 min-w-min">
       <img src="/assets/PNGs/Waypost_logo_on_dark.png" alt="Waypost" />
       <ul className="font-bold p-0">
         {navLinks.map(item => {
