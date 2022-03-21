@@ -8,7 +8,7 @@ keysTable.init();
 const createKey = async (req, res, next) => {
   const key = uuidv4();
   try {
-    const result = await keysTable.insertRow({ sdk_key: key });
+    await keysTable.insertRow({ sdk_key: key });
     res.status(200).send(key);
   } catch (err) {
     res.status(500).send("Error saving new key");
