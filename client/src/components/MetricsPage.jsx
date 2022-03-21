@@ -30,7 +30,7 @@ const MetricsPage = () => {
       <div className="flex justify-between items-center my-3">
         <h2 className="text-3xl font-bold text-primary-violet">Metrics</h2>
         <button
-          className="btn bg-primary-turquoise"
+          className="btn bg-primary-turquoise my-4"
           type="button"
           onClick={handleOpenNewMetricForm}
           disabled={!isConnected}

@@ -85,16 +85,16 @@ const FlagDetailsPage = () => {
         <div>
           {!isEditing && (
             <button
-              className="btn bg-primary-turquoise"
+              className="btn bg-primary-turquoise m-5"
               onClick={handleEditFlag}
             >
-              Edit
+              Edit Flag
             </button>
           )}
           {flagData.is_experiment ? (
             <>
               <button
-                className="btn bg-primary-violet"
+                className="btn bg-primary-violet m-5"
                 onClick={handleStopExperiment}
               >
                 Stop Experiment
@@ -111,21 +111,28 @@ const FlagDetailsPage = () => {
         </div>
       </div>
       {!isEditing ? (
-        <>
-          <p>{flagData.description}</p>
-          <p>
-            Current Status:{" "}
-            <span className="text-primary-violet font-bold">
-              {flagData.status ? "On" : "Off"}
-            </span>
-          </p>
-          <p>
-            Rollout percentage:{" "}
-            <span className="text-primary-violet font-bold">
-              {flagData.percentage_split}%
-            </span>
-          </p>
-        </>
+        <div className="p-8 m-5 shadow-md">
+          {flagData.name && (
+            <div>
+              <div className="inline-block w-1/2 text-right pr-10">Name:</div>
+              <span className="font-bold">{flagData.name}</span>
+            </div>
+          )}
+          {flagData.description && (
+            <div>
+              <div className="inline-block w-1/2 text-right pr-10">Description:</div>
+              <span className="font-bold">{flagData.description}</span>
+            </div>
+          )}
+          <div>
+            <div className="inline-block w-1/2 text-right pr-10">Current Status:</div>
+            <span className="font-bold">{flagData.status ? "On" : "Off"}</span>
+          </div>
+          <div>
+            <div className="inline-block w-1/2 text-right pr-10">Rollout percentage:</div>
+            <span className="font-bold">{flagData.percentage_split}%</span>
+          </div>
+        </div>
       ) : (
         <EditFlagForm setIsEditing={setIsEditing} />
       )}
