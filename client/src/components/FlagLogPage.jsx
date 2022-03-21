@@ -2,10 +2,10 @@ import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from "react-redux";
 import { fetchLog } from '../actions/logActions';
 
-const LogItem = ({ id, flag_id, event_type, timestamp }) => {
+const LogItem = ({ id, flag_name, event_type, timestamp }) => {
   return (
     <tr>
-      <td className="font-bold">{flag_id}</td>
+      <td className="font-bold">{flag_name}</td>
       <td>{event_type}</td>
       <td>{timestamp}</td>
     </tr>

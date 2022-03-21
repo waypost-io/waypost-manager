@@ -6,7 +6,7 @@ flagEventsTable.init();
 
 const GET_LOGS_QUERY = `
   SELECT fe.*,
-    f.name
+    f.name AS flag_name
   FROM flag_events fe
   JOIN flags f
     ON fe.flag_id = f.id
