@@ -1,5 +1,5 @@
 const PGTable = require("../db/PGTable");
-const { EXPERIMENTS_TABLE_NAME, EXPERIMENT_METRICS_TABLE_NAME, EXPOSURES_TABLE_NAME, GET_EXPT_METRICS_QUERY, GET_EXPOSURES_ON_EXPT } = require("../constants/db");
+const { EXPERIMENTS_TABLE_NAME, EXPERIMENT_METRICS_TABLE_NAME, EXPOSURES_TABLE_NAME, GET_EXPT_METRICS_QUERY, GET_EXPOSURES_ON_EXPT, GET_METRIC_DATA } = require("../constants/db");
 const { getNowString } = require("../utils");
 const { runAnalytics } = require('../lib/statistics');
 
@@ -200,7 +200,8 @@ const analyzeExperiment = async (req, res, next) => {
   const id = req.params.id;
   try {
     await runAnalytics(id);
-    res.status(200).send("Success");
+    const result = await experimentsTable.query(GET_METRIC_DATA, [ id ]);
+    res.status(200).send(result.rows);
   } catch (err) {
     console.log(err);
     res.status(500).send(err.message);

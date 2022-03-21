@@ -5,6 +5,7 @@ import MetricResultRow from './MetricResultRow';
 
 const ExperimentResults = ({ id }) => {
   const metrics = useSelector((state) => state.experiments.find(expt => expt.id === id).metrics);
+  console.log(metrics);
   const hasResult = metrics.find(metric => metric.p_value !== null);
   const dispatch = useDispatch();
 

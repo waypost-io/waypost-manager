@@ -37,11 +37,12 @@ export function editExperimentSuccess(editedExpt) {
 export function updateStats(id) {
   return function(dispatch) {
     apiClient.updateStats(id, data => {
+      console.log(data);
       dispatch(updateStatsSuccess(data));
     });
   }
 }
 
-export function updateStatsSuccess(stats) {
-  return { type: "UPDATE_STATS_SUCCESS", stats };
+export function updateStatsSuccess(metrics) {
+  return { type: "UPDATE_STATS_SUCCESS", metrics };
 }
