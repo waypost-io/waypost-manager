@@ -64,7 +64,6 @@ const DBModal = ({ modalOpen, setModalOpen }) => {
     }
 
     let success = await dispatch(connectDB(dbObj));
-    console.log(success);
 
     if (success) resetForm();
   }

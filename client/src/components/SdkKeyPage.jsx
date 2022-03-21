@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchSdkKey, createSdkKey } from "../actions/sdkKeyActions";
 
@@ -25,10 +25,12 @@ need to update all instances of the SDK with the new key`;
   }
 
   return (
-    <div className="w-full py-3 px-12">
+    <div className="flow-root items-center py-3 px-12">
       <h2 className="text-3xl font-bold text-primary-violet">Get an SDK Key</h2>
       {sdkKey && (
-        <p className="text-xl">{sdkKey}</p>
+          <div className="text-xl py-3" ><span className="bg-secondary-skyblue py-1 px-1 border-2 rounded-md">{sdkKey}</span>
+            <button className="mx-3 bg-slate py-1 px-1 border-0 rounded-md" onClick={() => {navigator.clipboard.writeText(sdkKey)}}>Copy</button>
+          </div>
       )}
       <button
         className="btn bg-primary-turquoise"
