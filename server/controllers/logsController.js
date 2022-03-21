@@ -4,6 +4,15 @@ const { FLAG_EVENTS_TABLE_NAME } = require("../constants/db");
 const flagEventsTable = new PGTable(FLAG_EVENTS_TABLE_NAME);
 flagEventsTable.init();
 
+const GET_LOGS_QUERY = `
+  SELECT fe.*,
+    f.name
+  FROM flag_events fe
+  JOIN flags f
+    ON fe.flag_id = f.id
+  ORDER BY fe.timestamp DESC
+`;
+
 const logEvent = async (req, res, next) => {
   try {
     const event = {
@@ -21,9 +30,8 @@ const logEvent = async (req, res, next) => {
 
 const getLog = async (req, res, next) => {
   try {
-    const logData = await flagEventsTable.getAllRows();
-    const sortedLog = logData.sort((a, b) => b.timestamp - a.timestamp);
-    res.status(200).send(sortedLog);
+    const result = await flagEventsTable.query(GET_LOGS_QUERY);
+    res.status(200).send(result.rows);
   } catch (err) {
     console.log(err.message);
     res.status(500);
