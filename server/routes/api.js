@@ -71,7 +71,12 @@ router.put("/experiments/:id/analysis", experimentController.analyzeExperiment);
 
 router.put("/analysis", experimentController.analyzeAll);
 
-router.post("/sdkKey", sdkKeyController.removeKeys, sdkKeyController.createKey);
+router.post(
+  "/sdkKey",
+  sdkKeyController.removeKeys,
+  sdkKeyController.createKey,
+  sdkKeyController.sendSdkWebhook
+);
 
 router.get("/sdkKey", sdkKeyController.fetchKey);
 

@@ -96,13 +96,13 @@ const getExperimentsForFlag = async (req, res, next) => {
   const flagId = req.params.id;
   try {
     let { rows: exptMetrics } = await experimentsTable.query(GET_EXPT_METRICS_QUERY, [flagId]);
-    const experiments = transformMetricExptData(exptMetrics);
+    const experiments = transformMetricExptData(exptMetrics); // transforms to redux-friendly format
     // attaches exposures to running experiment
     const runningExpt = experiments.find((expt) => expt.date_ended === null);
     if (runningExpt) {
       let { rows: exposures } = await exposuresTable.query(GET_EXPOSURES_ON_EXPT, [ runningExpt.id ]);
 
-      if (exposures.length > 0) {
+      if (exposures.length > 0) { // put exposures onto running experiment
         const exposuresTest = createExposureObj(exposures, "test")
         const exposuresControl = createExposureObj(exposures, "control")
         runningExpt.exposuresTest = exposuresTest;

@@ -80,7 +80,6 @@ const createFlag = async (req, res, next) => {
 
     try {
       const savedFlag = await flagTable.insertRow(newFlag);
-      req.update = true;
       res.status(200).send(savedFlag);
       next();
     } catch (e) {
@@ -99,7 +98,6 @@ const editFlag = async (req, res, next) => {
 
   try {
     const updatedFlag = await flagTable.editRow(updatedFields, { id });
-    req.update = true;
 
     res.status(200).send(updatedFlag);
     next();
@@ -116,7 +114,6 @@ const deleteFlag = async (req, res, next) => {
       throw new Error(`Flag with the id of ${id} doesn't exist`);
 
     const deletedFlagName = result.name;
-    req.update = true;
 
     res
       .status(200)
@@ -129,11 +126,10 @@ const deleteFlag = async (req, res, next) => {
 
 const sendFlagsWebhook = async (req, res, next) => {
   try {
-    await sendWebhook(req.flags);
-    console.log("webhook sent");
-    res.status(200);
+    await sendWebhook("/flags", req.flags);
+    console.log("flag webhook sent");
   } catch (err) {
-    console.log("Could not send webhook");
+    console.log("Could not send flag webhook");
   }
 };
 
