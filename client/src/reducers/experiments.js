@@ -11,13 +11,12 @@ export default function experiments(state = [], action) {
       const indexOfEdited = newState.findIndex((expt) => (
         expt.id === action.editedExpt.id
       ));
-      const exposures = newState[indexOfEdited].exposures;
       newState[indexOfEdited] = action.editedExpt;
-      newState[indexOfEdited].exposures = exposures;
 
       return newState;
     }
     case "UPDATE_STATS_SUCCESS": {
+      console.log(action);
       let newState = [...state];
       const exptId = action.metrics[0].experiment_id;
       return newState.map(expt => {

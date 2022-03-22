@@ -173,16 +173,16 @@ const editExperiment = async (req, res, next) => {
       updatedExpt = await experimentsTable.getRow(id);
     }
 
-    await setExposuresOnExperiment(updatedExpt);
+    if (!updatedExpt.date_ended) await setExposuresOnExperiment(updatedExpt);
     const updatedMetrics = (await experimentMetricsTable.query(GET_METRIC_DATA, [ id ])).rows;
     updatedExpt.metrics = updatedMetrics;
     req.updatedExpt = updatedExpt;
     // If regular edit, not stopping experiment, just send back updated expt
-    if (!updatedFields.date_ended) {
-      res.status(200).send(updatedExpt);
-      return;
-    }
-    // Else if stopping experiment, go to getAnalysis()
+    // if (!updatedFields.date_ended) {
+    //   res.status(200).send(updatedExpt);
+    //   return;
+    // }
+    // Else if stopping experiment, go to analyzeExperiment()
     next();
   } catch (err) {
     console.log(err);
@@ -205,7 +205,11 @@ const analyzeExperiment = async (req, res, next) => {
   try {
     await runAnalytics(id);
     const result = await experimentsTable.query(GET_METRIC_DATA, [ id ]);
-    res.status(200).send(result.rows);
+    if (req.updatedExpt) {
+      res.status(200).send({ stats: result.rows, updatedExpt: req.updatedExpt });
+    } else {
+      res.status(200).send(result.rows)
+    }
   } catch (err) {
     console.log(err);
     res.status(500).send(err.message);
