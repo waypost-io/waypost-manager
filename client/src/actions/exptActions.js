@@ -37,7 +37,6 @@ export function editExperimentSuccess(editedExpt) {
 export function updateStats(id) {
   return function(dispatch) {
     apiClient.updateStats(id, data => {
-      console.log(data);
       dispatch(updateStatsSuccess(data));
     });
   }
