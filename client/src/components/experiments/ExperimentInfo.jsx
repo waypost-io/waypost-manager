@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import EditExperimentForm from "./forms/EditExperimentForm";
+import EditExperimentForm from "../forms/EditExperimentForm";
 import ExposuresChart from "./ExposuresChart";
 import ExperimentResults from "./ExperimentResults";
 

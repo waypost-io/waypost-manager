@@ -5,7 +5,7 @@ import { fetchExperiments, editExperiment } from "../../actions/exptActions";
 import { fetchMetrics } from "../../actions/metricActions";
 import { useParams, useNavigate } from "react-router-dom";
 import EditFlagForm from "../forms/EditFlagForm";
-import ExperimentInfo from "../ExperimentInfo";
+import ExperimentInfo from "../experiments/ExperimentInfo";
 
 const FlagDetailsPage = () => {
   const dispatch = useDispatch();

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSelector, useDispatch } from "react-redux";
-import { updateStats } from '../actions/exptActions';
+import { updateStats } from '../../actions/exptActions';
 import MetricResultRow from './MetricResultRow';
 
 const ExperimentResults = ({ id }) => {
