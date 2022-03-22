@@ -16,7 +16,6 @@ const ExperimentInfo = ({ data, allMetrics }) => {
       return allMetrics.find((m) => m.id === metric.metric_id).name;
     })
     .join(", ");
-    console.log(data);
 
   return (
     <div className="rounded p-5 mt-3 mb-16 shadow-xl border-2 border-slate">

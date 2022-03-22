@@ -177,13 +177,8 @@ const editExperiment = async (req, res, next) => {
     const updatedMetrics = (await experimentMetricsTable.query(GET_METRIC_DATA, [ id ])).rows;
     updatedExpt.metrics = updatedMetrics;
     req.updatedExpt = updatedExpt;
-    // If regular edit, not stopping experiment, just send back updated expt
-    // if (!updatedFields.date_ended) {
-    //   res.status(200).send(updatedExpt);
-    //   return;
-    // }
-    // Else if stopping experiment, go to analyzeExperiment()
-    next();
+
+    next(); // go to analyzeExperiment
   } catch (err) {
     console.log(err);
     res.status(500).send(err.message)
