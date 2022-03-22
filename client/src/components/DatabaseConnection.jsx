@@ -27,7 +27,7 @@ const DatabaseConnection = ({ setDbModalOpen }) => {
     <div className="text-sm">
       <div className="inline-block relative">
         <button
-          className={`btn peer text-lg border border-primary-offwhite ${dbName === "" ? "after:content-['Not_Connected'] hover:after:content-['Connect']" : "after:content-['Connected'] hover:after:content-['Disconnect']"}`}
+          className={`btn peer w-60 text-lg border border-primary-offwhite ${dbName === "" ? "after:content-['Not_Connected'] hover:after:content-['Connect']" : "after:content-['Connected'] hover:after:content-['Disconnect']"}`}
           type="button"
           onClick={handleClick}
         >
