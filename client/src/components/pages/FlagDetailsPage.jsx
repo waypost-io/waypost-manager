@@ -4,8 +4,8 @@ import { fetchFlags, toggleFlag, editFlag } from "../../actions/flagActions";
 import { fetchExperiments, editExperiment } from "../../actions/exptActions";
 import { fetchMetrics } from "../../actions/metricActions";
 import { useParams, useNavigate } from "react-router-dom";
-import EditFlagForm from "../EditFlagForm";
-import ExperimentInfo from "../ExperimentInfo";
+import EditFlagForm from "../forms/EditFlagForm";
+import ExperimentInfo from "../experiments/ExperimentInfo";
 
 const FlagDetailsPage = () => {
   const dispatch = useDispatch();
@@ -111,7 +111,7 @@ const FlagDetailsPage = () => {
         </div>
       </div>
       {!isEditing ? (
-        <div className="p-8 m-5 shadow-md">
+        <div className="p-3 m-2">
           {flagData.name && (
             <div>
               <div className="inline-block w-1/2 text-right pr-10">Name:</div>

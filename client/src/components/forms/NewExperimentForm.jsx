@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { editFlag } from "../actions/flagActions";
-import { createExperiment } from "../actions/exptActions";
-import MetricCheckbox from "./MetricCheckbox";
+import { editFlag } from "../../actions/flagActions";
+import { createExperiment } from "../../actions/exptActions";
+import MetricCheckbox from "../MetricCheckbox";
 
 const LABEL_CSS = "inline-block w-1/3 text-center mr-5";
 

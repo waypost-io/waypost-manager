@@ -6,7 +6,7 @@ import { checkDBConnection } from './actions/dbActions';
 import './App.css';
 import SideNav from './components/SideNav';
 import Header from './components/Header';
-import DBModal from './components/DBModal';
+import DBModal from './components/forms/DBModal';
 import FlagDashboard from './components/pages/FlagDashboard';
 import FlagDetailsPage from './components/pages/FlagDetailsPage';
 import MetricsPage from './components/pages/MetricsPage';

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import EditExperiment from "./EditExperiment";
+import EditExperimentForm from "../forms/EditExperimentForm";
 import ExposuresChart from "./ExposuresChart";
 import ExperimentResults from "./ExperimentResults";
 
@@ -18,7 +18,7 @@ const ExperimentInfo = ({ data, allMetrics }) => {
     .join(", ");
 
   return (
-    <div className="rounded p-5 my-8 shadow-lg">
+    <div className="rounded p-5 mt-3 mb-16 shadow-xl border-2 border-slate">
       {!isEditing ? (
         <div className="flex flex-col items-center">
           <div className="flex justify-between items-center w-full">
@@ -35,7 +35,7 @@ const ExperimentInfo = ({ data, allMetrics }) => {
               </button>
             )}
           </div>
-          <div className="w-full p-8 m-5 shadow-md">
+          <div className="w-full p-8 m-5 border-b border-b-slateLight">
             <div>
               <div className="inline-block w-1/2 text-right pr-10">ID:</div>
               <span className="font-bold">{id}</span>
@@ -65,7 +65,7 @@ const ExperimentInfo = ({ data, allMetrics }) => {
           <ExperimentResults id={id} />
         </div>
       ) : (
-        <EditExperiment
+        <EditExperimentForm
           setIsEditing={setIsEditing}
           allMetrics={allMetrics}
           {...data}

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { connectDB } from "../actions/dbActions";
+import { connectDB } from "../../actions/dbActions";
 
 const LABEL_CSS = "inline-block w-1/3 text-right mr-5";
 const INPUT_ELEM_CSS = "border border-slate rounded-lg p-2";
