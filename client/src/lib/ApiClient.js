@@ -181,23 +181,23 @@ const apiClient = {
       .then(callback)
       .catch(logError)
   },
-  fetchAssignmentOnFlag: function(id, callback) {
+  fetchAssignmentsOnFlag: function(id, callback) {
     return axios
       .get(`/api/flags/${id}/custom-assignments`)
       .then(unwrapData)
       .then(callback)
       .catch(logError)
   },
-  createAssignmentsOnFlag: function(id, newAssignments, callback) {
+  createAssignmentsOnFlag: function(flagId, newAssignments, callback) {
     return axios
-      .post(`/api/flags/${id}/custom-assignments`, newAssignments)
+      .post(`/api/flags/${flagId}/custom-assignments`, newAssignments)
       .then(unwrapData)
       .then(callback)
       .catch(logError)
   },
-  deleteAssignmentsOnFlag: function(id, deletedAssignments, callback) {
+  deleteAssignmentsOnFlag: function(flagId, userIds, callback) {
     return axios
-      .delete(`/api/flags/${id}/custom-assignments`, deletedAssignments)
+      .delete(`/api/flags/${flagId}/custom-assignments`, userIds)
       .then(unwrapData)
       .then(callback)
       .catch(logError)
