@@ -1,5 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrashCan } from '@fortawesome/free-solid-svg-icons';
 
 const FlagItem = ({
   id,
@@ -17,7 +19,7 @@ const FlagItem = ({
   };
 
   return (
-    <div className="flex justify-between p-5 border-b border-b-primary-oxfordblue">
+    <div className="flex justify-between items-center p-5 border-b border-b-primary-oxfordblue">
       <a className="font-bold" href={`/flags/${id}`} onClick={handleSelectFlag}>
         {name}
       </a>
@@ -32,10 +34,10 @@ const FlagItem = ({
         </label>
         <button
           type="button"
-          className="text-primary-oxfordblue text-xs ml-2.5 bg-transparent hover:text-primary-violet"
+          className="text-primary-oxfordblue ml-6 bg-transparent hover:text-primary-violet"
           onClick={handleDeleteFlag(id)}
         >
-          Delete
+          <FontAwesomeIcon icon={faTrashCan} />
         </button>
       </div>
     </div>

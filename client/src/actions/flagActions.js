@@ -1,5 +1,4 @@
 import apiClient from '../lib/ApiClient';
-import { fetchExperiments } from './exptActions';
 
 export function fetchFlags() {
   return function(dispatch) {

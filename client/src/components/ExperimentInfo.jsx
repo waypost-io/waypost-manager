@@ -18,7 +18,7 @@ const ExperimentInfo = ({ data, allMetrics }) => {
     .join(", ");
 
   return (
-    <div className="border border-dashed border-primary-oxfordblue rounded p-5 my-4">
+    <div className="rounded p-5 my-8 shadow-lg">
       {!isEditing ? (
         <div className="flex flex-col items-center">
           <div className="flex justify-between items-center w-full">
@@ -27,7 +27,7 @@ const ExperimentInfo = ({ data, allMetrics }) => {
             </h2>
             {!date_ended && (
               <button
-                className="bg-slate text-primary-offwhite rounded-lg py-1.5 px-6 ml-2"
+                className="bg-slate hover:bg-slateDark text-primary-offwhite rounded-lg py-1.5 px-6 ml-2"
                 type="button"
                 onClick={() => setIsEditing(true)}
               >

@@ -11,12 +11,12 @@ const navLinks =[
 const SideNav = () => {
   const navigate = useNavigate();
   return (
-    <div className="bg-primary-black text-primary-offwhite min-h-screen w-80 min-w-min">
+    <div className="font-display bg-primary-black text-primary-offwhite min-h-screen w-64 min-w-min">
       <img src="/assets/PNGs/Waypost_logo_on_dark.png" alt="Waypost" />
       <ul className="font-bold p-0">
         {navLinks.map(item => {
           return (
-            <li key={`li-${item.id}`} onClick={() => navigate(item.path)} className="p-5 hover:cursor-pointer hover:bg-primary-violet hover:text-primary-offwhite">{item.title}</li>
+            <li key={`li-${item.id}`} onClick={() => navigate(item.path)} className="navlink p-5 hover:cursor-pointer relative z-10">{item.title}</li>
             )
         })}
       </ul>

@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchFlags, toggleFlag, editFlag } from "../actions/flagActions";
-import { fetchExperiments, editExperiment } from "../actions/exptActions";
-import { fetchMetrics } from "../actions/metricActions";
+import { fetchFlags, toggleFlag, editFlag } from "../../actions/flagActions";
+import { fetchExperiments, editExperiment } from "../../actions/exptActions";
+import { fetchMetrics } from "../../actions/metricActions";
 import { useParams, useNavigate } from "react-router-dom";
-import EditFlagForm from "./EditFlagForm";
-import ExperimentInfo from "./ExperimentInfo";
+import EditFlagForm from "../EditFlagForm";
+import ExperimentInfo from "../ExperimentInfo";
 
 const FlagDetailsPage = () => {
   const dispatch = useDispatch();
@@ -85,16 +85,16 @@ const FlagDetailsPage = () => {
         <div>
           {!isEditing && (
             <button
-              className="btn bg-primary-turquoise"
+              className="btn bg-slate hover:bg-slateDark m-5"
               onClick={handleEditFlag}
             >
-              Edit
+              Edit Flag
             </button>
           )}
           {flagData.is_experiment ? (
             <>
               <button
-                className="btn bg-primary-violet"
+                className="btn bg-primary-violet hover:bg-primaryDark-violet m-5"
                 onClick={handleStopExperiment}
               >
                 Stop Experiment
@@ -102,7 +102,7 @@ const FlagDetailsPage = () => {
             </>
           ) : (
             <button
-              className="btn bg-primary-turquoise"
+              className="btn bg-primary-turquoise hover:bg-primaryDark-turquoise m-5"
               onClick={handleCreateExperiment}
             >
               Create an experiment
@@ -111,21 +111,28 @@ const FlagDetailsPage = () => {
         </div>
       </div>
       {!isEditing ? (
-        <>
-          <p>{flagData.description}</p>
-          <p>
-            Current Status:{" "}
-            <span className="text-primary-violet font-bold">
-              {flagData.status ? "On" : "Off"}
-            </span>
-          </p>
-          <p>
-            Rollout percentage:{" "}
-            <span className="text-primary-violet font-bold">
-              {flagData.percentage_split}%
-            </span>
-          </p>
-        </>
+        <div className="p-8 m-5 shadow-md">
+          {flagData.name && (
+            <div>
+              <div className="inline-block w-1/2 text-right pr-10">Name:</div>
+              <span className="font-bold">{flagData.name}</span>
+            </div>
+          )}
+          {flagData.description && (
+            <div>
+              <div className="inline-block w-1/2 text-right pr-10">Description:</div>
+              <span className="font-bold">{flagData.description}</span>
+            </div>
+          )}
+          <div>
+            <div className="inline-block w-1/2 text-right pr-10">Current Status:</div>
+            <span className="font-bold">{flagData.status ? "On" : "Off"}</span>
+          </div>
+          <div>
+            <div className="inline-block w-1/2 text-right pr-10">Rollout percentage:</div>
+            <span className="font-bold">{flagData.percentage_split}%</span>
+          </div>
+        </div>
       ) : (
         <EditFlagForm setIsEditing={setIsEditing} />
       )}

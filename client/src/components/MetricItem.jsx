@@ -1,7 +1,11 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import { deleteMetric } from "../actions/metricActions";
+
+const BUTTON_CSS = "text-primary-violet py-2 px-3 mr-2 hover:bg-primary-violet hover:text-primary-offwhite rounded-xl";
 
 const MetricsItem = ({ id, name, query_string, type }) => {
   const dispatch = useDispatch();
@@ -26,15 +30,14 @@ const MetricsItem = ({ id, name, query_string, type }) => {
       <div>
         <button
           onClick={handleEditMetric}
-          className="border border-primary-violet text-primary-black rounded py-2 px-5 hover:text-primary-violet mr-2"
+          className={BUTTON_CSS}
         >
           Edit
         </button>
         <button
           onClick={handleDeleteMetric}
-          className="border border-primary-violet text-primary-black rounded py-2 px-5 hover:text-primary-violet"
         >
-          Delete
+          <FontAwesomeIcon icon={faTrashCan} />
         </button>
       </div>
     </div>

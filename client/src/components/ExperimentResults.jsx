@@ -16,7 +16,7 @@ const ExperimentResults = ({ id }) => {
     <div className="w-full">
       <div className="flex justify-between items-center">
         <h3 className="text-xl font-bold text-center">Results</h3>
-        <button onClick={handleRefreshResults} className="btn bg-primary-violet">Refresh Results</button>
+        <button onClick={handleRefreshResults} className="btn bg-primary-violet hover:bg-primaryDark-violet my-5">Refresh Results</button>
       </div>
       {hasResult && (
         <table className="w-full shadow-md">

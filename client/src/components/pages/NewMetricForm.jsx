@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 import { useParams, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { createMetric, editMetric } from '../actions/metricActions';
+import { createMetric, editMetric } from '../../actions/metricActions';
+
+const LABEL_CSS = "inline-block w-1/3 text-center mr-5";
+const INPUT_ELEM_CSS = "border border-slate rounded-lg p-2";
 
 const NewMetricForm = () => {
   const { id } = useParams();
@@ -77,11 +80,11 @@ const NewMetricForm = () => {
     <form className="flex flex-col items-center">
       <div>
         <div className="mt-2.5">
-          <label htmlFor="metric-name" className="inline-block w-1/3 text-right mr-5">Name: </label>
-          <input id="metric-name" type="text" value={name} onChange={(e) => setName(e.target.value)} className="border border-slate rounded-lg p-2"/>
+          <label htmlFor="metric-name" className={LABEL_CSS}>Name: </label>
+          <input id="metric-name" type="text" value={name} onChange={(e) => setName(e.target.value)} className={INPUT_ELEM_CSS} />
         </div>
         <div className="mt-2.5 flex items-center">
-          <label className="inline-block w-1/3 text-right mr-5">Type: </label>
+          <label className={LABEL_CSS}>Type: </label>
             <ul className="inline-block">
               <li>
                 <input type="radio" id="binomial" name="metric-type" value="binomial" checked={type === "binomial"} onChange={onTypeSelection} />
@@ -102,18 +105,18 @@ const NewMetricForm = () => {
             </ul>
           </div>
           <div className="mt-2.5 flex items-center">
-            <label htmlFor="metric-query" className="inline-block w-1/3 text-center mr-5">
+            <label htmlFor="metric-query" className={LABEL_CSS}>
               <p>Query to retrieve data:</p>
               <p className="text-sm italic">Do not include semicolon.</p>
               <p className="text-sm italic">If the metric is a <span className="font-bold">Binomial</span> type, the query should result in <code>user_id</code> and <code>timestamp</code> columns.</p>
               <p className="text-sm italic">The query should result in <code>user_id</code>, <code>timestamp</code>, and <code>value</code> columns for all other types.</p>
             </label>
-            <textarea id="metric-query" rows={6} cols={35} value={query} onChange={(e) => setQuery(e.target.value)} className="border border-slate rounded-lg p-2" />
+            <textarea id="metric-query" rows={6} cols={35} value={query} onChange={(e) => setQuery(e.target.value)} className={INPUT_ELEM_CSS} />
           </div>
         </div>
       <div>
-        <button onClick={handleSave} className="btn bg-primary-turquoise">Save Changes</button>
-        <button onClick={handleCancel} className="btn bg-slate">Cancel</button>
+        <button onClick={handleSave} className="btn bg-primary-turquoise hover:bg-primaryDark-turquoise  m-4">Save Changes</button>
+        <button onClick={handleCancel} className="btn bg-slate hover:bg-slateDark m-4">Cancel</button>
       </div>
     </form>
   </div>

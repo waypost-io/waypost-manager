@@ -26,7 +26,7 @@ const MetricResultRow = ({
       id: metric_id,
       toolbar: {
         show: false,
-      },
+      }
     },
     colors: ["#07C0C5", "#B94E9C"],
     plotOptions: {
