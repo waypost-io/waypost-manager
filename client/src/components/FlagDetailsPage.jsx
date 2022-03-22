@@ -102,7 +102,7 @@ const FlagDetailsPage = () => {
             </>
           ) : (
             <button
-              className="btn bg-primary-turquoise"
+              className="btn bg-primary-turquoise m-5"
               onClick={handleCreateExperiment}
             >
               Create an experiment

@@ -91,7 +91,7 @@ const NewExperimentForm = ({ metrics }) => {
   }
 
   return (
-    <form className="flex flex-col items-center">
+    <form className="flex flex-col items-center mt-5">
       <div>
         <div className="mt-2.5 flex items-center">
           <label htmlFor="name" className="inline-block w-1/3 text-right mr-5">
@@ -154,10 +154,10 @@ const NewExperimentForm = ({ metrics }) => {
           </div>
         </div>
       <div>
-        <button className="btn bg-primary-turquoise" onClick={handleSubmit}>
+        <button className="btn bg-primary-turquoise m-4" onClick={handleSubmit}>
           Start New Experiment
         </button>
-        <button className="btn bg-slate" onClick={handleCancel}>Cancel</button>
+        <button className="btn bg-slate m-4" onClick={handleCancel}>Cancel</button>
       </div>
     </form>
   );
