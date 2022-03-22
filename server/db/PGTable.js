@@ -106,7 +106,7 @@ module.exports = class PGTable {
     return result.rows[0];
   }
 
-  async getRowsWhere(whereObj) {
+  async getRowsWhere(whereObj = {}) {
     const [queryString, params] = this.createSelectStatement(whereObj);
     const result = await dbQuery(queryString, ...params);
     return result.rows;

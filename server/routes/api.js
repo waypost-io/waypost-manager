@@ -7,7 +7,14 @@ const connectionController = require("../controllers/connectionController");
 const sdkKeyController = require("../controllers/sdkKeyController");
 const exposuresController = require("../controllers/exposuresController");
 const logsController = require("../controllers/logsController");
+const cAssignmentController = require("../controllers/cAssignmentController");
 const { validateNewFlag } = require("../validators/validators");
+
+router.get("/flags/:id/custom-assignments", cAssignmentController.fetchAssignmentsOnFlag);
+
+router.post("/flags/:id/custom-assignments", cAssignmentController.createAssignments);
+
+router.delete("/flags/:id/custom-assignments", cAssignmentController.deleteAssignments);
 
 router.get("/flags", flagsController.getAllFlags);
 
@@ -18,6 +25,7 @@ router.post(
   validateNewFlag,
   flagsController.createFlag,
   flagsController.setFlagsOnReq,
+  cAssignmentController.setAssignmentsOnEachFlag,
   flagsController.sendFlagsWebhook,
   logsController.logEvent
 );
@@ -26,6 +34,7 @@ router.put(
   "/flags/:id",
   flagsController.editFlag,
   flagsController.setFlagsOnReq,
+  cAssignmentController.setAssignmentsOnEachFlag,
   flagsController.sendFlagsWebhook,
   logsController.logEvent
 );
@@ -39,6 +48,7 @@ router.delete(
   "/flags/:id",
   flagsController.deleteFlag,
   flagsController.setFlagsOnReq,
+  cAssignmentController.setAssignmentsOnEachFlag,
   flagsController.sendFlagsWebhook,
   logsController.logEvent
 );
