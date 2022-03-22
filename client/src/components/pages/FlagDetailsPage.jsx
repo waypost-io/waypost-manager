@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchFlags, toggleFlag, editFlag } from "../actions/flagActions";
-import { fetchExperiments, editExperiment } from "../actions/exptActions";
-import { fetchMetrics } from "../actions/metricActions";
+import { fetchFlags, toggleFlag, editFlag } from "../../actions/flagActions";
+import { fetchExperiments, editExperiment } from "../../actions/exptActions";
+import { fetchMetrics } from "../../actions/metricActions";
 import { useParams, useNavigate } from "react-router-dom";
-import EditFlagForm from "./EditFlagForm";
-import ExperimentInfo from "./ExperimentInfo";
+import EditFlagForm from "../EditFlagForm";
+import ExperimentInfo from "../ExperimentInfo";
 
 const FlagDetailsPage = () => {
   const dispatch = useDispatch();

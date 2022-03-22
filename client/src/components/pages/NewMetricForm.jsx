@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useParams, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { createMetric, editMetric } from '../actions/metricActions';
+import { createMetric, editMetric } from '../../actions/metricActions';
 
 const LABEL_CSS = "inline-block w-1/3 text-center mr-5";
 const INPUT_ELEM_CSS = "border border-slate rounded-lg p-2";

@@ -4,16 +4,16 @@ import { useDispatch } from "react-redux";
 import { fetchFlags } from './actions/flagActions';
 import { checkDBConnection } from './actions/dbActions';
 import './App.css';
-import FlagDashboard from './components/FlagDashboard';
 import SideNav from './components/SideNav';
-import FlagDetailsPage from './components/FlagDetailsPage';
-import MetricsPage from './components/MetricsPage';
 import Header from './components/Header';
 import DBModal from './components/DBModal';
-import NewExperimentPage from './components/NewExperimentPage';
-import NewMetricForm from './components/NewMetricForm';
-import SdkKeyPage from './components/SdkKeyPage';
-import FlagLogPage from './components/FlagLogPage';
+import FlagDashboard from './components/pages/FlagDashboard';
+import FlagDetailsPage from './components/pages/FlagDetailsPage';
+import MetricsPage from './components/pages/MetricsPage';
+import NewExperimentPage from './components/pages/NewExperimentPage';
+import NewMetricForm from './components/pages/NewMetricForm';
+import SdkKeyPage from './components/pages/SdkKeyPage';
+import FlagLogPage from './components/pages/FlagLogPage';
 
 function App() {
   const dispatch = useDispatch();

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchLog } from "../actions/logActions";
+import { fetchLog } from "../../actions/logActions";
 
 const LogItem = ({ id, flag_name, event_type, timestamp }) => {
   const eventDate = new Date(timestamp);

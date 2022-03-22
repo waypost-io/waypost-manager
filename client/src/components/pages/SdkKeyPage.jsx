@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCopy } from '@fortawesome/free-regular-svg-icons'
-import { fetchSdkKey, createSdkKey } from "../actions/sdkKeyActions";
+import { fetchSdkKey, createSdkKey } from "../../actions/sdkKeyActions";
 
 const SdkKeyPage = () => {
   const dispatch = useDispatch();

@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import MetricItem from "./MetricItem";
-import { fetchMetrics } from "../actions/metricActions";
+import MetricItem from "../MetricItem";
+import { fetchMetrics } from "../../actions/metricActions";
 
 const MetricsPage = () => {
   const dispatch = useDispatch();
