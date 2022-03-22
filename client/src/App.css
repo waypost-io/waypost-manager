@@ -155,6 +155,35 @@ input:checked + .slider:before {
   height: 660px;
 }
 
+.navlink:hover::after {
+  opacity: 1;
+  visibility: visible;
+  height: 100%;
+}
+
+.navlink, .navlink::before {
+  transition: all .5s;
+}
+
+.navlink::after {
+  transition: all .5s;
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  margin: auto;
+  width: 100%;
+  height: 1px;
+  content: '.';
+  color: transparent;
+  background-color: #B94E9C;
+  visibility: none;
+  opacity: 0;
+  z-index: -1;
+}
+
 .x-icon:before {
   content: "\00d7";
   font-size: 2rem;

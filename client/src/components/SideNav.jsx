@@ -16,7 +16,7 @@ const SideNav = () => {
       <ul className="font-bold p-0">
         {navLinks.map(item => {
           return (
-            <li key={`li-${item.id}`} onClick={() => navigate(item.path)} className="p-5 hover:cursor-pointer hover:bg-primary-violet hover:text-primary-offwhite">{item.title}</li>
+            <li key={`li-${item.id}`} onClick={() => navigate(item.path)} className="navlink p-5 hover:cursor-pointer relative z-10">{item.title}</li>
             )
         })}
       </ul>
