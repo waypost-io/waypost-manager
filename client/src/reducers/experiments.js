@@ -16,7 +16,6 @@ export default function experiments(state = [], action) {
       return newState;
     }
     case "UPDATE_STATS_SUCCESS": {
-      console.log(action);
       let newState = [...state];
       const exptId = action.metrics[0].experiment_id;
       return newState.map(expt => {
