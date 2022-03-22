@@ -3,6 +3,9 @@ import { editExperiment } from "../actions/exptActions";
 import { useDispatch } from "react-redux";
 import MetricCheckbox from "./MetricCheckbox";
 
+const FIELD_DIV_CSS = "mt-2.5 flex justify-start items-center";
+const LABEL_CSS = "inline-block w-1/3 text-center mr-5";
+const INPUT_ELEM_CSS = "border border-slate rounded-lg p-2";
 
 const EditExperiment = ({ id, name, description, duration, date_started, date_ended, metrics, allMetrics, setIsEditing }) => {
   const dispatch = useDispatch();
@@ -11,7 +14,7 @@ const EditExperiment = ({ id, name, description, duration, date_started, date_en
   const [newDescription, setNewDescription] = useState(description || "");
   const [newDuration, setNewDuration] = useState(duration);
   const [newMetricIds, setNewMetricIds] = useState(origMetricIds);
-  const inputCSS = "border border-primary-oxfordblue rounded-lg px-2";
+  // const inputCSS = "border border-primary-oxfordblue rounded-lg px-2";
   const startDate = new Date(date_started).toLocaleDateString("en-US");
 
   const getChangedData = () => {
@@ -79,13 +82,22 @@ const EditExperiment = ({ id, name, description, duration, date_started, date_en
           <button className="bg-slate text-primary-offwhite rounded-lg py-1.5 px-6 ml-2" type="button" onClick={() => setIsEditing(false)}>Cancel</button>
         </div>
       </div>
-      <p>ID: <span className="font-bold">{id}</span></p>
-      <p>Name: <input className={inputCSS} value={newName} onChange={(e) => setNewName(e.target.value)}/></p>
-      <p>Duration: <input className={inputCSS} type="number" value={newDuration} onChange={(e) => setNewDuration(e.target.value)}/> days</p>
-      <p>Description: <input className={inputCSS} value={newDescription} onChange={(e) => setNewDescription(e.target.value)}/></p>
+      <div className={FIELD_DIV_CSS}>
+        <label for="expt-name" className={LABEL_CSS}>Name:</label>
+        <input id="expt-name" className={INPUT_ELEM_CSS} value={newName} onChange={(e) => setNewName(e.target.value)}/>
+      </div>
+      <div className={FIELD_DIV_CSS}>
+        <label for="duration" className={LABEL_CSS}>Duration:</label>
+        <input id="duration" className={INPUT_ELEM_CSS} type="number" value={newDuration} onChange={(e) => setNewDuration(e.target.value)}/>
+        <span className="ml-2">days</span>
+      </div>
+      <div className={FIELD_DIV_CSS}>
+        <label for="description" className={LABEL_CSS}>Description:</label>
+        <input id="description" className={INPUT_ELEM_CSS} value={newDescription} onChange={(e) => setNewDescription(e.target.value)}/>
+      </div>
       <div className="my-5">
-          <h3 className="font-bold text-base">Select the metrics you want to measure:</h3>
-          <div className="flex mt-2.5 mx-3 justify-start">
+          <h3 className="font-bold text-base text-center">Select the metrics you want to measure:</h3>
+          <div className="flex mt-2.5 mx-3 justify-center">
           {allMetrics.map(({ id, name }) => (
             <MetricCheckbox key={id} id={id} name={name} selected={newMetricIds.includes(id)} handleClick={() => toggleMetric(id)} />
           ))}

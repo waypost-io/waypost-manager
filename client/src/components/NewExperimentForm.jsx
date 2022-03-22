@@ -5,6 +5,8 @@ import { editFlag } from "../actions/flagActions";
 import { createExperiment } from "../actions/exptActions";
 import MetricCheckbox from "./MetricCheckbox";
 
+const LABEL_CSS = "inline-block w-1/3 text-center mr-5";
+
 const NewExperimentForm = ({ metrics }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -94,7 +96,7 @@ const NewExperimentForm = ({ metrics }) => {
     <form className="flex flex-col items-center mt-5">
       <div>
         <div className="mt-2.5 flex items-center">
-          <label htmlFor="name" className="inline-block w-1/3 text-right mr-5">
+          <label htmlFor="name" className={LABEL_CSS}>
             Name (optional):{" "}
           </label>
           <input
@@ -105,7 +107,7 @@ const NewExperimentForm = ({ metrics }) => {
           />
         </div>
         <div className="mt-2.5 flex items-center">
-          <label htmlFor="description" className="inline-block w-1/3 text-right mr-5">Description (optional, max 255 characters): </label>
+          <label htmlFor="description" className={LABEL_CSS}>Description (optional, max 255 characters): </label>
           <textarea
             id="description"
             type="textarea"
@@ -117,7 +119,7 @@ const NewExperimentForm = ({ metrics }) => {
           />
         </div>
         <div className="mt-2.5 flex items-center">
-          <label htmlFor="percent-test" className="inline-block w-1/3 text-right mr-5">Percent of Users Tested: </label>
+          <label htmlFor="percent-test" className={LABEL_CSS}>Percent of Users Tested: </label>
           <input
             id="percent-test"
             type="number"
@@ -132,7 +134,7 @@ const NewExperimentForm = ({ metrics }) => {
           <p className="inline-block ml-5">{validPercent(percentTest) ? `(${100-percentTest}% of users in control group)` : "Please enter an integer from 0-100"}</p>
         </div>
         <div className="mt-2.5 flex items-center">
-          <label htmlFor="duration" className="inline-block w-1/3 text-right mr-5">Duration: </label>
+          <label htmlFor="duration" className={LABEL_CSS}>Duration: </label>
           <input
             id="duration"
             type="number"
