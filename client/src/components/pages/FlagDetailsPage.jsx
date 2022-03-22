@@ -16,6 +16,12 @@ const FlagDetailsPage = () => {
   );
   const exptData = useSelector((state) => state.experiments);
   const metricData = useSelector((state) => state.metrics);
+  const cAssignmentData = useSelector((state) => state.customAssignments[flagId]);
+  console.log("custom assignments on flag", cAssignmentData);
+  const [alwaysOn, setAlwaysOn] = useState([]);
+  const [alwaysOff, setAlwaysOff] = useState([]);
+  const [showCAssignments, setShowCAssignments] = useState(false);
+  const [cAssignmentsFetched, setCAssignmentsFetched] = useState(false);
   const [flagFetched, setFlagFetched] = useState(false);
   const [exptsFetched, setExptsFetched] = useState(false);
   const [metricsFetched, setMetricsFetched] = useState(false);
@@ -132,6 +138,12 @@ const FlagDetailsPage = () => {
             <div className="inline-block w-1/2 text-right pr-10">Rollout percentage:</div>
             <span className="font-bold">{flagData.percentage_split}%</span>
           </div>
+          {cAssignmentData && <div>
+            <div className="inline-block w-1/2 text-right pr-10">Always on for user IDs:</div>
+            <span className="font-bold">user123, user234</span>
+            <div className="inline-block w-1/2 text-right pr-10">Always off for user IDs:</div>
+            <span className="font-bold">user123, user234</span>
+          </div>}
         </div>
       ) : (
         <EditFlagForm setIsEditing={setIsEditing} />
