@@ -61,7 +61,7 @@ const ExperimentInfo = ({ data, allMetrics }) => {
               <span className="font-bold">{metricsNames}</span>
             </div>
           </div>
-          <ExposuresChart id={id} />
+          {!date_ended && <ExposuresChart id={id} />}
           <ExperimentResults id={id} />
         </div>
       ) : (

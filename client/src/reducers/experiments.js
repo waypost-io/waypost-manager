@@ -11,9 +11,7 @@ export default function experiments(state = [], action) {
       const indexOfEdited = newState.findIndex((expt) => (
         expt.id === action.editedExpt.id
       ));
-      const exposures = newState[indexOfEdited].exposures;
       newState[indexOfEdited] = action.editedExpt;
-      newState[indexOfEdited].exposures = exposures;
 
       return newState;
     }

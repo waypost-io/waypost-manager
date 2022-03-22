@@ -25,7 +25,8 @@ export function createExperimentSuccess(newExpt) {
 export function editExperiment(exptId, updatedFields) {
   return function(dispatch) {
     apiClient.editExperiment(exptId, updatedFields, data => {
-      dispatch(editExperimentSuccess(data));
+      dispatch(updateStatsSuccess(data.stats))
+      dispatch(editExperimentSuccess(data.updatedExpt));
     });
   }
 }

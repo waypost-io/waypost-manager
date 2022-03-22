@@ -92,6 +92,17 @@ const createExposureObj = (exposuresArr, variant) => {
   return obj;
 }
 
+const setExposuresOnExperiment = async (experiment) => {
+  let { rows: exposures } = await exposuresTable.query(GET_EXPOSURES_ON_EXPT, [ experiment.id ]);
+
+  if (exposures.length > 0) { // put exposures onto running experiment
+    const exposuresTest = createExposureObj(exposures, "test")
+    const exposuresControl = createExposureObj(exposures, "control")
+    experiment.exposuresTest = exposuresTest;
+    experiment.exposuresControl = exposuresControl;
+  }
+}
+
 const getExperimentsForFlag = async (req, res, next) => {
   const flagId = req.params.id;
   try {
@@ -99,16 +110,7 @@ const getExperimentsForFlag = async (req, res, next) => {
     const experiments = transformMetricExptData(exptMetrics); // transforms to redux-friendly format
     // attaches exposures to running experiment
     const runningExpt = experiments.find((expt) => expt.date_ended === null);
-    if (runningExpt) {
-      let { rows: exposures } = await exposuresTable.query(GET_EXPOSURES_ON_EXPT, [ runningExpt.id ]);
-
-      if (exposures.length > 0) { // put exposures onto running experiment
-        const exposuresTest = createExposureObj(exposures, "test")
-        const exposuresControl = createExposureObj(exposures, "control")
-        runningExpt.exposuresTest = exposuresTest;
-        runningExpt.exposuresControl = exposuresControl;
-      }
-    }
+    if (runningExpt) await setExposuresOnExperiment(runningExpt);
     res.status(200).send(experiments);
   } catch (err) {
     console.log(err);
@@ -170,16 +172,13 @@ const editExperiment = async (req, res, next) => {
     } else {
       updatedExpt = await experimentsTable.getRow(id);
     }
+
+    if (!updatedExpt.date_ended) await setExposuresOnExperiment(updatedExpt);
     const updatedMetrics = (await experimentMetricsTable.query(GET_METRIC_DATA, [ id ])).rows;
     updatedExpt.metrics = updatedMetrics;
     req.updatedExpt = updatedExpt;
-    // If regular edit, not stopping experiment, just send back updated expt
-    if (!updatedFields.date_ended) {
-      res.status(200).send(updatedExpt);
-      return;
-    }
-    // Else if stopping experiment, go to getAnalysis()
-    next();
+
+    next(); // go to analyzeExperiment
   } catch (err) {
     console.log(err);
     res.status(500).send(err.message)
@@ -201,7 +200,11 @@ const analyzeExperiment = async (req, res, next) => {
   try {
     await runAnalytics(id);
     const result = await experimentsTable.query(GET_METRIC_DATA, [ id ]);
-    res.status(200).send(result.rows);
+    if (req.updatedExpt) {
+      res.status(200).send({ stats: result.rows, updatedExpt: req.updatedExpt });
+    } else {
+      res.status(200).send(result.rows)
+    }
   } catch (err) {
     console.log(err);
     res.status(500).send(err.message);
