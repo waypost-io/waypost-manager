@@ -1,7 +1,7 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faLock, faLockOpen } from "@fortawesome/free-solid-svg-icons";
+import { faDatabase } from "@fortawesome/free-solid-svg-icons";
 import { disconnectDB } from "../actions/dbActions";
 
 const DatabaseConnection = ({ setDbModalOpen }) => {
@@ -25,26 +25,15 @@ const DatabaseConnection = ({ setDbModalOpen }) => {
 
   return (
     <div className="text-sm">
-      <span>
-        {dbName === ""
-          ? "Not connected to your database"
-          : `Currently connected to ${dbName} `}
-      </span>
       <div className="inline-block relative">
         <button
-          className="btn peer text-lg hover:text-primary-violet"
+          className={`btn peer text-lg border border-primary-offwhite ${dbName === "" ? "after:content-['Not_Connected'] hover:after:content-['Connect']" : "after:content-['Connected'] hover:after:content-['Disconnect']"}`}
           type="button"
           onClick={handleClick}
         >
-          {dbName === "" ? (
-            <FontAwesomeIcon icon={faLockOpen} />
-          ) : (
-            <FontAwesomeIcon icon={faLock} />
-          )}
+          <FontAwesomeIcon icon={faDatabase} className="mr-2" />
         </button>
-        <span className="text-primary-violet font-bold absolute bottom-9 right-px hidden peer-hover:block">
-          {dbName === "" ? "Connect" : "Disconnect"}
-        </span>
+
       </div>
     </div>
   );
