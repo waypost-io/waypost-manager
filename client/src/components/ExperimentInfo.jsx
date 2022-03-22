@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import EditExperiment from "./forms/EditExperimentForm";
+import EditExperimentForm from "./forms/EditExperimentForm";
 import ExposuresChart from "./ExposuresChart";
 import ExperimentResults from "./ExperimentResults";
 
@@ -65,7 +65,7 @@ const ExperimentInfo = ({ data, allMetrics }) => {
           <ExperimentResults id={id} />
         </div>
       ) : (
-        <EditExperiment
+        <EditExperimentForm
           setIsEditing={setIsEditing}
           allMetrics={allMetrics}
           {...data}

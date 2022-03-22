@@ -7,7 +7,7 @@ const FIELD_DIV_CSS = "mt-2.5 flex justify-start items-center";
 const LABEL_CSS = "inline-block w-1/3 text-center mr-5";
 const INPUT_ELEM_CSS = "border border-slate rounded-lg p-2";
 
-const EditExperiment = ({
+const EditExperimentForm = ({
   id,
   name,
   description,
@@ -84,6 +84,7 @@ const EditExperiment = ({
     }
     setIsEditing(false);
   };
+
   return (
     <>
       <div className="flex justify-between items-center w-full">
@@ -167,4 +168,4 @@ const EditExperiment = ({
   );
 };
 
-export default EditExperiment;
+export default EditExperimentForm;
