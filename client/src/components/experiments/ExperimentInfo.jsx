@@ -18,7 +18,7 @@ const ExperimentInfo = ({ data, allMetrics }) => {
     .join(", ");
 
   return (
-    <div className="rounded p-5 my-8 shadow-lg">
+    <div className="rounded p-5 my-16 shadow-xl border-2 border-slate">
       {!isEditing ? (
         <div className="flex flex-col items-center">
           <div className="flex justify-between items-center w-full">
@@ -35,7 +35,7 @@ const ExperimentInfo = ({ data, allMetrics }) => {
               </button>
             )}
           </div>
-          <div className="w-full p-8 m-5 shadow-md">
+          <div className="w-full p-8 m-5 shadow-md bg-primary-offwhite">
             <div>
               <div className="inline-block w-1/2 text-right pr-10">ID:</div>
               <span className="font-bold">{id}</span>
