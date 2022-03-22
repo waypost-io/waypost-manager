@@ -38,6 +38,9 @@ const calcContinuousMetric = async (exptId, metricId, exptQuery, metricQuery) =>
     ORDER BY 1
   `;
   result = await eventDbQuery(query, exptId);
+  if (result.rows.length === 0) {
+    return;
+  }
   const [ controlGroup, testGroup ] = result.rows;
 
   const stat = ttest(
@@ -78,6 +81,10 @@ const calcDiscreteMetric = async (exptId, metricId, exptQuery, metricQuery) => {
   ORDER BY 1
   `;
   result = await eventDbQuery(query, exptId);
+  if (result.rows.length === 0) {
+    return;
+  }
+
   let obs = []
   result.rows.forEach(group => {
     let data = [ +group.count, +group.num_users - (+group.count) ];
