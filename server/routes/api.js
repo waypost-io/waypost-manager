@@ -12,9 +12,11 @@ const { validateNewFlag } = require("../validators/validators");
 
 router.get("/flags/:id/custom-assignments", cAssignmentController.fetchAssignmentsOnFlag);
 
-router.post("/flags/:id/custom-assignments", cAssignmentController.createAssignments);
+router.get("/custom-assignments", cAssignmentController.fetchAllAssignments);
 
-router.delete("/flags/:id/custom-assignments", cAssignmentController.deleteAssignments);
+router.post("/flags/:id/custom-assignments", cAssignmentController.createAssignmentsOnFlag);
+
+router.delete("/flags/:id/custom-assignments", cAssignmentController.deleteAssignmentsOnFlag);
 
 router.get("/flags", flagsController.getAllFlags);
 

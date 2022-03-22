@@ -36,6 +36,15 @@ const fetchAssignmentsOnFlag = async (req, res, next) => {
   }
 }
 
+const fetchAllAssignments = async (req, res, next) => {
+  try {
+    const result = await cAssignmentTable.getAllRows();
+    res.status(200).send(transformAssignmentData(result));
+  } catch (e) {
+    res.status(500).send("Error fetching custom assignment data")
+  }
+}
+
 const setAssignmentsOnEachFlag = async (req, res, next) => {
   try {
     const result = await cAssignmentTable.getAllRows();
@@ -53,7 +62,7 @@ const setAssignmentsOnEachFlag = async (req, res, next) => {
 }
 
 // receives { user123: true, user234: false, etc.}
-const createAssignments = async (req, res, next) => {
+const createAssignmentsOnFlag = async (req, res, next) => {
   const flagId = req.params.id;
   const newAssignments = req.body;
   const insertRows = [];
@@ -73,7 +82,7 @@ const createAssignments = async (req, res, next) => {
   }
 }
 // receives an array of userIds: ["user1", "12345", "user2020"]
-const deleteAssignments = async (req, res, next) => {
+const deleteAssignmentsOnFlag = async (req, res, next) => {
   const flagId = req.params.id;
   const usersToDeleteOnFlag = req.body;
   const deleteRows = [];
@@ -87,13 +96,14 @@ const deleteAssignments = async (req, res, next) => {
 
   try {
     await Promise.all(deleteRows);
-    res.status(200).send("Deletion of assignments was successful");
+    res.status(200).send({ flag_id: flagId, userIds });
   } catch (e) {
     res.status(500).send(`Error deleting users ${usersToDeleteOnFlag} on flagId: ${flagId}`);
   }
 }
 
 exports.fetchAssignmentsOnFlag = fetchAssignmentsOnFlag;
-exports.createAssignments = createAssignments;
-exports.deleteAssignments = deleteAssignments;
+exports.fetchAllAssignments = fetchAllAssignments;
+exports.createAssignmentsOnFlag = createAssignmentsOnFlag;
+exports.deleteAssignmentsOnFlag = deleteAssignmentsOnFlag;
 exports.setAssignmentsOnEachFlag = setAssignmentsOnEachFlag;
