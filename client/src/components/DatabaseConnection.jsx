@@ -27,13 +27,16 @@ const DatabaseConnection = ({ setDbModalOpen }) => {
     <div className="text-sm">
       <div className="inline-block relative">
         <button
-          className={`btn peer w-60 text-lg border border-primary-offwhite ${dbName === "" ? "after:content-['Not_Connected'] hover:after:content-['Connect']" : "after:content-['Connected'] hover:after:content-['Disconnect']"} hover:text-primary-turquoise hover:border-primary-turquoise`}
+          className={`btn peer w-60 text-lg border border-primary-offwhite hover:text-primary-turquoise hover:border-primary-turquoise ${
+            dbName === ""
+              ? "after:content-['Not_Connected'] hover:after:content-['Connect']"
+              : "after:content-['Connected'] hover:after:content-['Disconnect']"
+          }`}
           type="button"
           onClick={handleClick}
         >
           <FontAwesomeIcon icon={faDatabase} className="mr-2" />
         </button>
-
       </div>
     </div>
   );
