@@ -27,7 +27,7 @@ const FlagsList = ({ setModalOpen }) => {
       <div className="flex justify-between items-center my-3">
         <h2 className="text-3xl font-bold text-primary-violet">Feature Flags</h2>
         <button
-          className="btn bg-primary-turquoise my-4"
+          className="btn bg-primary-turquoise hover:bg-primaryDark-turquoise my-4"
           type="button"
           onClick={() => setModalOpen(true)}
         >

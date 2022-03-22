@@ -50,7 +50,7 @@ const EditFlagForm = ({ setIsEditing }) => {
   };
 
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-center border-b border-b-primary-oxfordblue py-8">
       <h2 className="font-bold text-xl text-primary-violet">Edit Flag</h2>
       <form className="w-full">
         <div className={FIELD_DIV_CSS}>
@@ -92,10 +92,10 @@ const EditFlagForm = ({ setIsEditing }) => {
         </div>
       </form>
       <div>
-        <button className="btn bg-primary-turquoise m-4" onClick={handleSaveEdits}>
+        <button className="btn bg-primary-turquoise hover:bg-primaryDark-turquoise m-4" onClick={handleSaveEdits}>
             Save Changes
         </button>
-        <button className="btn bg-slate m-4" onClick={() => setIsEditing(false)}>Cancel</button>
+        <button className="btn bg-slate hover:bg-slateDark m-4" onClick={() => setIsEditing(false)}>Cancel</button>
       </div>
     </div>
   );

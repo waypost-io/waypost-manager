@@ -85,7 +85,7 @@ const FlagDetailsPage = () => {
         <div>
           {!isEditing && (
             <button
-              className="btn bg-primary-turquoise m-5"
+              className="btn bg-slate hover:bg-slateDark m-5"
               onClick={handleEditFlag}
             >
               Edit Flag
@@ -94,7 +94,7 @@ const FlagDetailsPage = () => {
           {flagData.is_experiment ? (
             <>
               <button
-                className="btn bg-primary-violet m-5"
+                className="btn bg-primary-violet hover:bg-primaryDark-violet m-5"
                 onClick={handleStopExperiment}
               >
                 Stop Experiment
@@ -102,7 +102,7 @@ const FlagDetailsPage = () => {
             </>
           ) : (
             <button
-              className="btn bg-primary-turquoise m-5"
+              className="btn bg-primary-turquoise hover:bg-primaryDark-turquoise m-5"
               onClick={handleCreateExperiment}
             >
               Create an experiment

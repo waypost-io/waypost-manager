@@ -166,7 +166,7 @@ const DBModal = ({ modalOpen, setModalOpen }) => {
         </form>
         <button
           type="submit"
-          className="btn bg-primary-violet my-4"
+          className="btn bg-primary-violet hover:bg-primaryDark-violet my-4"
           onClick={handleSubmit}
         >
           Submit

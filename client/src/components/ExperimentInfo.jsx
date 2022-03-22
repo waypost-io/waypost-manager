@@ -27,7 +27,7 @@ const ExperimentInfo = ({ data, allMetrics }) => {
             </h2>
             {!date_ended && (
               <button
-                className="bg-slate text-primary-offwhite rounded-lg py-1.5 px-6 ml-2"
+                className="bg-slate hover:bg-slateDark text-primary-offwhite rounded-lg py-1.5 px-6 ml-2"
                 type="button"
                 onClick={() => setIsEditing(true)}
               >

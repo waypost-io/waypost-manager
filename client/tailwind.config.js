@@ -9,13 +9,18 @@ module.exports = {
         'violet': '#B94E9C',
         'turquoise': '#07C0C5'
       },
+      primaryDark: {
+        'violet': '#712d5f',
+        'turquoise': '#058f94'
+      },
       secondary: {
         'green': '#8FE3A5',
         'pink': '#FCB8EA',
         'salmon': '#F19693',
         'skyblue': '#B0FAFC'
       },
-      'slate': '#94a3b8'
+      'slate': '#94a3b8',
+      'slateDark': '#64748b'
     },
     fontFamily: {
       display: ['Orbitron', 'sans-serif'],
