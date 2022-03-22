@@ -36,6 +36,13 @@ const FlagDetailsPage = () => {
   }, [dispatch, cAssignmentsFetched])
 
   useEffect(() => {
+    if (cAssignmentData) {
+      setAlwaysOn(Object.keys(cAssignmentData).filter((userId) => cAssignmentData[userId]))
+      setAlwaysOff(Object.keys(cAssignmentData).filter((userId) => !cAssignmentData[userId]))
+    }
+  }, [dispatch, cAssignmentData])
+
+  useEffect(() => {
     if (!flagFetched) {
       dispatch(fetchFlags());
       setFlagFetched(true);
@@ -148,9 +155,9 @@ const FlagDetailsPage = () => {
           </div>
           {cAssignmentData && <div>
             <div className="inline-block w-1/2 text-right pr-10">Always on for user IDs:</div>
-            <span className="font-bold">user123, user234</span>
+            <span className="font-bold">{alwaysOn.join(", ")}</span>
             <div className="inline-block w-1/2 text-right pr-10">Always off for user IDs:</div>
-            <span className="font-bold">user123, user234</span>
+            <span className="font-bold">{alwaysOff.join(", ")}</span>
           </div>}
         </div>
       ) : (
