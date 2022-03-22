@@ -10,7 +10,9 @@ const INPUT_ELEM_CSS = "border border-slate rounded-lg p-2";
 const EditFlagForm = ({ setIsEditing }) => {
   const dispatch = useDispatch();
   const { flagId } = useParams();
-  const flagNames = useSelector((state) => state.flags.map(flag => flag.name));
+  const flagNames = useSelector((state) =>
+    state.flags.map((flag) => flag.name)
+  );
   const flagData = useSelector((state) =>
     state.flags.find((flag) => flag.id === +flagId)
   );
@@ -65,7 +67,9 @@ const EditFlagForm = ({ setIsEditing }) => {
           />
         </div>
         <div className={FIELD_DIV_CSS}>
-          <label htmlFor="new-description" className={LABEL_CSS}>Description:</label>
+          <label htmlFor="new-description" className={LABEL_CSS}>
+            Description:
+          </label>
           <textarea
             id="new-description"
             type="textarea"
@@ -77,7 +81,9 @@ const EditFlagForm = ({ setIsEditing }) => {
           />
         </div>
         <div className={FIELD_DIV_CSS}>
-          <label htmlFor="new-percent" className={LABEL_CSS}>Percent of Users Exposed:</label>
+          <label htmlFor="new-percent" className={LABEL_CSS}>
+            Percent of Users Exposed:
+          </label>
           <input
             id="new-percent"
             type="number"
@@ -92,10 +98,18 @@ const EditFlagForm = ({ setIsEditing }) => {
         </div>
       </form>
       <div>
-        <button className="btn bg-primary-turquoise hover:bg-primaryDark-turquoise m-4" onClick={handleSaveEdits}>
-            Save Changes
+        <button
+          className="btn bg-primary-turquoise hover:bg-primaryDark-turquoise m-4"
+          onClick={handleSaveEdits}
+        >
+          Save Changes
         </button>
-        <button className="btn bg-slate hover:bg-slateDark m-4" onClick={() => setIsEditing(false)}>Cancel</button>
+        <button
+          className="btn bg-slate hover:bg-slateDark m-4"
+          onClick={() => setIsEditing(false)}
+        >
+          Cancel
+        </button>
       </div>
     </div>
   );

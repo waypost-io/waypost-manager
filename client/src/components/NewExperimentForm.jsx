@@ -14,7 +14,7 @@ const NewExperimentForm = ({ metrics }) => {
 
   const [duration, setDuration] = useState(14);
   const [percentTest, setPercentTest] = useState(50);
-  const [name, setName] = useState("")
+  const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [metricIds, setMetricIds] = useState([]);
 
@@ -23,44 +23,51 @@ const NewExperimentForm = ({ metrics }) => {
   const validPercent = (percent) => {
     if (percent === "e") return false;
     percent = Number(percent);
-    const result = percent >= 0 && percent <= 100 && !isNaN(percentTest) && Math.floor(percent) === percent;
-    return result
-  }
+    const result =
+      percent >= 0 &&
+      percent <= 100 &&
+      !isNaN(percentTest) &&
+      Math.floor(percent) === percent;
+    return result;
+  };
 
   const validMetrics = (metricIds) => {
     const existingMetricIds = metrics.map((metric) => metric.id);
-    return metricIds.every(id => existingMetricIds.includes(id));
-  }
+    return metricIds.every((id) => existingMetricIds.includes(id));
+  };
 
   const validateInput = () => {
     let errMessage = "";
 
     if (duration < 1) {
-      errMessage += "- The duration has to be at least one day\n"
+      errMessage += "- The duration has to be at least one day\n";
     }
 
     if (!validPercent(percentTest)) {
-      errMessage += "- The percentage you're testing has to be an integer between 0-100\n"
+      errMessage +=
+        "- The percentage you're testing has to be an integer between 0-100\n";
     }
 
     if (description.length > 255) {
-      errMessage += "- The length of the description is too long\n"
+      errMessage += "- The length of the description is too long\n";
     }
 
     if (name.length > 50) {
-      errMessage += "- The length of the name is too long (max 50 char)\n"
+      errMessage += "- The length of the name is too long (max 50 char)\n";
     }
 
     if (!validMetrics(metricIds)) {
-      errMessage += "- Please check metrics page to make sure those you selected still exist\n"
+      errMessage +=
+        "- Please check metrics page to make sure those you selected still exist\n";
     }
 
     if (metricIds.length === 0) {
-      errMessage += "- Please select at least one metric. If your desired ones aren't present please visit the 'Metrics' tab and add them before starting the experiment\n"
+      errMessage +=
+        "- Please select at least one metric. If your desired ones aren't present please visit the 'Metrics' tab and add them before starting the experiment\n";
     }
 
-    return errMessage
-  }
+    return errMessage;
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -71,7 +78,13 @@ const NewExperimentForm = ({ metrics }) => {
       return;
     }
 
-    const exptObj = { name, flag_id: flagId, description, duration, metric_ids: metricIds };
+    const exptObj = {
+      name,
+      flag_id: flagId,
+      description,
+      duration,
+      metric_ids: metricIds,
+    };
     const flagObj = { percentage_split: percentTest, is_experiment: true };
 
     dispatch(editFlag(flagId, flagObj));
@@ -81,16 +94,16 @@ const NewExperimentForm = ({ metrics }) => {
 
   const toggleMetric = (id) => {
     if (metricIds.includes(id)) {
-      setMetricIds(metricIds.filter(existingId => existingId !== id))
+      setMetricIds(metricIds.filter((existingId) => existingId !== id));
     } else {
       setMetricIds([...metricIds, id]);
     }
-  }
+  };
 
   const handleCancel = (e) => {
     e.preventDefault();
     navigate(backToFlag);
-  }
+  };
 
   return (
     <form className="flex flex-col items-center mt-5">
@@ -107,7 +120,9 @@ const NewExperimentForm = ({ metrics }) => {
           />
         </div>
         <div className="mt-2.5 flex items-center">
-          <label htmlFor="description" className={LABEL_CSS}>Description (optional, max 255 characters): </label>
+          <label htmlFor="description" className={LABEL_CSS}>
+            Description (optional, max 255 characters):{" "}
+          </label>
           <textarea
             id="description"
             type="textarea"
@@ -119,7 +134,9 @@ const NewExperimentForm = ({ metrics }) => {
           />
         </div>
         <div className="mt-2.5 flex items-center">
-          <label htmlFor="percent-test" className={LABEL_CSS}>Percent of Users Tested: </label>
+          <label htmlFor="percent-test" className={LABEL_CSS}>
+            Percent of Users Tested:{" "}
+          </label>
           <input
             id="percent-test"
             type="number"
@@ -131,10 +148,16 @@ const NewExperimentForm = ({ metrics }) => {
             onChange={(e) => setPercentTest(e.target.value)}
           />{" "}
           <span className="ml-2">%</span>
-          <p className="inline-block ml-5">{validPercent(percentTest) ? `(${100-percentTest}% of users in control group)` : "Please enter an integer from 0-100"}</p>
+          <p className="inline-block ml-5">
+            {validPercent(percentTest)
+              ? `(${100 - percentTest}% of users in control group)`
+              : "Please enter an integer from 0-100"}
+          </p>
         </div>
         <div className="mt-2.5 flex items-center">
-          <label htmlFor="duration" className={LABEL_CSS}>Duration: </label>
+          <label htmlFor="duration" className={LABEL_CSS}>
+            Duration:{" "}
+          </label>
           <input
             id="duration"
             type="number"
@@ -148,18 +171,28 @@ const NewExperimentForm = ({ metrics }) => {
         </div>
       </div>
       <div className="my-5">
-          <h3 className="font-bold text-base text-center">Select the metrics you want to measure:</h3>
-          <div className="flex mt-2.5 mx-3 justify-start">
+        <h3 className="font-bold text-base text-center">
+          Select the metrics you want to measure:
+        </h3>
+        <div className="flex mt-2.5 mx-3 justify-start">
           {metrics.map(({ name, id }) => (
-            <MetricCheckbox key={id} name={name} id={id} handleClick={() => toggleMetric(id)} selected={metricIds.includes(id)}/>
+            <MetricCheckbox
+              key={id}
+              name={name}
+              id={id}
+              handleClick={() => toggleMetric(id)}
+              selected={metricIds.includes(id)}
+            />
           ))}
-          </div>
         </div>
+      </div>
       <div>
         <button className="btn bg-primary-turquoise m-4" onClick={handleSubmit}>
           Start New Experiment
         </button>
-        <button className="btn bg-slate m-4" onClick={handleCancel}>Cancel</button>
+        <button className="btn bg-slate m-4" onClick={handleCancel}>
+          Cancel
+        </button>
       </div>
     </form>
   );
