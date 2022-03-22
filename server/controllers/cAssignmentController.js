@@ -96,7 +96,7 @@ const deleteAssignmentsOnFlag = async (req, res, next) => {
 
   try {
     await Promise.all(deleteRows);
-    res.status(200).send({ flag_id: flagId, userIds });
+    res.status(200).send({ flag_id: flagId, user_ids: usersToDeleteOnFlag });
   } catch (e) {
     res.status(500).send(`Error deleting users ${usersToDeleteOnFlag} on flagId: ${flagId}`);
   }
