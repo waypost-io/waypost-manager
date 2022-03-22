@@ -52,12 +52,45 @@ const setAssignmentsOnEachFlag = async (req, res, next) => {
   }
 }
 
+// receives { user123: true, user234: false, etc.}
 const createAssignments = async (req, res, next) => {
   const flagId = req.params.id;
-}
+  const newAssignments = req.body;
+  const insertRows = [];
 
+  Object.keys(newAssignments).forEach((key) => {
+    const obj = { user_id: key, status: newAssignments[key], flag_id: flagId };
+    insertRows.push(new Promise((resolve, reject) => {
+      resolve(cAssignmentTable.insertRow(obj));
+    }));
+  });
+
+  try {
+    const results = await Promise.all(insertRows)
+    res.status(200).send(transformAssignmentData(results));
+  } catch (e) {
+    res.status(500).send("Error inserting new assignments.")
+  }
+}
+// receives an array of userIds: ["user1", "12345", "user2020"]
 const deleteAssignments = async (req, res, next) => {
-  const id = req.params.id;
+  const flagId = req.params.id;
+  const usersToDeleteOnFlag = req.body;
+  const deleteRows = [];
+
+  usersToDeleteOnFlag.forEach((userId) => {
+    const obj = { user_id: userId, flag_id: flagId };
+    deleteRows.push(new Promise((resolve, reject) => {
+      resolve(cAssignmentTable.deleteRow(obj));
+    }));
+  });
+
+  try {
+    await Promise.all(deleteRows);
+    res.status(200).send("Deletion of assignments was successful");
+  } catch (e) {
+    res.status(500).send(`Error deleting users ${usersToDeleteOnFlag} on flagId: ${flagId}`);
+  }
 }
 
 exports.fetchAssignmentsOnFlag = fetchAssignmentsOnFlag;
