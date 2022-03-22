@@ -111,7 +111,7 @@ const FlagDetailsPage = () => {
         </div>
       </div>
       {!isEditing ? (
-        <div className="p-8 m-5 shadow-lg bg-primary-offwhite">
+        <div className="p-3 m-2">
           {flagData.name && (
             <div>
               <div className="inline-block w-1/2 text-right pr-10">Name:</div>
@@ -136,7 +136,6 @@ const FlagDetailsPage = () => {
       ) : (
         <EditFlagForm setIsEditing={setIsEditing} />
       )}
-      {/* <div className="border-b border-b-primary-oxfordblue"></div> */}
       {exptData &&
         exptData.map((expt) => {
           return <ExperimentInfo key={expt.id} allMetrics={metricData} data={expt} />;

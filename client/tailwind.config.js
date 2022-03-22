@@ -20,6 +20,7 @@ module.exports = {
         'skyblue': '#B0FAFC'
       },
       'slate': '#94a3b8',
+      'slateLight': '#e2e8f0',
       'slateDark': '#64748b'
     },
     fontFamily: {
