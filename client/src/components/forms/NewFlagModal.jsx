@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { createFlag } from "../actions/flagActions";
+import { createFlag } from "../../actions/flagActions";
 
 const NewFlagModal = ({ modalOpen, setModalOpen }) => {
   const dispatch = useDispatch();

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { editExperiment } from "../actions/exptActions";
+import { editExperiment } from "../../actions/exptActions";
 import { useDispatch } from "react-redux";
-import MetricCheckbox from "./MetricCheckbox";
+import MetricCheckbox from "../MetricCheckbox";
 
 const FIELD_DIV_CSS = "mt-2.5 flex justify-start items-center";
 const LABEL_CSS = "inline-block w-1/3 text-center mr-5";

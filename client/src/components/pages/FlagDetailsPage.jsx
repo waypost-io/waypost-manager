@@ -4,7 +4,7 @@ import { fetchFlags, toggleFlag, editFlag } from "../../actions/flagActions";
 import { fetchExperiments, editExperiment } from "../../actions/exptActions";
 import { fetchMetrics } from "../../actions/metricActions";
 import { useParams, useNavigate } from "react-router-dom";
-import EditFlagForm from "../EditFlagForm";
+import EditFlagForm from "../forms/EditFlagForm";
 import ExperimentInfo from "../ExperimentInfo";
 
 const FlagDetailsPage = () => {

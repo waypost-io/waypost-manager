@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import FlagsList from '../FlagsList';
-import NewFlagModal from '../NewFlagModal';
+import NewFlagModal from '../forms/NewFlagModal';
 
 const FlagDashboard = () => {
   const [ flagModalOpen, setFlagModalOpen ] = useState(false);

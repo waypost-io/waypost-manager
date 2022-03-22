@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchFlags } from "../../actions/flagActions";
 import { fetchMetrics } from "../../actions/metricActions";
-import NewExperimentForm from '../NewExperimentForm';
+import NewExperimentForm from '../forms/NewExperimentForm';
 
 const NewExperimentPage = () => {
   const dispatch = useDispatch();
