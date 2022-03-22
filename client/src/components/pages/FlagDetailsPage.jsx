@@ -7,6 +7,8 @@ import { fetchMetrics } from "../../actions/metricActions";
 import { useParams, useNavigate } from "react-router-dom";
 import EditFlagForm from "../forms/EditFlagForm";
 import ExperimentInfo from "../experiments/ExperimentInfo";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCaretDown, faCaretUp } from '@fortawesome/free-solid-svg-icons';
 
 const FlagDetailsPage = () => {
   const dispatch = useDispatch();
@@ -153,11 +155,32 @@ const FlagDetailsPage = () => {
             <div className="inline-block w-1/2 text-right pr-10">Rollout percentage:</div>
             <span className="font-bold">{flagData.percentage_split}%</span>
           </div>
-          {cAssignmentData && <div>
-            <div className="inline-block w-1/2 text-right pr-10">Always on for user IDs:</div>
-            <span className="font-bold">{alwaysOn.join(", ")}</span>
-            <div className="inline-block w-1/2 text-right pr-10">Always off for user IDs:</div>
-            <span className="font-bold">{alwaysOff.join(", ")}</span>
+          {cAssignmentData &&
+          <div>
+            {!showCAssignments ? (
+              <button
+                type="button"
+                className="inline-block w-1/2 text-right pr-10 text-primary-oxfordblue ml-6 hover:text-primary-violet"
+                onClick={() => setShowCAssignments(true)}
+              >
+                Show Custom Assignments <FontAwesomeIcon icon={faCaretDown} />
+              </button>
+            ) : (
+              <>
+                <button
+                  type="button"
+                  className="inline-block w-1/2 text-right pr-10 text-primary-oxfordblue ml-6 hover:text-primary-violet"
+                  onClick={() => setShowCAssignments(false)}
+                >
+                  Hide Custom Assignments <FontAwesomeIcon icon={faCaretUp} />
+                </button>
+                <div className="inline-block w-1/2 text-right pr-10">Always on for user IDs:</div>
+                <span className="font-bold">{alwaysOn.join(", ")}</span>
+                <div className="inline-block w-1/2 text-right pr-10">Always off for user IDs:</div>
+                <span className="font-bold">{alwaysOff.join(", ")}</span>
+              </>
+            )}
+
           </div>}
         </div>
       ) : (
