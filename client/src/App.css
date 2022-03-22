@@ -151,13 +151,8 @@ input:checked + .slider:before {
 }
 
 .db-modal {
-  background-color: white;
-  margin: 50px auto;
-  padding: 20px;
   width: min(60%, 700px);
-  height: 500px;
-  border-radius: 15px;
-  position: relative;
+  height: 660px;
 }
 
 .x-icon:before {
