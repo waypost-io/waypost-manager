@@ -83,16 +83,16 @@ const EditExperiment = ({ id, name, description, duration, date_started, date_en
         </div>
       </div>
       <div className={FIELD_DIV_CSS}>
-        <label for="expt-name" className={LABEL_CSS}>Name:</label>
+        <label htmlFor="expt-name" className={LABEL_CSS}>Name:</label>
         <input id="expt-name" className={INPUT_ELEM_CSS} value={newName} onChange={(e) => setNewName(e.target.value)}/>
       </div>
       <div className={FIELD_DIV_CSS}>
-        <label for="duration" className={LABEL_CSS}>Duration:</label>
+        <label fhtmlFor="duration" className={LABEL_CSS}>Duration:</label>
         <input id="duration" className={INPUT_ELEM_CSS} type="number" value={newDuration} onChange={(e) => setNewDuration(e.target.value)}/>
         <span className="ml-2">days</span>
       </div>
       <div className={FIELD_DIV_CSS}>
-        <label for="description" className={LABEL_CSS}>Description:</label>
+        <label htmlFor="description" className={LABEL_CSS}>Description:</label>
         <input id="description" className={INPUT_ELEM_CSS} value={newDescription} onChange={(e) => setNewDescription(e.target.value)}/>
       </div>
       <div className="my-5">
