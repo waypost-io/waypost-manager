@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchFlags, toggleFlag, editFlag } from "../../actions/flagActions";
 import { fetchExperiments, editExperiment } from "../../actions/exptActions";
+import { fetchAssignmentsOnFlag } from "../../actions/cAssignmentActions";
 import { fetchMetrics } from "../../actions/metricActions";
 import { useParams, useNavigate } from "react-router-dom";
 import EditFlagForm from "../forms/EditFlagForm";
@@ -26,6 +27,13 @@ const FlagDetailsPage = () => {
   const [exptsFetched, setExptsFetched] = useState(false);
   const [metricsFetched, setMetricsFetched] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+
+  useEffect(() => {
+    if (!cAssignmentsFetched) {
+      dispatch(fetchAssignmentsOnFlag(flagId));
+      setCAssignmentsFetched(true);
+    }
+  }, [dispatch, cAssignmentsFetched])
 
   useEffect(() => {
     if (!flagFetched) {

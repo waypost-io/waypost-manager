@@ -5,7 +5,7 @@ export default function customAssignments(state = {}, action) {
     }
     case "FETCHED_ASSIGNMENTS_ON_FLAG_SUCCESS": {
       const newState = JSON.parse(JSON.stringify(state));
-      newState[action.flagId] = action.assignments
+      newState[action.flagId] = action.assignments[action.flagId];
       return newState;
     }
     case "DELETED_ASSIGNMENTS_ON_FLAG_SUCCESS": {

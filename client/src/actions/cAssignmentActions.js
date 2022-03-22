@@ -3,7 +3,7 @@ import apiClient from '../lib/ApiClient';
 export function addAssignmentsToFlag(flagId, newAssignments) {
   return function(dispatch) {
     apiClient.createAssignmentsOnFlag(flagId, newAssignments, (data) => {
-      dipatch(addAssignmentsSuccess(data));
+      dispatch(addAssignmentsSuccess(data));
     })
   }
 }
@@ -15,13 +15,13 @@ export function addAssignmentsSuccess(newAssignments) {
 export function fetchAssignmentsOnFlag(flagId) {
   return function(dispatch) {
     apiClient.fetchAssignmentsOnFlag(flagId, (data) => {
-      dispatch(fetchAssignmentsOnFlagSuccess(data))
+      dispatch(fetchAssignmentsOnFlagSuccess(flagId, data))
     })
   }
 }
 
-export function fetchAssignmentsOnFlagSuccess(assignments) {
-  return { type: "FETCHED_ASSIGNMENTS_ON_FLAG_SUCCESS", assignments }
+export function fetchAssignmentsOnFlagSuccess(flagId, assignments) {
+  return { type: "FETCHED_ASSIGNMENTS_ON_FLAG_SUCCESS", flagId, assignments }
 }
 
 export function fetchAllAssignments() {
@@ -38,7 +38,7 @@ export function fetchAllAssignmentsSuccess(allAssignments) {
 
 export function deleteAssignmentsOnFlag(flagId, userIds) {
   return function(dispatch) {
-    apiClient.deleteAssignmentsOnFlag(id, userIds, (data) => {
+    apiClient.deleteAssignmentsOnFlag(flagId, userIds, (data) => {
       dispatch(deleteAssignmentsOnFlagSuccess(data.flag_id, data.user_ids))
     })
   }
