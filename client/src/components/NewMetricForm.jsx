@@ -112,8 +112,8 @@ const NewMetricForm = () => {
           </div>
         </div>
       <div>
-        <button onClick={handleSave} className="btn bg-primary-turquoise">Save Changes</button>
-        <button onClick={handleCancel} className="btn bg-slate">Cancel</button>
+        <button onClick={handleSave} className="btn bg-primary-turquoise m-4">Save Changes</button>
+        <button onClick={handleCancel} className="btn bg-slate m-4">Cancel</button>
       </div>
     </form>
   </div>
