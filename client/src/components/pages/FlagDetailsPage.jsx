@@ -181,9 +181,13 @@ const FlagDetailsPage = () => {
                   Hide Custom Assignments <FontAwesomeIcon icon={faCaretUp} />
                 </button>
                 <div className="inline-block w-1/2 text-right pr-10">Always on for user IDs:</div>
-                <span className="font-bold">{customAssignments.on.join(", ")}</span>
+                <span className="font-bold">
+                  {customAssignments.on.length > 0 ? customAssignments.on.join(", ") : " "}
+                </span>
                 <div className="inline-block w-1/2 text-right pr-10">Always off for user IDs:</div>
-                <span className="font-bold">{customAssignments.off.join(", ")}</span>
+                <span className="font-bold">
+                  {customAssignments.off.length > 0 ? customAssignments.on.join(", ") : " "}
+                </span>
               </>
             )}
 
