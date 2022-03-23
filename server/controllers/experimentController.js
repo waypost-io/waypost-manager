@@ -209,11 +209,6 @@ const analyzeExperiment = async (req, res, next) => {
     const result = await experimentsTable.query(GET_METRIC_DATA, [ id ]);
     returnObj.stats = result.rows;
     res.status(200).send(returnObj);
-    // if (req.updatedExpt) {
-    //   res.status(200).send({ stats: result.rows, updatedExpt: req.updatedExpt });
-    // } else {
-    //   res.status(200).send(result.rows)
-    // }
   } catch (err) {
     console.log(err);
     res.status(500).send(err.message);
