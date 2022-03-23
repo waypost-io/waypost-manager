@@ -1,6 +1,6 @@
 # waypost
 
-Full-stack application for feature flag management
+Full-stack application for feature flag management and A/B testing
 
 # Database setup
 
@@ -29,10 +29,10 @@ Returns all feature flags stored in the Waypost postgres db:
 [
    {
         "id": 1,
-        "app_id": null,
-        "name": "Test Flag 1",
-        "description": "This is a test description",
+        "name": "Feature Flag 1",
+        "description": "A detailed description",
         "status": true,
+        "percentage_split": 50,
         "date_created": "2021-03-02T07:00:00.000Z",
         "date_edited": "2021-03-02T07:00:00.000Z",
         "last_toggle": "2021-03-02T07:00:00.000Z"
@@ -49,8 +49,8 @@ Returns a feature flag stored in the Waypost db:
 {
   id: 1,
   app_id: null,
-  name: 'Test flag 1',
-  description: 'This is a test description',
+  name: 'Feature Flag 1',
+  description: 'A detailed description',
   status: false,
   percentage_split: 0,
   is_experiment: false,
@@ -69,9 +69,9 @@ Body of the request:
 
 ```
 {
-   name: "flag name",
-   description?: "desritpion of flag"
-   status?: boolean
+   name: "More ads",
+   description: "This feature adds more ads"
+   status: boolean
 }
 ```
 
@@ -79,14 +79,14 @@ response example:
 
 ```
 {
-   "id":6,
-   "app_id":null,
-   "name":"caleb_test_flag",
-   "description":null,
-   "status":true,
-   "date_created":"2022-03-05T07:00:00.000Z",
-   "date_edited":"2022-03-05T07:00:00.000Z",
-   "last_toggle":"2022-03-05T07:00:00.000Z"
+   "id": 6,
+   "app_id": null,
+   "name": "caleb_test_flag",
+   "description": null,
+   "status": true,
+   "date_created": "2022-03-05T07:00:00.000Z",
+   "date_edited": "2022-03-05T07:00:00.000Z",
+   "last_toggle": "2022-03-05T07:00:00.000Z"
 }
 ```
 
@@ -96,7 +96,7 @@ body of the request:
 
 ```
 {
-   "attribute_to_edit": new_value
+   "name": "My new flag name"
 }
 ```
 
@@ -106,8 +106,8 @@ response example:
 {
    "id":6,
    "app_id":null,
-   "name":"caleb_test_flag",
-   "description":null,
+   "name": "My new flag name",
+   "description": null,
    "status":true,
    "date_created":"2022-03-05T07:00:00.000Z",
    "date_edited":"2022-03-05T07:00:00.000Z",

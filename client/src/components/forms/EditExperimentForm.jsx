@@ -24,7 +24,6 @@ const EditExperimentForm = ({
   const [newDescription, setNewDescription] = useState(description || "");
   const [newDuration, setNewDuration] = useState(duration);
   const [newMetricIds, setNewMetricIds] = useState(origMetricIds);
-  // const inputCSS = "border border-primary-oxfordblue rounded-lg px-2";
   const startDate = new Date(date_started).toLocaleDateString("en-US");
 
   const getChangedData = () => {

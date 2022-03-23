@@ -49,7 +49,7 @@ const FlagLogPage = () => {
           ))}
         </select>
       </div>
-      <table className="w-full shadow-md mt-5">
+      <table data-testid="flagLogTable" className="w-full shadow-md mt-5">
         <thead className="bg-primary-black text-primary-offwhite">
           <tr>
             <th>Flag Name</th>

@@ -2,10 +2,10 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const navLinks =[
-  { id: 1, title: 'Flags Dashboard', path: "/" },
-  { id: 2, title: 'Metrics', path: '/metrics' },
-  { id: 3, title: 'Flag Events Log', path: '/log' },
-  { id: 4, title: 'SDK Key', path: "/sdkKey"}
+  { id: 1, title: 'Flags Dashboard', path: "/", testid: 'flagsLink' },
+  { id: 2, title: 'Metrics', path: '/metrics', testid: 'metricsLink' },
+  { id: 3, title: 'Flag Events Log', path: '/log', testid: 'logLink' },
+  { id: 4, title: 'SDK Key', path: "/sdkKey", testid: 'sdkKeyLink' }
 ]
 
 const SideNav = () => {
@@ -16,7 +16,7 @@ const SideNav = () => {
       <ul className="font-bold p-0">
         {navLinks.map(item => {
           return (
-            <li key={`li-${item.id}`} onClick={() => navigate(item.path)} className="navlink p-5 hover:cursor-pointer relative z-10">{item.title}</li>
+            <li key={`li-${item.id}`} onClick={() => navigate(item.path)} data-testid={item.testid} className="navlink p-5 hover:cursor-pointer relative z-10">{item.title}</li>
             )
         })}
       </ul>

@@ -114,6 +114,7 @@ const FlagDetailsPage = () => {
             <button
               className="btn bg-slate hover:bg-slateDark m-5"
               onClick={handleEditFlag}
+              data-testid="editFlagBtn"
             >
               Edit Flag
             </button>
