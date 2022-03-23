@@ -191,6 +191,7 @@ const FlagDetailsPage = () => {
       ) : (
         <EditFlagForm
           setIsEditing={setIsEditing}
+          customAssignments={customAssignments}
         />
       )}
       {exptData &&
