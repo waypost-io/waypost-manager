@@ -20,7 +20,6 @@ const FlagDetailsPage = () => {
   const exptData = useSelector((state) => state.experiments);
   const metricData = useSelector((state) => state.metrics);
   const cAssignmentData = useSelector((state) => state.customAssignments[flagId]);
-  console.log("custom assignments on flag", cAssignmentData);
   const [customAssignments, setCustomAssignments] = useState({ on: [], off: []});
   const [showCAssignments, setShowCAssignments] = useState(false);
   const [cAssignmentsFetched, setCAssignmentsFetched] = useState(false);
