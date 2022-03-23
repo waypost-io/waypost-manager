@@ -79,11 +79,12 @@ const FlagDetailsPage = () => {
     navigate(path);
   };
 
-  const handleStopExperiment = (e) => {
+  const handleStopExperiment = async (e) => {
     e.preventDefault();
     const runningExptId = exptData.find(expt => expt.date_ended === null).id;
     dispatch(editFlag(flagId, { is_experiment: false}));
-    dispatch(editExperiment(runningExptId, { date_ended: true}));
+    const err = await dispatch(editExperiment(runningExptId, { date_ended: true}));
+    if (err) alert(err);
   };
 
   const handleToggle = (id) => {
@@ -184,9 +185,13 @@ const FlagDetailsPage = () => {
                   </button>
                 </div>
                 <div className="inline-block w-1/2 text-right pr-10">Always on for user IDs:</div>
-                <span className="font-bold">{customAssignments.on.join(", ")}</span>
+                <span className="font-bold">
+                  {customAssignments.on.length > 0 ? customAssignments.on.join(", ") : " "}
+                </span>
                 <div className="inline-block w-1/2 text-right pr-10">Always off for user IDs:</div>
-                <span className="font-bold">{customAssignments.off.join(", ")}</span>
+                <span className="font-bold">
+                  {customAssignments.off.length > 0 ? customAssignments.on.join(", ") : " "}
+                </span>
               </>
             )}
           </div>

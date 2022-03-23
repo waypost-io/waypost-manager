@@ -23,7 +23,11 @@ export default function customAssignments(state = {}, action) {
     case "CREATED_ASSIGNMENTS_SUCCESS": {
       const newState = JSON.parse(JSON.stringify(state));
       Object.keys(action.newAssignments).forEach((flagId) => {
-        Object.assign(newState[flagId], action.newAssignments[flagId]);
+        if (newState[flagId]) {
+          Object.assign(newState[flagId], action.newAssignments[flagId]);
+        } else {
+          newState[flagId] = action.newAssignments[flagId];
+        }
       })
       return newState;
     }

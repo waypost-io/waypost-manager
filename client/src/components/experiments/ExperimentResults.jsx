@@ -8,8 +8,9 @@ const ExperimentResults = ({ id }) => {
   const hasResult = metrics.find(metric => metric.p_value !== null);
   const dispatch = useDispatch();
 
-  const handleRefreshResults = () => {
-    dispatch(updateStats(id));
+  const handleRefreshResults = async () => {
+    const err = await dispatch(updateStats(id));
+    if (err) alert(err);
   };
 
   return (

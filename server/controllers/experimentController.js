@@ -197,14 +197,18 @@ const analyzeAll = async (req, res, next) => {
 
 const analyzeExperiment = async (req, res, next) => {
   const id = req.params.id;
+  const returnObj = req.updatedExpt ? { updatedExpt: req.updatedExpt } : {};
   try {
     await runAnalytics(id);
+  } catch (e) {
+    const errMessage = "Not connected to event database. Please connect and try again for up-to-date results";
+    returnObj.error_message = errMessage;
+  }
+
+  try {
     const result = await experimentsTable.query(GET_METRIC_DATA, [ id ]);
-    if (req.updatedExpt) {
-      res.status(200).send({ stats: result.rows, updatedExpt: req.updatedExpt });
-    } else {
-      res.status(200).send(result.rows)
-    }
+    returnObj.stats = result.rows;
+    res.status(200).send(returnObj);
   } catch (err) {
     console.log(err);
     res.status(500).send(err.message);

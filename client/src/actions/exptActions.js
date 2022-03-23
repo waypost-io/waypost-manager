@@ -24,9 +24,10 @@ export function createExperimentSuccess(newExpt) {
 
 export function editExperiment(exptId, updatedFields) {
   return function(dispatch) {
-    apiClient.editExperiment(exptId, updatedFields, data => {
-      dispatch(updateStatsSuccess(data.stats))
+    return apiClient.editExperiment(exptId, updatedFields, data => {
+      dispatch(updateStatsSuccess(data.stats));
       dispatch(editExperimentSuccess(data.updatedExpt));
+      return data.error_message;
     });
   }
 }
@@ -37,8 +38,9 @@ export function editExperimentSuccess(editedExpt) {
 
 export function updateStats(id) {
   return function(dispatch) {
-    apiClient.updateStats(id, data => {
-      dispatch(updateStatsSuccess(data));
+    return apiClient.updateStats(id, data => {
+      dispatch(updateStatsSuccess(data.stats));
+      return data.error_message;
     });
   }
 }
