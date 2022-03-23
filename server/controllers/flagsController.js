@@ -1,4 +1,3 @@
-const pg = require("pg");
 const { validationResult } = require("express-validator");
 const PGTable = require("../db/PGTable");
 const { FLAG_TABLE_NAME } = require("../constants/db");
@@ -53,6 +52,7 @@ const getAllFlags = async (req, res, next) => {
 
 const setFlagsOnReq = async (req, res, next) => {
   const data = await getFlagsForWebhook();
+  console.log(data);
   req.flags = data;
   next();
 };
@@ -79,10 +79,10 @@ const createFlag = async (req, res, next) => {
 
     try {
       const savedFlag = await flagTable.insertRow(newFlag);
-      
+
       req.eventType = "FLAG_CREATED";
       req.flagId = savedFlag.
-      
+
       res.status(200).send(savedFlag);
       next();
     } catch (e) {

@@ -5,6 +5,7 @@ import metrics from "./metrics";
 import dbName from "./dbName";
 import sdkKey from "./sdkKey";
 import flagLog from "./flagLog";
+import customAssignments from "./customAssignments"
 
 const rootReducer = combineReducers({
   flags,
@@ -13,6 +14,7 @@ const rootReducer = combineReducers({
   dbName,
   sdkKey,
   flagLog,
+  customAssignments,
 });
 
 export default rootReducer;
