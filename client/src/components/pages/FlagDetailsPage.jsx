@@ -166,30 +166,31 @@ const FlagDetailsPage = () => {
               <div className="inline-block w-1/2 text-right pr-10">
                 <button
                   type="button"
-                  className="text-sm border bg-primary-offwhite text-primary-oxfordblue p-1.5 mt-2 ml-6 rounded-lg hover:bg-primary-violet hover:text-primary-offwhite"
+                  className="text-sm border bg-primary-offwhite text-primary-oxfordblue p-1.5 my-2 ml-6 rounded-lg hover:bg-slate hover:text-primary-offwhite"
                   onClick={() => setShowCAssignments(true)}
                 >
                   Show Custom Assignments<FontAwesomeIcon icon={faCaretDown} className="ml-1" />
                 </button>
               </div>
-
             ) : (
               <>
-                <button
-                  type="button"
-                  className="inline-block w-1/2 text-right pr-10 text-primary-oxfordblue ml-6 hover:text-primary-violet"
-                  onClick={() => setShowCAssignments(false)}
-                >
-                  Hide Custom Assignments <FontAwesomeIcon icon={faCaretUp} />
-                </button>
+                <div className="block w-1/2 text-right pr-10">
+                  <button
+                    type="button"
+                    className="inline-block w-1/2 text-sm border bg-primary-offwhite text-primary-oxfordblue p-1.5 my-2 rounded-lg ml-6 hover:bg-slate hover:text-primary-offwhite"
+                    onClick={() => setShowCAssignments(false)}
+                  >
+                    Hide Custom Assignments <FontAwesomeIcon icon={faCaretUp} />
+                  </button>
+                </div>
                 <div className="inline-block w-1/2 text-right pr-10">Always on for user IDs:</div>
                 <span className="font-bold">{customAssignments.on.join(", ")}</span>
                 <div className="inline-block w-1/2 text-right pr-10">Always off for user IDs:</div>
                 <span className="font-bold">{customAssignments.off.join(", ")}</span>
               </>
             )}
-
-          </div>}
+          </div>
+          }
         </div>
       ) : (
         <EditFlagForm
