@@ -214,7 +214,7 @@ const EditFlagForm = ({ setIsEditing, customAssignments }) => {
             value={userToAdd}
             onChange={(e) => setUserToAdd(e.target.value)}
           />
-          <select className="mx-2 border-2 border-black rounded-lg p-1 bg-slateLight" value={status} onChange={handleSelection}>
+          <select className="mx-2 border border-black rounded-lg p-2 bg-primary-offwhite" value={status} onChange={handleSelection}>
             <option value={"true"} >Always On</option>
             <option value={"false"} >Always Off</option>
           </select>
