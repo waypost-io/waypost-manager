@@ -69,7 +69,18 @@ export const handlers = [
         hash_offset: 83,
         name: "Experiment 1",
         description: "Description for expt 1",
-        metric_ids: [1],
+        metrics: [
+          {
+            metric_id: 1,
+            name: "Signups",
+            type: "binomial"
+          },
+          {
+            metric_id: 2,
+            name: "Time on site",
+            type: "duration"
+          }
+        ],
         mean_test: null,
         mean_control: null,
         standard_dev_test: null,
