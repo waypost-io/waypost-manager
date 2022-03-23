@@ -1,10 +1,10 @@
 export default function experiments(state = [], action) {
   switch (action.type) {
     case "FETCH_EXPERIMENTS_SUCCESS": {
-      return [...action.experiments];
+      return [ ...action.experiments ];
     }
     case "CREATE_EXPERIMENT_SUCCESS": {
-      return [action.newExpt, ...state];
+      return [ ...state, action.newExpt ];
     }
     case "EDIT_EXPERIMENT_SUCCESS": {
       let newState = [...state];
