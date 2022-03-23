@@ -52,7 +52,6 @@ const getAllFlags = async (req, res, next) => {
 
 const setFlagsOnReq = async (req, res, next) => {
   const data = await getFlagsForWebhook();
-  console.log(data);
   req.flags = data;
   next();
 };
