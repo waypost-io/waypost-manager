@@ -29,36 +29,97 @@ const EditFlagForm = ({ setIsEditing, customAssignments }) => {
   const [existingAssignments, setExistingAssignments] = useState(customAssignments);
   const [userToDelete, setUserToDelete] = useState("");
   const [userToAdd, setUserToAdd] = useState("");
-  const [status, setStatus] = useState("Always On");
+  const [status, setStatus] = useState(false);
+
 
   const handleSelection = (e) => {
+    e.preventDefault();
     setStatus(e.target.value)
   }
 
-  const handleSaveEdits = (e) => {
+  const userInAssignments = (userId, obj) => {
+    const allUsers = obj.on.concat(obj.off);
+    return allUsers.includes(userId);
+  }
+
+  const handleAdd = (e) => {
     e.preventDefault();
-    if (
-      newName.length === 0 ||
-      isNaN(Number(newPercent)) ||
-      newPercent < 0 ||
-      newPercent > 100
-    ) {
-      alert("Please check your inputs again.");
-      return;
+    // if user currently on screen, don't do anything
+    if (userInAssignments(userToAdd, existingAssignments)) {
+      alert("A user cannot have multiple assignments on the same flag");
+      setUserToAdd("");
+      return
     }
-    if (flagNames.includes(newName) && newName !== flagData.name) {
-      alert("Name is already taken by another feature flag.");
-      return;
+    // if user is in database with same status but was deleted
+    // don't add them and remove user from instruction to be deleted
+    const statusKey = status ? "on" : "off";
+    if (customAssignments[statusKey].includes(userToAdd)) {
+      setDeletedAssignments(deletedAssignments.filter(userId => (
+        userId !== userToAdd
+      )));
+    } else {
+      const obj = {};
+      obj[userToAdd] = status;
+      setNewAssignments({...newAssignments, ...obj});
     }
 
-    dispatch(
-      editFlag(flagId, {
-        name: newName,
-        description: newDescription,
-        percentage_split: newPercent,
+    const newEA = JSON.parse(JSON.stringify(existingAssignments));
+    status ? newEA.on.push(userToAdd) : newEA.off.push(userToAdd)
+    setExistingAssignments(newEA);
+    setUserToAdd("");
+  }
+
+  const handleDelete = (e) => {
+    e.preventDefault();
+    if (!userInAssignments(userToDelete, existingAssignments)) {
+      alert("You cannot delete a user who isn't assigned. Check your spelling and please try again");
+      return
+    }
+
+    if (Object.keys(newAssignments).includes(userToDelete)) {
+      const obj = {};
+      Object.keys(newAssignments).forEach((userId) => {
+        if (userId !== userToDelete) obj[userId] = newAssignments[userId];
       })
-    );
-    setIsEditing(false);
+      setNewAssignments(obj);
+    } else {
+      setDeletedAssignments([userToDelete, ...deletedAssignments]);
+    }
+
+    const newEA = JSON.parse(JSON.stringify(existingAssignments));
+    newEA.on = newEA.on.filter((id) => id !== userToDelete);
+    newEA.off = newEA.off.filter((id) => id !== userToDelete);
+    setExistingAssignments(newEA);
+    setUserToDelete("")
+  }
+
+  const handleSaveEdits = (e) => {
+    // e.preventDefault();
+    // if (
+    //   newName.length === 0 ||
+    //   isNaN(Number(newPercent)) ||
+    //   newPercent < 0 ||
+    //   newPercent > 100
+    // ) {
+    //   alert("Please check your inputs again.");
+    //   return;
+    // }
+    // if (flagNames.includes(newName) && newName !== flagData.name) {
+    //   alert("Name is already taken by another feature flag.");
+    //   return;
+    // }
+    //
+    // dispatch(
+    //   editFlag(flagId, {
+    //     name: newName,
+    //     description: newDescription,
+    //     percentage_split: newPercent,
+    //   })
+    // );
+    // setIsEditing(false);
+    console.log("originals", customAssignments);
+    console.log(newAssignments);
+    console.log(deletedAssignments);
   };
 
   return (
@@ -129,7 +190,7 @@ const EditFlagForm = ({ setIsEditing, customAssignments }) => {
             value={userToDelete}
             onChange={(e) => setUserToDelete(e.target.value)}
           />
-          <button className="btn bg-primary-violet hover:bg-primaryDark-violet mx-4" type="button">
+          <button className="btn bg-primary-violet hover:bg-primaryDark-violet mx-4" type="button" onClick={handleDelete}>
             Delete
           </button>
         </div>
@@ -148,7 +209,7 @@ const EditFlagForm = ({ setIsEditing, customAssignments }) => {
             <option value={true} >Always On</option>
             <option value={false} >Always Off</option>
           </select>
-          <button className="btn bg-primary-turquoise hover:bg-primaryDark-turquoise mx-2" type="button">
+          <button className="btn bg-primary-turquoise hover:bg-primaryDark-turquoise mx-2" type="button" onClick={handleAdd}>
             Add
           </button>
         </div>
