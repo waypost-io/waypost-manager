@@ -84,7 +84,7 @@ const FlagDetailsPage = () => {
     const runningExptId = exptData.find(expt => expt.date_ended === null).id;
     dispatch(editFlag(flagId, { is_experiment: false}));
     const err = await dispatch(editExperiment(runningExptId, { date_ended: true}));
-    if (err) alert(err);
+    if (err) alert(err + " Please connect and then try again for up-to-date results");
   };
 
   const handleToggle = (id) => {
