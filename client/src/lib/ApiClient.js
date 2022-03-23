@@ -197,7 +197,7 @@ const apiClient = {
   },
   deleteAssignmentsOnFlag: function(flagId, userIds, callback) {
     return axios
-      .delete(`/api/flags/${flagId}/custom-assignments`, userIds)
+      .delete(`/api/flags/${flagId}/custom-assignments`, {data: userIds})
       .then(unwrapData)
       .then(callback)
       .catch(logError)

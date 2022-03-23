@@ -117,8 +117,15 @@ const EditFlagForm = ({ setIsEditing, customAssignments }) => {
         percentage_split: newPercent,
       })
     );
-    await dispatch(deleteAssignmentsOnFlag(flagId, deletedAssignments));
-    dispatch(addAssignmentsToFlag(flagId, newAssignments));
+
+    if (deletedAssignments.length > 0) {
+      await dispatch(deleteAssignmentsOnFlag(flagId, deletedAssignments));
+    }
+
+    if (Object.keys(newAssignments).length > 0) {
+      dispatch(addAssignmentsToFlag(flagId, newAssignments));
+    }
+    
     setIsEditing(false);
   };
 
