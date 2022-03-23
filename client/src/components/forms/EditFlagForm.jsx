@@ -34,7 +34,7 @@ const EditFlagForm = ({ setIsEditing, customAssignments }) => {
 
   const handleSelection = (e) => {
     e.preventDefault();
-    setStatus(e.target.value)
+    setStatus(e.target.value === "true");
   }
 
   const userInAssignments = (userId, obj) => {
@@ -206,8 +206,8 @@ const EditFlagForm = ({ setIsEditing, customAssignments }) => {
             onChange={(e) => setUserToAdd(e.target.value)}
           />
           <select className="mx-2" value={status} onChange={handleSelection}>
-            <option value={true} >Always On</option>
-            <option value={false} >Always Off</option>
+            <option value={"true"} >Always On</option>
+            <option value={"false"} >Always Off</option>
           </select>
           <button className="btn bg-primary-turquoise hover:bg-primaryDark-turquoise mx-2" type="button" onClick={handleAdd}>
             Add
