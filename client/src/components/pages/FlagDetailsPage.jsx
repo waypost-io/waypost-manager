@@ -21,8 +21,7 @@ const FlagDetailsPage = () => {
   const metricData = useSelector((state) => state.metrics);
   const cAssignmentData = useSelector((state) => state.customAssignments[flagId]);
   console.log("custom assignments on flag", cAssignmentData);
-  const [alwaysOn, setAlwaysOn] = useState([]);
-  const [alwaysOff, setAlwaysOff] = useState([]);
+  const [customAssignments, setCustomAssignments] = useState({ on: [], off: []});
   const [showCAssignments, setShowCAssignments] = useState(false);
   const [cAssignmentsFetched, setCAssignmentsFetched] = useState(false);
   const [flagFetched, setFlagFetched] = useState(false);
@@ -39,8 +38,14 @@ const FlagDetailsPage = () => {
 
   useEffect(() => {
     if (cAssignmentData) {
-      setAlwaysOn(Object.keys(cAssignmentData).filter((userId) => cAssignmentData[userId]))
-      setAlwaysOff(Object.keys(cAssignmentData).filter((userId) => !cAssignmentData[userId]))
+      const assignments = {}
+      assignments.on = Object.keys(cAssignmentData).filter(userId => (
+        cAssignmentData[userId]
+      ));
+      assignments.off = Object.keys(cAssignmentData).filter(userId => (
+        !cAssignmentData[userId]
+      ));
+      setCustomAssignments(assignments);
     }
   }, [dispatch, cAssignmentData])
 
@@ -175,16 +180,18 @@ const FlagDetailsPage = () => {
                   Hide Custom Assignments <FontAwesomeIcon icon={faCaretUp} />
                 </button>
                 <div className="inline-block w-1/2 text-right pr-10">Always on for user IDs:</div>
-                <span className="font-bold">{alwaysOn.join(", ")}</span>
+                <span className="font-bold">{customAssignments.on.join(", ")}</span>
                 <div className="inline-block w-1/2 text-right pr-10">Always off for user IDs:</div>
-                <span className="font-bold">{alwaysOff.join(", ")}</span>
+                <span className="font-bold">{customAssignments.off.join(", ")}</span>
               </>
             )}
 
           </div>}
         </div>
       ) : (
-        <EditFlagForm setIsEditing={setIsEditing} />
+        <EditFlagForm
+          setIsEditing={setIsEditing}
+        />
       )}
       {exptData &&
         exptData.map((expt) => {
