@@ -34,7 +34,7 @@ const getExperiment = async (req, res, next) => {
 //   }
 // ]
 
-const separateMetricExperimentData = (metricExpt) => {
+const separateMetricExperimentData = (metricExpt) => { // helper
   const {
     metric_id,
     mean_test,
@@ -61,7 +61,53 @@ const separateMetricExperimentData = (metricExpt) => {
   return [expt, metricObj];
 }
 
-const transformMetricExptData = (exptMetrics) => {
+// Input: [
+//   {
+//     id: 7,
+//     flag_id: 1,
+//     date_started: 2022-03-23T07:00:00.000Z,
+//     date_ended: null,
+//     duration: 14,
+//     name: 'Time on site',
+//     description: null,
+//     metric_id: 2,
+//     type: 'duration',
+//     mean_test: null,
+//     mean_control: null,
+//     interval_start: null,
+//     interval_end: null,
+//     p_value: null
+//   },
+//   ...
+// ]
+
+// Output:
+// [
+//   {
+//     id: 7,
+//     flag_id: 1,
+//     date_started: 2022-03-23T07:00:00.000Z,
+//     date_ended: null,
+//     duration: 14,
+//     description: null,
+//     metrics: [ [Object] ]
+//   },
+//   ...
+// ]
+
+// Each metric object looks like:
+// {
+//   metric_id: 2,
+//   mean_test: null,
+//   mean_control: null,
+//   interval_start: null,
+//   interval_end: null,
+//   p_value: null,
+//   name: 'Time on site',
+//   type: 'duration'
+// }
+
+const transformExptMetricData = (exptMetrics) => { // helper
   let idMap = {};
   exptMetrics.forEach((exptMetric) => {
     const [expt, metricObj] = separateMetricExperimentData(exptMetric);
@@ -82,13 +128,30 @@ const transformMetricExptData = (exptMetrics) => {
   return experiments;
 }
 
-const createExposureObj = (exposuresArr, variant) => {
+// variant is either "test" or "control"
+// Input exposuresArr (below), and "test":
+// [
+//   { variant: 'test', num_users: 23, date: 2022-03-14T07:00:00.000Z },
+//   { variant: 'control', num_users: 20, date: 2022-03-14T07:00:00.000Z },
+//   { variant: 'test', num_users: 144, date: 2022-03-15T07:00:00.000Z },
+//   ...
+// ]
+// Output
+// {
+//   '2022-03-14T07:00:00.000Z': 23,
+//   '2022-03-15T07:00:00.000Z': 144,
+//   ...,
+// }
+
+const createExposureObj = (exposuresArr, variant) => { // helper
   const obj = {};
+
   exposuresArr = exposuresArr.filter((expo) => expo.variant === variant);
   exposuresArr.forEach((expo) => {
     const date = expo.date.toISOString();
     obj[date] = expo.num_users
   })
+
   return obj;
 }
 
@@ -107,8 +170,8 @@ const getExperimentsForFlag = async (req, res, next) => {
   const flagId = req.params.id;
   try {
     let { rows: exptMetrics } = await experimentsTable.query(GET_EXPT_METRICS_QUERY, [flagId]);
-    const experiments = transformMetricExptData(exptMetrics); // transforms to redux-friendly format
-    // attaches exposures to running experiment
+    const experiments = transformExptMetricData(exptMetrics); // transforms to redux-friendly format
+
     const runningExpt = experiments.find((expt) => expt.date_ended === null);
     if (runningExpt) await setExposuresOnExperiment(runningExpt);
     res.status(200).send(experiments);
@@ -117,6 +180,13 @@ const getExperimentsForFlag = async (req, res, next) => {
     res.status(500).send(err.message)
   }
 };
+
+const addMetricsToExptMetricsTable = async (metricIds, exptId) => { //
+  for (let i = 0; i < metricIds.length; i++) {
+    const metricId = metricIds[i];
+    await experimentMetricsTable.insertRow({ experiment_id: exptId, metric_id: metricId });
+  }
+}
 
 const createExperiment = async (req, res, next) => {
   try {
@@ -127,11 +197,8 @@ const createExperiment = async (req, res, next) => {
       description: req.body.description || '',
     };
     const newExpt = await experimentsTable.insertRow(exptObj);
-    // Add each metric_id to experiment_metrics with the experiment_id
-    for (let i = 0; i < req.body.metric_ids.length; i++) {
-      const metricId = req.body.metric_ids[i];
-      await experimentMetricsTable.insertRow({ experiment_id: newExpt.id, metric_id: metricId });
-    }
+
+    await addMetricsToExptMetricsTable(req.body.metric_ids, newExpt.id)
 
     const metrics = await experimentMetricsTable.getRowsWhere({ experiment_id: newExpt.id });
     newExpt.metrics = metrics;
@@ -142,28 +209,30 @@ const createExperiment = async (req, res, next) => {
   }
 };
 
+const updateMetricsOnExpt = async (oldMetricIds, newMetricIds, exptId) => { // helper
+  for (let i = 0; i < newMetricIds.length; i++) {
+    const newMId = newMetricIds[i];
+    if (!oldMetricIds.includes(newMId)) {
+      await experimentMetricsTable.insertRow({ experiment_id: exptId, metric_id: newMId });
+    }
+  }
+
+  for (let i = 0; i < oldMetricIds.length; i++) {
+    const oldMId = oldMetricIds[i];
+    if (!newMetricIds.includes(oldMId)) {
+      await experimentMetricsTable.deleteRow({ experiment_id: exptId, metric_id: oldMId});
+    }
+  }
+}
+
 const editExperiment = async (req, res, next) => {
   const id = req.params.id;
   try {
     let { metric_ids, old_metric_ids, ...updatedFields} = req.body;
+    if (metric_ids) await updateMetricsOnExpt(old_metric_ids, metric_ids, id);
+
     if (updatedFields.date_ended) {
       updatedFields.date_ended = getNowString();
-    }
-
-    if (metric_ids) {
-      for (let i = 0; i < metric_ids.length; i++) {
-        const newMId = metric_ids[i];
-        if (!old_metric_ids.includes(newMId)) {
-          await experimentMetricsTable.insertRow({ experiment_id: id, metric_id: newMId });
-        }
-      }
-
-      for (let i = 0; i < old_metric_ids.length; i++) {
-        const oldMId = old_metric_ids[i];
-        if (!metric_ids.includes(oldMId)) {
-          await experimentMetricsTable.deleteRow({ experiment_id: id, metric_id: oldMId});
-        }
-      }
     }
 
     let updatedExpt;
