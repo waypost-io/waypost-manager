@@ -15,7 +15,6 @@ const FlagDetailsPage = () => {
     state.flags.find((flag) => flag.id === +flagId)
   );
   const exptData = useSelector((state) => state.experiments);
-  console.log(exptData);
   const metricData = useSelector((state) => state.metrics);
   const [flagFetched, setFlagFetched] = useState(false);
   const [exptsFetched, setExptsFetched] = useState(false);
@@ -88,6 +87,7 @@ const FlagDetailsPage = () => {
             <button
               className="btn bg-slate hover:bg-slateDark m-5"
               onClick={handleEditFlag}
+              data-testid="editFlagBtn"
             >
               Edit Flag
             </button>

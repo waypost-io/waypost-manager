@@ -1,8 +1,5 @@
 import React from 'react';
 import '@testing-library/jest-dom';
-// We're using our own custom render function and not RTL's render.
-// Our custom utils also re-export everything from RTL
-// so we can import fireEvent and screen here as well
 import { render, fireEvent, screen } from './utils/test-utils';
 import App from '../App';
 import { server } from './utils/testServer';
@@ -16,7 +13,7 @@ afterEach(() => server.resetHandlers());
 // Disable API mocking after the tests are done.
 afterAll(() => server.close());
 
-test('Title and sidebar display', async () => {
+test('Displays Title and sidebar on first load', () => {
   render(<App />);
   expect(screen.getByText("Waypost")).toBeInTheDocument();
   expect(screen.getByTestId('flagsLink')).toBeInTheDocument();
@@ -25,8 +22,29 @@ test('Title and sidebar display', async () => {
   expect(screen.getByTestId('sdkKeyLink')).toBeInTheDocument();
 });
 
-test('Shows flags', async () => {
+test('Shows flags on home page', async () => {
   render(<App />);
   expect(await screen.findByText("Test Flag 1")).toBeInTheDocument();
   expect(await screen.findByText("Test Flag 2")).toBeInTheDocument();
+});
+
+test('Shows metrics on metrics page', async () => {
+  render(<App />);
+  fireEvent.click(screen.getByTestId('metricsLink'));
+  expect(await screen.findByText("Signups")).toBeInTheDocument();
+  expect(await screen.findByText("Time on site")).toBeInTheDocument();
+});
+
+test('Navigates to flag details page when name is clicked', async () => {
+  render(<App />);
+  fireEvent.click(screen.getByTestId('flagsLink'));
+  const flag1 = await screen.findByText("Test Flag 1");
+  fireEvent.click(flag1);
+  expect(screen.getByTestId('editFlagBtn')).toBeInTheDocument();
+});
+
+test('Shows flag events log after navigating to page', () => {
+  render(<App />);
+  fireEvent.click(screen.getByTestId('logLink'));
+  expect(screen.getByTestId('flagLogTable')).toBeInTheDocument();
 });
