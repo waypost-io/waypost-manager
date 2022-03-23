@@ -38,8 +38,9 @@ export function editExperimentSuccess(editedExpt) {
 
 export function updateStats(id) {
   return function(dispatch) {
-    apiClient.updateStats(id, data => {
-      dispatch(updateStatsSuccess(data));
+    return apiClient.updateStats(id, data => {
+      dispatch(updateStatsSuccess(data.stats));
+      return data.error_message;
     });
   }
 }
