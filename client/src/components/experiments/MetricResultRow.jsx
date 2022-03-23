@@ -30,15 +30,15 @@ const MetricResultRow = ({
         (p_value < 0.05 ? (
           <td>
             <p className="font-bold text-primary-turquoise">Significant</p>
-            {p_value.toFixed(4)}
+            <p>{p_value.toFixed(4)}</p>
           </td>
         ) : (
           <td>
             <p>Not significant</p>
-            {p_value.toFixed(4)}
+            <p>{p_value.toFixed(4)}</p>
           </td>
         ))}
-      {!p_value && (
+      {p_value === undefined && (
         <td>
           <p>No data yet</p>
         </td>

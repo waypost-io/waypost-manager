@@ -33,7 +33,7 @@ const FlagDetailsPage = () => {
       dispatch(fetchAssignmentsOnFlag(flagId));
       setCAssignmentsFetched(true);
     }
-  }, [dispatch, cAssignmentsFetched])
+  }, [dispatch, cAssignmentsFetched, flagId])
 
   useEffect(() => {
     if (cAssignmentData) {

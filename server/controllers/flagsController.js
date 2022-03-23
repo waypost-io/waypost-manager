@@ -81,7 +81,6 @@ const createFlag = async (req, res, next) => {
       const savedFlag = await flagTable.insertRow(newFlag);
 
       req.eventType = "FLAG_CREATED";
-      req.flagId = savedFlag.
 
       res.status(200).send(savedFlag);
       next();
