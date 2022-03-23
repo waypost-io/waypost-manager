@@ -1,23 +1,49 @@
-# waypost
+<p align="center">
+    <img src="" alt="Waypost logo" width="200" height="200">
+</p>
 
 Full-stack application for feature flag management and A/B testing
 
-# Database setup
+## Database setup
+1. Make sure postgres is installed.
+```
+psql -V
+```
+2. 
 
-NOTE: This is for early development. Delete from readme later.
-
-1. Go to the root folder of waypost
-2. Run `$ createdb waypost`
-3. Run "$ psql waypost < ./server/db/waypost_data_dump.sql"
-4. Open postgres and connect to waypost database to ensure all data made it in correctly
-   `$ psql -d waypost` then run `SELECT * FROM flags;`
-5. Add .env to the /server folder. It should look like:
-   DB="waypost"
-   DB_USER=<your username>
-   DB_PASSWORD=<Your password>
-   Note, if you don't remember your username/pw, follow this tutorial: https://stackoverflow.com/questions/10845998/i-forgot-the-password-i-entered-during-postgres-installation
-
-- Hint: if you're already connected as the postgres user, which is the default, you can just skip to step 6 of tutorial
+## Local setup
+1. Clone the Waypost repository.
+```
+git clone https://github.com/waypost-io/waypost.git
+cd waypost
+```
+2. Install dependancies
+```
+cd waypost/server
+npm install
+cd ../client
+npm install
+```
+3. Add .env files
+/server:
+```
+POSTGRES_DB="waypost"
+POSTGRES_USER=<user>
+POSTGRES_PASSWORD=<password>
+POSTGRES_HOST="localhost"
+POSTGRES_PORT= 5432
+WEBHOOK_VALIDATOR="secret"
+FLAG_PROVIDER_URL="http://localhost:5050"
+```
+/client: (optional if you want to run tests)
+```
+NODE_ENV="development"
+```
+6. Start the application from the /server directory.
+```
+npm run dev
+```
+The client will run on port `:3000` and the server will run on port `:5000`
 
 # API Docs
 
