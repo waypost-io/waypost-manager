@@ -130,9 +130,10 @@ const EditFlagForm = ({ setIsEditing, customAssignments }) => {
 
     setIsEditing(false);
   };
+  const underlineStyle = "underline underline-offset-4 mx-1 text-primary-violet hover:text-primaryDark-violet";
 
   return (
-    <div className="flex flex-col items-center border-b border-b-primary-oxfordblue py-8">
+    <div className="flex flex-col items-center py-8">
       <h2 className="font-bold text-xl text-primary-violet">Edit Flag</h2>
       <form className="w-full">
         <div className={FIELD_DIV_CSS}>
@@ -199,7 +200,7 @@ const EditFlagForm = ({ setIsEditing, customAssignments }) => {
             value={userToDelete}
             onChange={(e) => setUserToDelete(e.target.value)}
           />
-          <button className="underline underline-offset-4 mx-2 text-primary-violet hover:text-primaryDark-violet" type="button" onClick={handleDelete}>
+          <button className="font-bold text-primary-violet underline underline-offset-4 hover:no-underline hover:bg-primary-offwhite hover:text-primaryDark-violet py-2 px-4 rounded-md mx-2" type="button" onClick={handleDelete}>
             Delete
           </button>
         </div>
@@ -218,7 +219,7 @@ const EditFlagForm = ({ setIsEditing, customAssignments }) => {
             <option value={"true"} >Always On</option>
             <option value={"false"} >Always Off</option>
           </select>
-          <button className="underline underline-offset-4 mx-1 text-primary-violet hover:text-primaryDark-violet" type="button" onClick={handleAdd}>
+          <button className="font-bold text-primary-violet underline underline-offset-4 hover:no-underline hover:bg-primary-offwhite hover:text-primaryDark-violet py-2 px-4 rounded-md" type="button" onClick={handleAdd}>
             Add
           </button>
         </div>

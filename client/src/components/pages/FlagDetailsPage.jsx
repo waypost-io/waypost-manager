@@ -163,13 +163,16 @@ const FlagDetailsPage = () => {
           {cAssignmentData &&
           <div>
             {!showCAssignments ? (
-              <button
-                type="button"
-                className="inline-block w-1/2 text-right pr-10 text-primary-oxfordblue ml-6 hover:text-primary-violet"
-                onClick={() => setShowCAssignments(true)}
-              >
-                Show Custom Assignments <FontAwesomeIcon icon={faCaretDown} />
-              </button>
+              <div className="inline-block w-1/2 text-right pr-10">
+                <button
+                  type="button"
+                  className="text-sm border bg-primary-offwhite text-primary-oxfordblue p-1.5 mt-2 ml-6 rounded-lg hover:bg-primary-violet hover:text-primary-offwhite"
+                  onClick={() => setShowCAssignments(true)}
+                >
+                  Show Custom Assignments<FontAwesomeIcon icon={faCaretDown} className="ml-1" />
+                </button>
+              </div>
+
             ) : (
               <>
                 <button
