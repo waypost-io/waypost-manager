@@ -24,9 +24,11 @@ export function createExperimentSuccess(newExpt) {
 
 export function editExperiment(exptId, updatedFields) {
   return function(dispatch) {
-    apiClient.editExperiment(exptId, updatedFields, data => {
-      dispatch(updateStatsSuccess(data.stats))
+    return apiClient.editExperiment(exptId, updatedFields, data => {
+      dispatch(updateStatsSuccess(data.stats));
       dispatch(editExperimentSuccess(data.updatedExpt));
+      return "Not connected to database, please connect and then try again for up to date results."
+      // return data.error_message
     });
   }
 }

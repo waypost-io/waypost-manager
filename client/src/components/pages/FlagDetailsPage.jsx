@@ -79,11 +79,12 @@ const FlagDetailsPage = () => {
     navigate(path);
   };
 
-  const handleStopExperiment = (e) => {
+  const handleStopExperiment = async (e) => {
     e.preventDefault();
     const runningExptId = exptData.find(expt => expt.date_ended === null).id;
     dispatch(editFlag(flagId, { is_experiment: false}));
-    dispatch(editExperiment(runningExptId, { date_ended: true}));
+    const err = await dispatch(editExperiment(runningExptId, { date_ended: true}));
+    if (err) alert(err);
   };
 
   const handleToggle = (id) => {
