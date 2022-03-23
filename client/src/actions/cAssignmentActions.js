@@ -39,11 +39,11 @@ export function fetchAllAssignmentsSuccess(allAssignments) {
 export function deleteAssignmentsOnFlag(flagId, userIds) {
   return function(dispatch) {
     apiClient.deleteAssignmentsOnFlag(flagId, userIds, (data) => {
-      dispatch(deleteAssignmentsOnFlagSuccess(data.flag_id, data.user_ids))
+      dispatch(deleteAssignmentsOnFlagSuccess(data.flag_id, data.user_ids));
     })
   }
 }
 
 export function deleteAssignmentsOnFlagSuccess(flagId, userIds) {
-  return { type: "FETCHED_ALL_ASSIGNMENTS_SUCCESS", flagId, userIds }
+  return { type: "DELETED_ASSIGNMENTS_ON_FLAG_SUCCESS", flagId, userIds }
 }

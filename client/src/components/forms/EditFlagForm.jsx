@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { editFlag } from "../../actions/flagActions";
+import { deleteAssignmentsOnFlag, addAssignmentsToFlag } from "../../actions/cAssignmentActions";
 
 const FIELD_DIV_CSS = "mt-2.5 flex justify-start items-center";
 const LABEL_CSS = "inline-block w-1/3 text-right mr-5";
@@ -93,33 +94,32 @@ const EditFlagForm = ({ setIsEditing, customAssignments }) => {
     setUserToDelete("")
   }
 
-  const handleSaveEdits = (e) => {
-    // e.preventDefault();
-    // if (
-    //   newName.length === 0 ||
-    //   isNaN(Number(newPercent)) ||
-    //   newPercent < 0 ||
-    //   newPercent > 100
-    // ) {
-    //   alert("Please check your inputs again.");
-    //   return;
-    // }
-    // if (flagNames.includes(newName) && newName !== flagData.name) {
-    //   alert("Name is already taken by another feature flag.");
-    //   return;
-    // }
-    //
-    // dispatch(
-    //   editFlag(flagId, {
-    //     name: newName,
-    //     description: newDescription,
-    //     percentage_split: newPercent,
-    //   })
-    // );
-    // setIsEditing(false);
-    console.log("originals", customAssignments);
-    console.log(newAssignments);
-    console.log(deletedAssignments);
+  const handleSaveEdits = async (e) => {
+    e.preventDefault();
+    if (
+      newName.length === 0 ||
+      isNaN(Number(newPercent)) ||
+      newPercent < 0 ||
+      newPercent > 100
+    ) {
+      alert("Please check your inputs again.");
+      return;
+    }
+    if (flagNames.includes(newName) && newName !== flagData.name) {
+      alert("Name is already taken by another feature flag.");
+      return;
+    }
+
+    dispatch(
+      editFlag(flagId, {
+        name: newName,
+        description: newDescription,
+        percentage_split: newPercent,
+      })
+    );
+    await dispatch(deleteAssignmentsOnFlag(flagId, deletedAssignments));
+    dispatch(addAssignmentsToFlag(flagId, newAssignments));
+    setIsEditing(false);
   };
 
   return (
