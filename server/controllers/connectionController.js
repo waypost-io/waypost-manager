@@ -1,4 +1,3 @@
-const { validationResult } = require("express-validator");
 const { verifyQueryString, verifyConnection } = require("../db/event-db-query");
 const { REQUIRED_EVENT_DB_COLS, CONNECTION_TABLE_NAME } = require("../constants/db");
 const PGTable = require("../db/PGTable");
@@ -8,9 +7,6 @@ connectionTable.init()
 
 
 const createConnection = async (req, res, next) => {
-  // TODO: create validator
-  //const errors = validationResult(req);
-
   try {
     await verifyConnection(req.body);
   } catch (err) {
@@ -20,7 +16,6 @@ const createConnection = async (req, res, next) => {
   }
 
   try {
-    console.log(req.body);
     await connectionTable.insertRow(req.body);
   } catch (err) {
     console.log(err);
@@ -50,7 +45,6 @@ const removeConnection = async (req, res, next) => {
 };
 
 const testConnection = async (req, res, next) => {
-  // NOTE: this is not a great way to do this becuase is just assumes that the db is not connected no matter the error
   try {
     const result = await connectionTable.query("SELECT pg_database FROM connection");
 
