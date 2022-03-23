@@ -45,7 +45,8 @@ const EditFlagForm = ({ setIsEditing, customAssignments }) => {
 
   const handleAdd = (e) => {
     e.preventDefault();
-    // if user currently on screen, don't do anything
+    // if user currently on screen, don't do anything, user can only have one
+    // custom assignment per flag
     if (userInAssignments(userToAdd, existingAssignments)) {
       alert("A user cannot have multiple assignments on the same flag");
       setUserToAdd("");
@@ -72,18 +73,19 @@ const EditFlagForm = ({ setIsEditing, customAssignments }) => {
 
   const handleDelete = (e) => {
     e.preventDefault();
+    // if custom assignment of user doesn't exist, you can't delete it
     if (!userInAssignments(userToDelete, existingAssignments)) {
       alert("You cannot delete a user who isn't assigned. Check your spelling and please try again");
       return
     }
-
+    // If the user to delete was just added, just remove the add
     if (Object.keys(newAssignments).includes(userToDelete)) {
       const obj = {};
       Object.keys(newAssignments).forEach((userId) => {
         if (userId !== userToDelete) obj[userId] = newAssignments[userId];
       })
       setNewAssignments(obj);
-    } else {
+    } else { // otherwise add them to list of users to delete
       setDeletedAssignments([userToDelete, ...deletedAssignments]);
     }
 
@@ -125,7 +127,7 @@ const EditFlagForm = ({ setIsEditing, customAssignments }) => {
     if (Object.keys(newAssignments).length > 0) {
       dispatch(addAssignmentsToFlag(flagId, newAssignments));
     }
-    
+
     setIsEditing(false);
   };
 
@@ -197,7 +199,7 @@ const EditFlagForm = ({ setIsEditing, customAssignments }) => {
             value={userToDelete}
             onChange={(e) => setUserToDelete(e.target.value)}
           />
-          <button className="btn bg-primary-violet hover:bg-primaryDark-violet mx-4" type="button" onClick={handleDelete}>
+          <button className="btn bg-primary-violet hover:bg-primaryDark-violet mx-2" type="button" onClick={handleDelete}>
             Delete
           </button>
         </div>
@@ -212,11 +214,11 @@ const EditFlagForm = ({ setIsEditing, customAssignments }) => {
             value={userToAdd}
             onChange={(e) => setUserToAdd(e.target.value)}
           />
-          <select className="mx-2" value={status} onChange={handleSelection}>
+          <select className="mx-2 border-2 border-black rounded-lg p-1 bg-slateLight" value={status} onChange={handleSelection}>
             <option value={"true"} >Always On</option>
             <option value={"false"} >Always Off</option>
           </select>
-          <button className="btn bg-primary-turquoise hover:bg-primaryDark-turquoise mx-2" type="button" onClick={handleAdd}>
+          <button className="btn bg-primary-turquoise hover:bg-primaryDark-turquoise mx-1" type="button" onClick={handleAdd}>
             Add
           </button>
         </div>
