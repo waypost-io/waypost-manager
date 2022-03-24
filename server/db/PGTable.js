@@ -1,5 +1,4 @@
 const { dbQuery } = require("./db-query");
-const { createPlaceholdersArr } = require("../utils");
 const { queryCreator: qc } = require("../lib/queryCreator");
 
 module.exports = class PGTable {
