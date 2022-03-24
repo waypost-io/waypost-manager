@@ -14,31 +14,31 @@ module.exports = class PGTable {
 
   // gets the column names
   async getFields() {
-    const statement = `SELECT * FROM ${this.tableName} WHERE false`;
-    const result = await dbQuery(statement);
+    const querystring = `SELECT * FROM ${this.tableName} WHERE false`;
+    const result = await dbQuery(querystring);
     return result.fields.map((fieldObj) => fieldObj.name);
   }
 
   async getAllRows() {
-    const statement = `SELECT * FROM ${this.tableName}`;
-    const result = await dbQuery(statement);
+    const querystring = `SELECT * FROM ${this.tableName}`;
+    const result = await dbQuery(querystring);
     return result.rows;
   }
 
   async getAllRowsNotDeleted() {
-    const statement = `SELECT * FROM ${this.tableName} WHERE is_deleted = FALSE`;
-    const result = await dbQuery(statement);
+    const querystring = `SELECT * FROM ${this.tableName} WHERE is_deleted = FALSE`;
+    const result = await dbQuery(querystring);
     return result.rows;
   }
 
   async getRow(id) {
-    const statement = `SELECT * FROM ${this.tableName} WHERE id = ${id}`;
-    const result = await dbQuery(statement);
+    const querystring = `SELECT * FROM ${this.tableName} WHERE id = ${id}`;
+    const result = await dbQuery(querystring);
     return result.rows[0];
   }
 
-  async getRowsWhere(whereObj = {}) {
-    const [queryString, params] = qc.createSelectStatement.call(this, whereObj);
+  async getRowsWhere(where = {}) {
+    const [ queryString, params ] = qc.createSelectStatement.call(this, where);
     const result = await dbQuery(queryString, ...params);
     return result.rows;
   }
@@ -63,8 +63,8 @@ module.exports = class PGTable {
   }
 
   async deleteAllRows() {
-    const statement = `DELETE FROM ${this.tableName} WHERE TRUE`;
-    const result = await dbQuery(queryString);
+    const querystring = `DELETE FROM ${this.tableName} WHERE TRUE`;
+    const result = await dbQuery(querystring);
     return result;
   }
   // just a wrapper around the dbQuery function
