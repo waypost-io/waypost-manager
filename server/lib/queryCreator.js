@@ -53,7 +53,6 @@ const queryCreator = {
     const queryString = `UPDATE ${this.tableName} SET ${edits.join(
       ", "
     )} ${where} RETURNING *`;
-    console.log("queryString", queryString);
     return [queryString, values];
   },
 
