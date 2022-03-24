@@ -7,7 +7,7 @@ const {
   setExposuresOnExperiment,
   updateMetricsOnExpt,
   addMetricsToExptMetricsTable,
-} = require("../helpers/experiments.js")
+} = require("../lib/experimentHelpers.js")
 
 const experimentsTable = new PGTable(EXPERIMENTS_TABLE_NAME);
 experimentsTable.init();
