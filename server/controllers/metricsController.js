@@ -6,14 +6,13 @@ const { eventDbQuery, verifyQueryString } = require("../db/event-db-query");
 const metricsTable = new PGTable(METRICS_TABLE_NAME);
 metricsTable.init();
 
+const BINOMIAL_COLS = ['user_id', 'timestamp'];
+const METRIC_COLS = ['user_id', 'timestamp', 'value'];
+
 const validateQuery = async (req, res, next) => {
-  let requiredCols;
-  if (req.body.type === 'binomial') {
-    requiredCols = ['user_id', 'timestamp'];
-  } else {
-    requiredCols = ['user_id', 'timestamp', 'value'];
-  }
-  
+  const type = req.body.type;
+  const requiredCols = type === 'binomial' ? BINOMIAL_COLS : METRIC_COLS;
+
   try {
     await verifyQueryString(req.body.query_string, requiredCols, "Columns not correct");
   } catch (err) {
