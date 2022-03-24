@@ -7,13 +7,14 @@ const metricsTable = new PGTable(METRICS_TABLE_NAME);
 metricsTable.init();
 
 const validateQuery = async (req, res, next) => {
+  let requiredCols;
+  if (req.body.type === 'binomial') {
+    requiredCols = ['user_id', 'timestamp'];
+  } else {
+    requiredCols = ['user_id', 'timestamp', 'value'];
+  }
+  
   try {
-    let requiredCols;
-    if (req.body.type === 'binomial') {
-      requiredCols = ['user_id', 'timestamp'];
-    } else {
-      requiredCols = ['user_id', 'timestamp', 'value'];
-    }
     await verifyQueryString(req.body.query_string, requiredCols, "Columns not correct");
   } catch (err) {
     console.log(err);
@@ -49,13 +50,14 @@ const createMetric = async (req, res, next) => {
     res.status(400).send("Type not valid");
     return;
   }
-  try {
-    const metricObj = {
-      name: req.body.name,
-      query_string: req.body.query_string,
-      type: req.body.type
-    };
 
+  const metricObj = {
+    name: req.body.name,
+    query_string: req.body.query_string,
+    type: req.body.type
+  };
+
+  try {
     const newMetric = await metricsTable.insertRow(metricObj);
     res.status(200).send({ok: true, metric: newMetric });
   } catch (err) {
