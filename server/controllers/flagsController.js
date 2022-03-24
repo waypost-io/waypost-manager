@@ -9,7 +9,7 @@ flagTable.init();
 const GET_FLAGS_FOR_WEBHOOK = `
   SELECT id, name, status, percentage_split, hash_offset, is_experiment
   FROM flags
-  WHERE is_deleted=false
+  WHERE is_deleted = FALSE
 `;
 
 const createNewFlagObj = ({
@@ -42,7 +42,7 @@ const getAllFlags = async (req, res, next) => {
   let data;
   try {
     if (req.query.prov) {
-      data = await getFlagsForWebhook();
+      next();
     } else {
       data = await flagTable.getAllRowsNotDeleted();
 
@@ -142,6 +142,7 @@ const sendFlagsWebhook = async (req, res, next) => {
   } catch (err) {
     console.log(err.message);
   }
+  if (req.query.prov) return;
   next();
 };
 
