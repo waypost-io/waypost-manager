@@ -10,7 +10,12 @@ const logsController = require("../controllers/logsController");
 const cAssignmentController = require("../controllers/cAssignmentController");
 
 // -------- Flags --------
-router.get("/flags", flagsController.getAllFlags);
+router.get("/flags",
+  flagsController.getAllFlags,
+  flagsController.setFlagsOnReq,
+  cAssignmentController.setAssignmentsOnEachFlag,
+  flagsController.sendFlagsWebhook
+);
 
 router.get("/flags/:id", flagsController.getFlag);
 
