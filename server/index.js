@@ -1,8 +1,8 @@
 require("dotenv").config();
-const express = require('express');
-const routes = require('./routes/api');
-const cron = require('node-cron');
-const { backfillExposures } = require('./lib/experimentExposures');
+const express = require("express");
+const routes = require("./routes/api");
+const cron = require("node-cron");
+const { backfillExposures } = require("./lib/experimentExposures");
 
 const app = express();
 
@@ -10,13 +10,16 @@ const port = 5000;
 
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
   next();
 });
 
 app.use(express.json());
 
-app.use('/api', routes);
+app.use("/api", routes);
 
 app.use((req, res, next) => {
   const error = new HttpError("Could not find this route.", 404);
@@ -32,9 +35,9 @@ app.use((err, req, res, next) => {
 });
 
 app.listen(port, () => {
-  console.log(`Server running on port ${port}`)
+  console.log(`Server running on port ${port}`);
 });
-
+ 
 // Backfilling exposures every night at 3am
 cron.schedule('0 3 * * *', async () => {
   backfillExposures();

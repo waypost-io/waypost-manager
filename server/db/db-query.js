@@ -31,4 +31,3 @@ const dbQuery = async (statement, ...parameters) => {
 };
 
 exports.dbQuery = dbQuery;
-

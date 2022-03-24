@@ -8,23 +8,14 @@ const sdkKeyController = require("../controllers/sdkKeyController");
 const exposuresController = require("../controllers/exposuresController");
 const logsController = require("../controllers/logsController");
 const cAssignmentController = require("../controllers/cAssignmentController");
-const { validateNewFlag } = require("../validators/validators");
 
-router.get("/flags/:id/custom-assignments", cAssignmentController.fetchAssignmentsOnFlag);
-
-router.get("/custom-assignments", cAssignmentController.fetchAllAssignments);
-
-router.post("/flags/:id/custom-assignments", cAssignmentController.createAssignmentsOnFlag);
-
-router.delete("/flags/:id/custom-assignments", cAssignmentController.deleteAssignmentsOnFlag);
-
+// -------- Flags --------
 router.get("/flags", flagsController.getAllFlags);
 
 router.get("/flags/:id", flagsController.getFlag);
 
 router.post(
   "/flags",
-  validateNewFlag,
   flagsController.createFlag,
   flagsController.setFlagsOnReq,
   cAssignmentController.setAssignmentsOnEachFlag,
@@ -41,11 +32,6 @@ router.put(
   logsController.logEvent
 );
 
-router.get(
-  "/flags/:id/experiments",
-  experimentController.getExperimentsForFlag
-);
-
 router.delete(
   "/flags/:id",
   flagsController.deleteFlag,
@@ -53,6 +39,30 @@ router.delete(
   cAssignmentController.setAssignmentsOnEachFlag,
   flagsController.sendFlagsWebhook,
   logsController.logEvent
+);
+
+// -------- Custom Assignments --------
+router.get(
+  "/flags/:id/custom-assignments",
+  cAssignmentController.fetchAssignmentsOnFlag
+);
+
+router.get("/custom-assignments", cAssignmentController.fetchAllAssignments);
+
+router.post(
+  "/flags/:id/custom-assignments",
+  cAssignmentController.createAssignmentsOnFlag
+);
+
+router.delete(
+  "/flags/:id/custom-assignments",
+  cAssignmentController.deleteAssignmentsOnFlag
+);
+
+// -------- Experiments --------
+router.get(
+  "/flags/:id/experiments",
+  experimentController.getExperimentsForFlag
 );
 
 router.get("/experiments/:id", experimentController.getExperiment);
@@ -65,30 +75,43 @@ router.put(
 
 router.post("/experiments", experimentController.createExperiment);
 
+router.put("/experiments/:id/analysis", experimentController.analyzeExperiment);
+
+// -------- Metrics --------
 router.get("/metrics", metricsController.getMetrics);
 
 router.get("/metrics/:id", metricsController.getMetric);
 
-router.post("/metrics", metricsController.validateQuery, metricsController.createMetric);
+router.post(
+  "/metrics",
+  metricsController.validateQuery,
+  metricsController.createMetric
+);
 
-router.put("/metrics/:id", metricsController.validateQuery, metricsController.editMetric);
+router.put(
+  "/metrics/:id",
+  metricsController.validateQuery,
+  metricsController.editMetric
+);
 
 router.delete("/metrics/:id", metricsController.deleteMetric);
 
+// -------- Connection to Event DB --------
 router.post("/connection", connectionController.createConnection);
 
 router.delete("/connection", connectionController.removeConnection);
 
 router.get("/connection", connectionController.testConnection);
 
+// -------- Analysis --------
 router.put("/exposures", exposuresController.backfillData);
-
-router.put("/experiments/:id/analysis", experimentController.analyzeExperiment);
 
 router.put("/analysis", experimentController.analyzeAll);
 
+// -------- Flag event logging --------
 router.get("/log", logsController.getLog);
 
+// -------- SDK Key --------
 router.get("/sdkKey", sdkKeyController.fetchKey);
 
 router.post(

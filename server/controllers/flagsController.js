@@ -1,12 +1,16 @@
-const { validationResult } = require("express-validator");
 const PGTable = require("../db/PGTable");
 const { FLAG_TABLE_NAME } = require("../constants/db");
 const { getNowString } = require("../utils");
 const { sendWebhook } = require("../lib/sendWebhook.js");
-const { getFlagsForWebhook } = require("../db/flags.js");
 
 const flagTable = new PGTable(FLAG_TABLE_NAME);
 flagTable.init();
+
+const GET_FLAGS_FOR_WEBHOOK = `
+  SELECT id, name, status, percentage_split, hash_offset, is_experiment
+  FROM flags
+  WHERE is_deleted=false
+`;
 
 const createNewFlagObj = ({
   name,
@@ -25,13 +29,13 @@ const createNewFlagObj = ({
     is_experiment: is_experiment || false,
     date_created: now,
     is_deleted: false,
-    hash_offset
+    hash_offset,
   };
 };
 
 const getAllFlags = async (req, res, next) => {
+  let data;
   try {
-    let data;
     if (req.query.prov) {
       data = await getFlagsForWebhook();
     } else {
@@ -51,7 +55,8 @@ const getAllFlags = async (req, res, next) => {
 };
 
 const setFlagsOnReq = async (req, res, next) => {
-  const data = await getFlagsForWebhook();
+  const result = await flagTable.query(GET_FLAGS_FOR_WEBHOOK);
+  const data = result.rows[0] === undefined ? undefined : result.rows;
   req.flags = data;
   next();
 };
@@ -72,35 +77,30 @@ const getFlag = async (req, res, next) => {
 };
 
 const createFlag = async (req, res, next) => {
-  const errors = validationResult(req);
-  if (errors.isEmpty()) {
-    const newFlag = createNewFlagObj(req.body);
+  const newFlag = createNewFlagObj(req.body);
 
-    try {
-      const savedFlag = await flagTable.insertRow(newFlag);
+  try {
+    const savedFlag = await flagTable.insertRow(newFlag);
 
-      req.eventType = "FLAG_CREATED";
+    req.eventType = "FLAG_CREATED";
 
-      res.status(200).send(savedFlag);
-      next();
-    } catch (e) {
-      res.status(500).send("Error inserting into flags table");
-    }
-  } else {
-    return next(new HttpError("The name field is empty.", 400));
+    res.status(200).send(savedFlag);
+    next();
+  } catch (e) {
+    res.status(500).send("Error inserting into flags table");
   }
 };
 
 const editFlag = async (req, res, next) => {
-  // figure out how to validate this
   const id = req.params.id;
   const now = getNowString();
   const updatedFields = req.body;
-  if (Object.keys(updatedFields).includes('status')) {
+  if (Object.keys(updatedFields).includes("status")) {
     req.eventType = "FLAG_TOGGLED";
   } else {
     req.eventType = "FLAG_EDITED";
   }
+
   try {
     const updatedFlag = await flagTable.editRow(updatedFields, { id });
 
@@ -113,10 +113,11 @@ const editFlag = async (req, res, next) => {
 
 const deleteFlag = async (req, res, next) => {
   const id = req.params.id;
+
   try {
     const result = await flagTable.editRow({ is_deleted: true }, { id });
-    if (!result)
-      throw new Error(`Flag with the id of ${id} doesn't exist`);
+
+    if (!result) throw new Error(`Flag with the id of ${id} doesn't exist`);
 
     const deletedFlagName = result.name;
     req.eventType = "FLAG_DELETED";
@@ -134,7 +135,6 @@ const sendFlagsWebhook = async (req, res, next) => {
   try {
     await sendWebhook("/flags", req.flags);
     console.log("flag webhook sent");
-
   } catch (err) {
     console.log(err.message);
   }

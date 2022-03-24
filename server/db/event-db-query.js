@@ -28,7 +28,7 @@ const eventDbQuery = async (statement, ...parameters) => {
   await client.end();
 
   return result;
-}
+};
 
 const verifyConnection = async (credentials) => {
   const client = new Client({
@@ -46,17 +46,19 @@ const verifyConnection = async (credentials) => {
   );
 
   await client.end();
-}
+};
 
 const verifyQueryString = async (queryString, requiredCols, errMessage) => {
-  const queryResult = await eventDbQuery(`SELECT * FROM (${queryString}) AS provided_query WHERE FALSE;`)
-  const tableCols = queryResult.fields.map(field => field.name);
+  const queryResult = await eventDbQuery(
+    `SELECT * FROM (${queryString}) AS provided_query WHERE FALSE;`
+  );
+  const tableCols = queryResult.fields.map((field) => field.name);
   for (let i = 0; i < requiredCols.length; i++) {
     if (!tableCols.includes(requiredCols[i])) {
       throw new Error(errMessage);
     }
-  };
-}
+  }
+};
 
 module.exports.eventDbQuery = eventDbQuery;
 module.exports.verifyConnection = verifyConnection;

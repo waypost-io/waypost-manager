@@ -6,15 +6,19 @@ const { eventDbQuery, verifyQueryString } = require("../db/event-db-query");
 const metricsTable = new PGTable(METRICS_TABLE_NAME);
 metricsTable.init();
 
+const BINOMIAL_COLS = ["user_id", "timestamp"];
+const METRIC_COLS = ["user_id", "timestamp", "value"];
+
 const validateQuery = async (req, res, next) => {
+  const type = req.body.type;
+  const requiredCols = type === "binomial" ? BINOMIAL_COLS : METRIC_COLS;
+
   try {
-    let requiredCols;
-    if (req.body.type === 'binomial') {
-      requiredCols = ['user_id', 'timestamp'];
-    } else {
-      requiredCols = ['user_id', 'timestamp', 'value'];
-    }
-    await verifyQueryString(req.body.query_string, requiredCols, "Columns not correct");
+    await verifyQueryString(
+      req.body.query_string,
+      requiredCols,
+      "Columns not correct"
+    );
   } catch (err) {
     console.log(err);
     res.status(200).send({ ok: false, error_message: err.message });
@@ -29,7 +33,7 @@ const getMetrics = async (req, res, next) => {
     res.status(200).send(metrics);
   } catch (err) {
     console.log(err);
-    res.status(500).send(err.message)
+    res.status(500).send(err.message);
   }
 };
 
@@ -40,7 +44,7 @@ const getMetric = async (req, res, next) => {
     res.status(200).send(metric);
   } catch (err) {
     console.log(err);
-    res.status(500).send(err.message)
+    res.status(500).send(err.message);
   }
 };
 
@@ -49,18 +53,19 @@ const createMetric = async (req, res, next) => {
     res.status(400).send("Type not valid");
     return;
   }
-  try {
-    const metricObj = {
-      name: req.body.name,
-      query_string: req.body.query_string,
-      type: req.body.type
-    };
 
+  const metricObj = {
+    name: req.body.name,
+    query_string: req.body.query_string,
+    type: req.body.type,
+  };
+
+  try {
     const newMetric = await metricsTable.insertRow(metricObj);
-    res.status(200).send({ok: true, metric: newMetric });
+    res.status(200).send({ ok: true, metric: newMetric });
   } catch (err) {
     console.log(err);
-    res.status(500).send(err.message)
+    res.status(500).send(err.message);
   }
 };
 
@@ -78,7 +83,10 @@ const editMetric = async (req, res, next) => {
 const deleteMetric = async (req, res, next) => {
   const id = req.params.id;
   try {
-    const result = await metricsTable.editRow({ is_deleted: true }, { id: Number(id) });
+    const result = await metricsTable.editRow(
+      { is_deleted: true },
+      { id: Number(id) }
+    );
     if (!result) {
       throw new Error(`Metric with id ${id} doesn't exist`);
     }

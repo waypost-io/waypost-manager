@@ -1,26 +1,31 @@
-const ttest = require('ttest');
-const chi2test = require( '@stdlib/stats-chi2test' );
+const ttest = require("ttest");
+const chi2test = require("@stdlib/stats-chi2test");
 const { dbQuery } = require("../db/db-query");
 const { eventDbQuery } = require("../db/event-db-query");
-const { createPlaceholdersArr } = require('../utils');
-const { getExptQuery, getActiveExperiments } = require('./experimentExposures');
+const { createPlaceholdersArr } = require("../utils");
+const { getExptQuery, getActiveExperiments } = require("./experimentExposures");
 
 const getExptMetrics = async (exptIds) => {
   const placeholders = createPlaceholdersArr(exptIds);
   const query = `
     SELECT experiment_id, metric_id FROM experiment_metrics
     WHERE experiment_id IN (${placeholders})
-  `
+  `;
   const result = await dbQuery(query, ...exptIds);
   return result.rows;
 };
 
 const getMetricData = async (metricId) => {
-  const query = "SELECT * FROM metrics WHERE id = $1"
+  const query = "SELECT * FROM metrics WHERE id = $1";
   return (await dbQuery(query, metricId)).rows[0];
 };
 
-const calcContinuousMetric = async (exptId, metricId, exptQuery, metricQuery) => {
+const calcContinuousMetric = async (
+  exptId,
+  metricId,
+  exptQuery,
+  metricQuery
+) => {
   const query = `
     WITH exposures AS (
       SELECT * FROM (${exptQuery}) AS exposure_table
@@ -41,15 +46,23 @@ const calcContinuousMetric = async (exptId, metricId, exptQuery, metricQuery) =>
   if (result.rows.length === 0) {
     return;
   }
-  const [ controlGroup, testGroup ] = result.rows;
+  const [controlGroup, testGroup] = result.rows;
 
   const stat = ttest(
-    { mean: +testGroup.mean, variance: (+testGroup.std_dev) ** 2, size: +testGroup.num_users },
-    { mean: +controlGroup.mean, variance: (+controlGroup.std_dev) ** 2, size: +controlGroup.num_users }
+    {
+      mean: +testGroup.mean,
+      variance: (+testGroup.std_dev) ** 2,
+      size: +testGroup.num_users,
+    },
+    {
+      mean: +controlGroup.mean,
+      variance: (+controlGroup.std_dev) ** 2,
+      size: +controlGroup.num_users,
+    }
   );
   const pValue = stat.pValue();
   const confInterval = stat.confidence();
-  const confIntervalPcnt = confInterval.map(num => num / +controlGroup.mean);
+  const confIntervalPcnt = confInterval.map((num) => num / +controlGroup.mean);
 
   // Insert into experiment_metrics table
   const insertStatement = `
@@ -59,7 +72,16 @@ const calcContinuousMetric = async (exptId, metricId, exptQuery, metricQuery) =>
       p_value = $5
     WHERE experiment_id = $6 AND metric_id = $7
   `;
-  await dbQuery(insertStatement, +controlGroup.mean, +testGroup.mean, confIntervalPcnt[0], confIntervalPcnt[1], pValue, exptId, metricId);
+  await dbQuery(
+    insertStatement,
+    +controlGroup.mean,
+    +testGroup.mean,
+    confIntervalPcnt[0],
+    confIntervalPcnt[1],
+    pValue,
+    exptId,
+    metricId
+  );
 };
 
 const calcDiscreteMetric = async (exptId, metricId, exptQuery, metricQuery) => {
@@ -85,9 +107,9 @@ const calcDiscreteMetric = async (exptId, metricId, exptQuery, metricQuery) => {
     return;
   }
 
-  let obs = []
-  result.rows.forEach(group => {
-    let data = [ +group.count, +group.num_users - (+group.count) ];
+  let obs = [];
+  result.rows.forEach((group) => {
+    let data = [+group.count, +group.num_users - +group.count];
     if (data[0] < 5 || data[1] < 5) {
       throw new Error("Sample size too small");
     }
@@ -101,16 +123,25 @@ const calcDiscreteMetric = async (exptId, metricId, exptQuery, metricQuery) => {
     SET mean_control = $1, mean_test = $2, p_value = $3
     WHERE experiment_id = $4 AND metric_id = $5
   `;
-  const [ control, test ] = result.rows;
-  await dbQuery(insertStatement, +control.rate_per_user, +test.rate_per_user, stat.pValue, exptId, metricId);
+  const [control, test] = result.rows;
+  await dbQuery(
+    insertStatement,
+    +control.rate_per_user,
+    +test.rate_per_user,
+    stat.pValue,
+    exptId,
+    metricId
+  );
 };
 
 // Does one experiment, one metric at a time
 const updateStats = async (exptMetric) => {
   const { experiment_id: exptId, metric_id: metricId } = exptMetric;
   const exptQuery = await getExptQuery();
-  const { query_string: metricQuery, type: metricType } = await getMetricData(metricId);
-  if (metricType === 'binomial') {
+  const { query_string: metricQuery, type: metricType } = await getMetricData(
+    metricId
+  );
+  if (metricType === "binomial") {
     await calcDiscreteMetric(exptId, metricId, exptQuery, metricQuery);
   } else {
     await calcContinuousMetric(exptId, metricId, exptQuery, metricQuery);
@@ -122,7 +153,7 @@ const runAnalytics = async (exptId) => {
   if (exptId === undefined) {
     experiments = await getActiveExperiments();
   } else {
-    experiments = [ exptId ];
+    experiments = [exptId];
   }
   const exptMetrics = await getExptMetrics(experiments);
   for (let i = 0; i < exptMetrics.length; i++) {
