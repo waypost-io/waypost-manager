@@ -153,7 +153,7 @@ const analyzeExperiment = async (req, res, next) => {
       returnObj.error_message = e.message;
     } else {
       const errMessage =
-      "Not connected to event database. Please connect and try again for up-to-date results";
+        "Not connected to event database. Please connect and try again for up-to-date results";
       returnObj.error_message = errMessage;
     }
   }
