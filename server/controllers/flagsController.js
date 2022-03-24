@@ -1,4 +1,3 @@
-const { validationResult } = require("express-validator");
 const PGTable = require("../db/PGTable");
 const { FLAG_TABLE_NAME } = require("../constants/db");
 const { getNowString } = require("../utils");
@@ -30,8 +29,8 @@ const createNewFlagObj = ({
 };
 
 const getAllFlags = async (req, res, next) => {
+  let data;
   try {
-    let data;
     if (req.query.prov) {
       data = await getFlagsForWebhook();
     } else {
@@ -72,27 +71,21 @@ const getFlag = async (req, res, next) => {
 };
 
 const createFlag = async (req, res, next) => {
-  const errors = validationResult(req);
-  if (errors.isEmpty()) {
-    const newFlag = createNewFlagObj(req.body);
+  const newFlag = createNewFlagObj(req.body);
 
-    try {
-      const savedFlag = await flagTable.insertRow(newFlag);
+  try {
+    const savedFlag = await flagTable.insertRow(newFlag);
 
-      req.eventType = "FLAG_CREATED";
+    req.eventType = "FLAG_CREATED";
 
-      res.status(200).send(savedFlag);
-      next();
-    } catch (e) {
-      res.status(500).send("Error inserting into flags table");
-    }
-  } else {
-    return next(new HttpError("The name field is empty.", 400));
+    res.status(200).send(savedFlag);
+    next();
+  } catch (e) {
+    res.status(500).send("Error inserting into flags table");
   }
 };
 
 const editFlag = async (req, res, next) => {
-  // figure out how to validate this
   const id = req.params.id;
   const now = getNowString();
   const updatedFields = req.body;
@@ -101,6 +94,7 @@ const editFlag = async (req, res, next) => {
   } else {
     req.eventType = "FLAG_EDITED";
   }
+  
   try {
     const updatedFlag = await flagTable.editRow(updatedFields, { id });
 
