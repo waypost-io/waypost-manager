@@ -64,13 +64,12 @@ const setAssignmentsOnEachFlag = async (req, res, next) => {
 const createAssignmentsOnFlag = async (req, res, next) => {
   const flagId = req.params.id;
   const newAssignments = req.body;
-  const insertRows = [];
 
-  Object.keys(newAssignments).forEach((key) => {
+  const insertRows = Object.keys(newAssignments).map(key => {
     const obj = { user_id: key, status: newAssignments[key], flag_id: flagId };
-    insertRows.push(new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       resolve(cAssignmentTable.insertRow(obj));
-    }));
+    });
   });
 
   try {
@@ -84,13 +83,12 @@ const createAssignmentsOnFlag = async (req, res, next) => {
 const deleteAssignmentsOnFlag = async (req, res, next) => {
   const flagId = req.params.id;
   const usersToDeleteOnFlag = req.body;
-  const deleteRows = [];
 
-  usersToDeleteOnFlag.forEach((userId) => {
+  const deleteRows = usersToDeleteOnFlag.map(userId => {
     const obj = { user_id: userId, flag_id: flagId };
-    deleteRows.push(new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       resolve(cAssignmentTable.deleteRow(obj));
-    }));
+    });
   });
 
   try {
