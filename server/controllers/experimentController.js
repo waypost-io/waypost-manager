@@ -1,5 +1,5 @@
 const PGTable = require("../db/PGTable");
-const { EXPERIMENTS_TABLE_NAME, EXPERIMENT_METRICS_TABLE_NAME, GET_EXPT_METRICS_QUERY, GET_METRIC_DATA } = require("../constants/db");
+const { EXPERIMENTS_TABLE_NAME, EXPERIMENT_METRICS_TABLE_NAME } = require("../constants/db");
 const { getNowString } = require("../utils");
 const { runAnalytics } = require('../lib/statistics');
 const {
@@ -13,6 +13,39 @@ const experimentsTable = new PGTable(EXPERIMENTS_TABLE_NAME);
 experimentsTable.init();
 const experimentMetricsTable = new PGTable(EXPERIMENT_METRICS_TABLE_NAME);
 experimentMetricsTable.init();
+
+const GET_METRIC_DATA = `
+  SELECT em.experiment_id,
+    em.metric_id,
+    m.name,
+    m.type,
+    em.mean_test,
+    em.mean_control,
+    em.interval_start,
+    em.interval_end,
+    em.p_value
+  FROM experiment_metrics em
+  JOIN metrics m
+    ON em.metric_id = m.id
+  WHERE em.experiment_id = $1
+`;
+
+const GET_EXPT_METRICS_QUERY = `SELECT e.* ,
+                                  em.metric_id,
+                                  m.name,
+                                  m.type,
+                                  em.mean_test,
+                                  em.mean_control,
+                                  em.interval_start,
+                                  em.interval_end,
+                                  em.p_value
+                                FROM experiments e
+                                JOIN experiment_metrics em
+                                  ON e.id=em.experiment_id
+                                JOIN metrics m
+                                  ON em.metric_id = m.id
+                                WHERE flag_id = $1
+                                ORDER BY e.id DESC;`;
 
 const getExperiment = async (req, res, next) => {
   const id = req.params.id;

@@ -1,9 +1,14 @@
 const PGTable = require("../db/PGTable");
-const { EXPERIMENT_METRICS_TABLE_NAME, EXPOSURES_TABLE_NAME, GET_EXPOSURES_ON_EXPT } = require("../constants/db");
+const { EXPERIMENT_METRICS_TABLE_NAME, EXPOSURES_TABLE_NAME } = require("../constants/db");
 const experimentMetricsTable = new PGTable(EXPERIMENT_METRICS_TABLE_NAME);
 experimentMetricsTable.init();
 const exposuresTable = new PGTable(EXPOSURES_TABLE_NAME);
 exposuresTable.init();
+
+const GET_EXPOSURES_ON_EXPT = `SELECT variant, num_users, date
+                               FROM exposures
+                               WHERE experiment_id = $1
+                               ORDER BY date ASC;`
 
 // separateMetricExperimentData
 // takes metric experiment data and separates it into two objects

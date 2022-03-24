@@ -13,7 +13,6 @@ cAssignmentTable.init();
 // ]
 // outputs object like:
 // { '1': { '12345': true, abcdefg010: true, a098vuj: false } }
-
 const transformAssignmentData = (assignmentsArr) => {
   const obj = {};
   assignmentsArr.forEach(a => {
