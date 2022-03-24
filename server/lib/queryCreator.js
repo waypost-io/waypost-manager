@@ -48,25 +48,26 @@ const queryCreator = {
         validUpdatedValues.push(updatedFields[fieldName]);
       }
     });
-    const [where, wValues] = createWhereStatement(whereObj, validUpdatedValues.length + 1);
+    const [where, wValues] = createWhereStatement.call(this, whereObj, validUpdatedValues.length + 1);
     const values = validUpdatedValues.concat(wValues);
     const queryString = `UPDATE ${this.tableName} SET ${edits.join(
       ", "
     )} ${where} RETURNING *`;
+    console.log("queryString", queryString);
     return [queryString, values];
   },
 
   createDeleteStatement(whereObj = {}) {
-    const [where, wValues] = createWhereStatement(whereObj);
+    const [where, wValues] = createWhereStatement.call(this, whereObj);
     const queryString = `DELETE FROM ${this.tableName} ${where} RETURNING *`;
     return [queryString, wValues]
   },
 
   createSelectStatement(whereObj = {}) {
-    const [where, wValues] = createWhereStatement(whereObj);
+    const [where, wValues] = createWhereStatement.call(this, whereObj);
     const queryString = `SELECT * FROM ${this.tableName} ${where}`;
     return [queryString, wValues]
-  }
+  },
 }
 
 exports.queryCreator = queryCreator;

@@ -114,8 +114,10 @@ const editFlag = async (req, res, next) => {
 
 const deleteFlag = async (req, res, next) => {
   const id = req.params.id;
+
   try {
     const result = await flagTable.editRow({ is_deleted: true }, { id });
+
     if (!result)
       throw new Error(`Flag with the id of ${id} doesn't exist`);
 

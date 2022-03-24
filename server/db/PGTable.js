@@ -52,7 +52,11 @@ module.exports = class PGTable {
   // Ex. editRow({ status: false, name: "New Flag"}, { id: 2})
   // => runs the query: UPDATE tableName SET ('status', 'name') WHERE id = 2
   async editRow(updatedFields, where = {}) {
+    console.log("updatedFields", updatedFields);
+    console.log("where", where);
     const [ queryString, params ] = qc.createUpdateStatement.call(this, updatedFields, where);
+    console.log("queryString", queryString);
+    console.log("params", params);
     const result = await dbQuery(queryString, ...params);
     return result.rows[0];
   }
