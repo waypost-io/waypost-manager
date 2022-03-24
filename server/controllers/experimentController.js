@@ -149,9 +149,13 @@ const analyzeExperiment = async (req, res, next) => {
   try {
     await runAnalytics(id);
   } catch (e) {
-    const errMessage =
-      "Not connected to event database. Please connect and try again for up-to-date results";
-    returnObj.error_message = errMessage;
+    if (e.message === "Sample size too small") {
+      returnObj.error_message = e.message;
+    } else {
+      const errMessage =
+        "Not connected to event database. Please connect and try again for up-to-date results";
+      returnObj.error_message = errMessage;
+    }
   }
 
   try {

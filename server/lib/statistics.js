@@ -116,7 +116,6 @@ const calcDiscreteMetric = async (exptId, metricId, exptQuery, metricQuery) => {
     obs.push(data);
   });
   const stat = chi2test(obs);
-
   // Insert into experiment_metrics table
   const insertStatement = `
     UPDATE experiment_metrics

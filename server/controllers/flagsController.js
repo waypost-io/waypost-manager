@@ -33,6 +33,11 @@ const createNewFlagObj = ({
   };
 };
 
+const getFlagsForWebhook = async () => {
+  const result = await flagTable.query(GET_FLAGS_FOR_WEBHOOK);
+  return result.rows[0] === undefined ? undefined : result.rows;
+}
+
 const getAllFlags = async (req, res, next) => {
   let data;
   try {
@@ -55,8 +60,7 @@ const getAllFlags = async (req, res, next) => {
 };
 
 const setFlagsOnReq = async (req, res, next) => {
-  const result = await flagTable.query(GET_FLAGS_FOR_WEBHOOK);
-  const data = result.rows[0] === undefined ? undefined : result.rows;
+  const data = await getFlagsForWebhook()
   req.flags = data;
   next();
 };
