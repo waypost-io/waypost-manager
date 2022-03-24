@@ -30,22 +30,24 @@ const GET_METRIC_DATA = `
   WHERE em.experiment_id = $1
 `;
 
-const GET_EXPT_METRICS_QUERY = `SELECT e.* ,
-                                  em.metric_id,
-                                  m.name,
-                                  m.type,
-                                  em.mean_test,
-                                  em.mean_control,
-                                  em.interval_start,
-                                  em.interval_end,
-                                  em.p_value
-                                FROM experiments e
-                                JOIN experiment_metrics em
-                                  ON e.id=em.experiment_id
-                                JOIN metrics m
-                                  ON em.metric_id = m.id
-                                WHERE flag_id = $1
-                                ORDER BY e.id DESC;`;
+const GET_EXPT_METRICS_QUERY = `
+  SELECT e.* ,
+    em.metric_id,
+    m.name,
+    m.type,
+    em.mean_test,
+    em.mean_control,
+    em.interval_start,
+    em.interval_end,
+    em.p_value
+  FROM experiments e
+  JOIN experiment_metrics em
+    ON e.id=em.experiment_id
+  JOIN metrics m
+    ON em.metric_id = m.id
+  WHERE flag_id = $1
+  ORDER BY e.id DESC;
+`;
 
 const getExperiment = async (req, res, next) => {
   const id = req.params.id;
@@ -74,19 +76,20 @@ const getExperimentsForFlag = async (req, res, next) => {
 };
 
 const createExperiment = async (req, res, next) => {
+  const exptObj = {
+    flag_id: req.body.flag_id,
+    duration: req.body.duration,
+    name: req.body.name || '',
+    description: req.body.description || '',
+  };
+
   try {
-    const exptObj = {
-      flag_id: req.body.flag_id,
-      duration: req.body.duration,
-      name: req.body.name || '',
-      description: req.body.description || '',
-    };
     const newExpt = await experimentsTable.insertRow(exptObj);
 
     await addMetricsToExptMetricsTable(req.body.metric_ids, newExpt.id)
 
-    const metrics = await experimentMetricsTable.getRowsWhere({ experiment_id: newExpt.id });
-    newExpt.metrics = metrics;
+    const whereObj = { experiment_id: newExpt.id }
+    newExpt.metrics = await experimentMetricsTable.getRowsWhere(whereObj);
     res.status(200).send(newExpt);
   } catch (err) {
     console.log(err);
@@ -96,15 +99,15 @@ const createExperiment = async (req, res, next) => {
 
 const editExperiment = async (req, res, next) => {
   const id = req.params.id;
+  let { metric_ids, old_metric_ids, ...updatedFields} = req.body;
+  if (updatedFields.date_ended) {
+    updatedFields.date_ended = getNowString();
+  }
+  let updatedExpt;
+
   try {
-    let { metric_ids, old_metric_ids, ...updatedFields} = req.body;
     if (metric_ids) await updateMetricsOnExpt(old_metric_ids, metric_ids, id);
 
-    if (updatedFields.date_ended) {
-      updatedFields.date_ended = getNowString();
-    }
-
-    let updatedExpt;
     if (Object.keys(updatedFields).length > 0) {
       updatedExpt = await experimentsTable.editRow(updatedFields, { id: id });
     } else {
@@ -112,8 +115,7 @@ const editExperiment = async (req, res, next) => {
     }
 
     if (!updatedExpt.date_ended) await setExposuresOnExperiment(updatedExpt);
-    const updatedMetrics = (await experimentMetricsTable.query(GET_METRIC_DATA, [ id ])).rows;
-    updatedExpt.metrics = updatedMetrics;
+    updatedExpt.metrics = (await experimentMetricsTable.query(GET_METRIC_DATA, [ id ])).rows;
     req.updatedExpt = updatedExpt;
 
     next(); // go to analyzeExperiment
@@ -136,6 +138,7 @@ const analyzeAll = async (req, res, next) => {
 const analyzeExperiment = async (req, res, next) => {
   const id = req.params.id;
   const returnObj = req.updatedExpt ? { updatedExpt: req.updatedExpt } : {};
+  
   try {
     await runAnalytics(id);
   } catch (e) {
