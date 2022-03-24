@@ -8,7 +8,6 @@ const sdkKeyController = require("../controllers/sdkKeyController");
 const exposuresController = require("../controllers/exposuresController");
 const logsController = require("../controllers/logsController");
 const cAssignmentController = require("../controllers/cAssignmentController");
-const { validateNewFlag } = require("../validators/validators");
 
 router.get("/flags/:id/custom-assignments", cAssignmentController.fetchAssignmentsOnFlag);
 
@@ -24,7 +23,6 @@ router.get("/flags/:id", flagsController.getFlag);
 
 router.post(
   "/flags",
-  validateNewFlag,
   flagsController.createFlag,
   flagsController.setFlagsOnReq,
   cAssignmentController.setAssignmentsOnEachFlag,
