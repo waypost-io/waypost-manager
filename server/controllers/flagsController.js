@@ -2,10 +2,16 @@ const PGTable = require("../db/PGTable");
 const { FLAG_TABLE_NAME } = require("../constants/db");
 const { getNowString } = require("../utils");
 const { sendWebhook } = require("../lib/sendWebhook.js");
-const { getFlagsForWebhook } = require("../db/flags.js");
+// const { getFlagsForWebhook } = require("../db/flags.js");
 
 const flagTable = new PGTable(FLAG_TABLE_NAME);
 flagTable.init();
+
+const GET_FLAGS_FOR_WEBHOOK = `
+  SELECT id, name, status, percentage_split, hash_offset, is_experiment
+  FROM flags
+  WHERE is_deleted=false
+`;
 
 const createNewFlagObj = ({
   name,
@@ -50,7 +56,8 @@ const getAllFlags = async (req, res, next) => {
 };
 
 const setFlagsOnReq = async (req, res, next) => {
-  const data = await getFlagsForWebhook();
+  const result = await flagTable.query(GET_FLAGS_FOR_WEBHOOK);
+  const data = result.rows[0] === undefined ? undefined : result.rows;
   req.flags = data;
   next();
 };
@@ -94,7 +101,7 @@ const editFlag = async (req, res, next) => {
   } else {
     req.eventType = "FLAG_EDITED";
   }
-  
+
   try {
     const updatedFlag = await flagTable.editRow(updatedFields, { id });
 
