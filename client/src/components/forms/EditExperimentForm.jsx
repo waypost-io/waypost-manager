@@ -119,7 +119,7 @@ const EditExperimentForm = ({
         />
       </div>
       <div className={FIELD_DIV_CSS}>
-        <label fhtmlFor="duration" className={LABEL_CSS}>
+        <label htmlFor="duration" className={LABEL_CSS}>
           Duration:
         </label>
         <input

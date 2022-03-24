@@ -37,8 +37,8 @@ app.use((err, req, res, next) => {
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });
-
-// Backfilling exposures every hour
-cron.schedule("0 * * * *", async () => {
+ 
+// Backfilling exposures every night at 3am
+cron.schedule('0 3 * * *', async () => {
   backfillExposures();
 });

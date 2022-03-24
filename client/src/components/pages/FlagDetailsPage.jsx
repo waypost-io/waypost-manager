@@ -205,7 +205,7 @@ const FlagDetailsPage = () => {
       )}
       {exptData &&
         exptData.map((expt) => {
-          return <ExperimentInfo key={expt.id} allMetrics={metricData} data={expt} />;
+          return <ExperimentInfo key={`exptinfo-${expt.id}`} allMetrics={metricData} data={expt} />;
         })}
     </div>
   );
