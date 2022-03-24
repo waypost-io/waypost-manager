@@ -1,17 +1,20 @@
 const { verifyQueryString, verifyConnection } = require("../db/event-db-query");
-const { REQUIRED_EVENT_DB_COLS, CONNECTION_TABLE_NAME } = require("../constants/db");
+const {
+  REQUIRED_EVENT_DB_COLS,
+  CONNECTION_TABLE_NAME,
+} = require("../constants/db");
 const PGTable = require("../db/PGTable");
 
 const connectionTable = new PGTable(CONNECTION_TABLE_NAME);
-connectionTable.init()
-
+connectionTable.init();
 
 const createConnection = async (req, res, next) => {
   try {
     await verifyConnection(req.body);
   } catch (err) {
     console.log(err);
-    res.status(200).send({ connected: false, error_message: "Could not connect to DB, invalid credentials." });
+    const error_message = "Could not connect to DB, invalid credentials.";
+    res.status(200).send({ connected: false, error_message });
     return;
   }
 
@@ -24,14 +27,20 @@ const createConnection = async (req, res, next) => {
   }
 
   try {
-    let errMessage = "Desired columns not returned by query string."
-    await verifyQueryString(req.body.expt_table_query, REQUIRED_EVENT_DB_COLS, errMessage)
+    let errMessage = "Desired columns not returned by query string.";
+    await verifyQueryString(
+      req.body.expt_table_query,
+      REQUIRED_EVENT_DB_COLS,
+      errMessage
+    );
     res.status(200).send({ connected: true, ok: true });
   } catch (err) {
     console.log(err);
     connectionTable.deleteAllRows();
-    res.status(200).send({ connected: true, ok: false, error_message: err.message });
-    return
+    res
+      .status(200)
+      .send({ connected: true, ok: false, error_message: err.message });
+    return;
   }
 };
 
@@ -46,12 +55,16 @@ const removeConnection = async (req, res, next) => {
 
 const testConnection = async (req, res, next) => {
   try {
-    const result = await connectionTable.query("SELECT pg_database FROM connection");
+    const result = await connectionTable.query(
+      "SELECT pg_database FROM connection"
+    );
 
     if (result.rows[0] === undefined) {
       res.status(200).send({ connected: false });
     } else {
-      res.status(200).send({ connected: true, database: result.rows[0]["pg_database"] });
+      res
+        .status(200)
+        .send({ connected: true, database: result.rows[0]["pg_database"] });
     }
   } catch (err) {
     console.log(err);

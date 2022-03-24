@@ -15,14 +15,14 @@ cAssignmentTable.init();
 // { '1': { '12345': true, abcdefg010: true, a098vuj: false } }
 const transformAssignmentData = (assignmentsArr) => {
   const obj = {};
-  assignmentsArr.forEach(a => {
+  assignmentsArr.forEach((a) => {
     if (!obj[a.flag_id]) {
       obj[a.flag_id] = {};
     }
-    obj[a.flag_id][a.user_id] = a.status
+    obj[a.flag_id][a.user_id] = a.status;
   });
   return obj;
-}
+};
 
 const fetchAssignmentsOnFlag = async (req, res, next) => {
   const flagId = req.params.id;
@@ -31,41 +31,41 @@ const fetchAssignmentsOnFlag = async (req, res, next) => {
     const assignments = transformAssignmentData(result);
     res.status(200).send(assignments);
   } catch (e) {
-    res.status(500).send("Error fetching custom assignment data")
+    res.status(500).send("Error fetching custom assignment data");
   }
-}
+};
 
 const fetchAllAssignments = async (req, res, next) => {
   try {
     const result = await cAssignmentTable.getAllRows();
     res.status(200).send(transformAssignmentData(result));
   } catch (e) {
-    res.status(500).send("Error fetching custom assignment data")
+    res.status(500).send("Error fetching custom assignment data");
   }
-}
+};
 
 const setAssignmentsOnEachFlag = async (req, res, next) => {
   try {
     const result = await cAssignmentTable.getAllRows();
     const assignments = transformAssignmentData(result);
 
-    req.flags.forEach(flag => {
+    req.flags.forEach((flag) => {
       flag.custom_assignments = assignments[flag.id];
       delete flag.id;
     });
 
     next();
   } catch (e) {
-    res.status(500).send("Error fetching custom assignment data")
+    res.status(500).send("Error fetching custom assignment data");
   }
-}
+};
 
 // receives { user123: true, user234: false, etc.}
 const createAssignmentsOnFlag = async (req, res, next) => {
   const flagId = req.params.id;
   const newAssignments = req.body;
 
-  const insertRows = Object.keys(newAssignments).map(key => {
+  const insertRows = Object.keys(newAssignments).map((key) => {
     const obj = { user_id: key, status: newAssignments[key], flag_id: flagId };
     return new Promise((resolve, reject) => {
       resolve(cAssignmentTable.insertRow(obj));
@@ -73,18 +73,18 @@ const createAssignmentsOnFlag = async (req, res, next) => {
   });
 
   try {
-    const results = await Promise.all(insertRows)
+    const results = await Promise.all(insertRows);
     res.status(200).send(transformAssignmentData(results));
   } catch (e) {
-    res.status(500).send("Error inserting new assignments.")
+    res.status(500).send("Error inserting new assignments.");
   }
-}
+};
 // receives an array of userIds: ["user1", "12345", "user2020"]
 const deleteAssignmentsOnFlag = async (req, res, next) => {
   const flagId = req.params.id;
   const usersToDeleteOnFlag = req.body;
 
-  const deleteRows = usersToDeleteOnFlag.map(userId => {
+  const deleteRows = usersToDeleteOnFlag.map((userId) => {
     const obj = { user_id: userId, flag_id: flagId };
     return new Promise((resolve, reject) => {
       resolve(cAssignmentTable.deleteRow(obj));
@@ -95,9 +95,11 @@ const deleteAssignmentsOnFlag = async (req, res, next) => {
     await Promise.all(deleteRows);
     res.status(200).send({ flag_id: flagId, user_ids: usersToDeleteOnFlag });
   } catch (e) {
-    res.status(500).send(`Error deleting users ${usersToDeleteOnFlag} on flagId: ${flagId}`);
+    res
+      .status(500)
+      .send(`Error deleting users ${usersToDeleteOnFlag} on flagId: ${flagId}`);
   }
-}
+};
 
 exports.fetchAssignmentsOnFlag = fetchAssignmentsOnFlag;
 exports.fetchAllAssignments = fetchAllAssignments;

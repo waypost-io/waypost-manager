@@ -1,13 +1,16 @@
 const PGTable = require("../db/PGTable");
-const { EXPERIMENTS_TABLE_NAME, EXPERIMENT_METRICS_TABLE_NAME } = require("../constants/db");
+const {
+  EXPERIMENTS_TABLE_NAME,
+  EXPERIMENT_METRICS_TABLE_NAME,
+} = require("../constants/db");
 const { getNowString } = require("../utils");
-const { runAnalytics } = require('../lib/statistics');
+const { runAnalytics } = require("../lib/statistics");
 const {
   transformExptMetricData,
   setExposuresOnExperiment,
   updateMetricsOnExpt,
   addMetricsToExptMetricsTable,
-} = require("../lib/experimentHelpers.js")
+} = require("../lib/experimentHelpers.js");
 
 const experimentsTable = new PGTable(EXPERIMENTS_TABLE_NAME);
 experimentsTable.init();
@@ -56,14 +59,16 @@ const getExperiment = async (req, res, next) => {
     res.status(200).send(experiment);
   } catch (err) {
     console.log(err);
-    res.status(500).send(err.message)
+    res.status(500).send(err.message);
   }
 };
 
 const getExperimentsForFlag = async (req, res, next) => {
   const flagId = req.params.id;
   try {
-    let { rows: exptMetrics } = await experimentsTable.query(GET_EXPT_METRICS_QUERY, [flagId]);
+    let {
+      rows: exptMetrics,
+    } = await experimentsTable.query(GET_EXPT_METRICS_QUERY, [flagId]);
     const experiments = transformExptMetricData(exptMetrics); // transforms to redux-friendly format
 
     const runningExpt = experiments.find((expt) => expt.date_ended === null);
@@ -71,7 +76,7 @@ const getExperimentsForFlag = async (req, res, next) => {
     res.status(200).send(experiments);
   } catch (err) {
     console.log(err);
-    res.status(500).send(err.message)
+    res.status(500).send(err.message);
   }
 };
 
@@ -79,27 +84,27 @@ const createExperiment = async (req, res, next) => {
   const exptObj = {
     flag_id: req.body.flag_id,
     duration: req.body.duration,
-    name: req.body.name || '',
-    description: req.body.description || '',
+    name: req.body.name || "",
+    description: req.body.description || "",
   };
 
   try {
     const newExpt = await experimentsTable.insertRow(exptObj);
 
-    await addMetricsToExptMetricsTable(req.body.metric_ids, newExpt.id)
+    await addMetricsToExptMetricsTable(req.body.metric_ids, newExpt.id);
 
-    const whereObj = { experiment_id: newExpt.id }
+    const whereObj = { experiment_id: newExpt.id };
     newExpt.metrics = await experimentMetricsTable.getRowsWhere(whereObj);
     res.status(200).send(newExpt);
   } catch (err) {
     console.log(err);
-    res.status(500).send(err.message)
+    res.status(500).send(err.message);
   }
 };
 
 const editExperiment = async (req, res, next) => {
   const id = req.params.id;
-  let { metric_ids, old_metric_ids, ...updatedFields} = req.body;
+  let { metric_ids, old_metric_ids, ...updatedFields } = req.body;
   if (updatedFields.date_ended) {
     updatedFields.date_ended = getNowString();
   }
@@ -115,13 +120,15 @@ const editExperiment = async (req, res, next) => {
     }
 
     if (!updatedExpt.date_ended) await setExposuresOnExperiment(updatedExpt);
-    updatedExpt.metrics = (await experimentMetricsTable.query(GET_METRIC_DATA, [ id ])).rows;
+    updatedExpt.metrics = (
+      await experimentMetricsTable.query(GET_METRIC_DATA, [id])
+    ).rows;
     req.updatedExpt = updatedExpt;
 
     next(); // go to analyzeExperiment
   } catch (err) {
     console.log(err);
-    res.status(500).send(err.message)
+    res.status(500).send(err.message);
   }
 };
 
@@ -138,16 +145,17 @@ const analyzeAll = async (req, res, next) => {
 const analyzeExperiment = async (req, res, next) => {
   const id = req.params.id;
   const returnObj = req.updatedExpt ? { updatedExpt: req.updatedExpt } : {};
-  
+
   try {
     await runAnalytics(id);
   } catch (e) {
-    const errMessage = "Not connected to event database. Please connect and try again for up-to-date results";
+    const errMessage =
+      "Not connected to event database. Please connect and try again for up-to-date results";
     returnObj.error_message = errMessage;
   }
 
   try {
-    const result = await experimentsTable.query(GET_METRIC_DATA, [ id ]);
+    const result = await experimentsTable.query(GET_METRIC_DATA, [id]);
     returnObj.stats = result.rows;
     res.status(200).send(returnObj);
   } catch (err) {

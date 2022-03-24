@@ -1,6 +1,6 @@
 const PGTable = require("../db/PGTable");
 const { KEYS_TABLE_NAME } = require("../constants/db");
-const { v4: uuidv4 } = require('uuid');
+const { v4: uuidv4 } = require("uuid");
 const { sendWebhook } = require("../lib/sendWebhook.js");
 
 const keysTable = new PGTable(KEYS_TABLE_NAME);
@@ -16,8 +16,7 @@ const createKey = async (req, res, next) => {
   } catch (err) {
     res.status(500).send("Error saving new key");
   }
-
-}
+};
 
 const fetchKey = async (req, res, next) => {
   try {
@@ -28,18 +27,18 @@ const fetchKey = async (req, res, next) => {
       res.status(200).send(undefined);
     }
   } catch (err) {
-    res.status(500).send("Error connecting to database")
+    res.status(500).send("Error connecting to database");
   }
-}
+};
 
 const removeKeys = async (req, res, next) => {
   try {
     await keysTable.deleteAllRows();
     next();
   } catch (err) {
-    res.status(500).send("Error connecting to database")
+    res.status(500).send("Error connecting to database");
   }
-}
+};
 
 const sendSdkWebhook = async (req, res, next) => {
   try {

@@ -19,7 +19,7 @@ const logEvent = async (req, res, next) => {
     const event = {
       flag_id: req.params.id || req.flagId,
       event_type: req.eventType,
-      timestamp: getNowString()
+      timestamp: getNowString(),
     };
     const savedEvent = await flagEventsTable.insertRow(event);
     res.status(200);
@@ -38,7 +38,6 @@ const getLog = async (req, res, next) => {
     res.status(500);
   }
 };
-
 
 exports.logEvent = logEvent;
 exports.getLog = getLog;

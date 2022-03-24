@@ -2,7 +2,6 @@ const PGTable = require("../db/PGTable");
 const { FLAG_TABLE_NAME } = require("../constants/db");
 const { getNowString } = require("../utils");
 const { sendWebhook } = require("../lib/sendWebhook.js");
-// const { getFlagsForWebhook } = require("../db/flags.js");
 
 const flagTable = new PGTable(FLAG_TABLE_NAME);
 flagTable.init();
@@ -30,7 +29,7 @@ const createNewFlagObj = ({
     is_experiment: is_experiment || false,
     date_created: now,
     is_deleted: false,
-    hash_offset
+    hash_offset,
   };
 };
 
@@ -96,7 +95,7 @@ const editFlag = async (req, res, next) => {
   const id = req.params.id;
   const now = getNowString();
   const updatedFields = req.body;
-  if (Object.keys(updatedFields).includes('status')) {
+  if (Object.keys(updatedFields).includes("status")) {
     req.eventType = "FLAG_TOGGLED";
   } else {
     req.eventType = "FLAG_EDITED";
@@ -118,8 +117,7 @@ const deleteFlag = async (req, res, next) => {
   try {
     const result = await flagTable.editRow({ is_deleted: true }, { id });
 
-    if (!result)
-      throw new Error(`Flag with the id of ${id} doesn't exist`);
+    if (!result) throw new Error(`Flag with the id of ${id} doesn't exist`);
 
     const deletedFlagName = result.name;
     req.eventType = "FLAG_DELETED";
@@ -137,7 +135,6 @@ const sendFlagsWebhook = async (req, res, next) => {
   try {
     await sendWebhook("/flags", req.flags);
     console.log("flag webhook sent");
-
   } catch (err) {
     console.log(err.message);
   }

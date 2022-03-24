@@ -12,7 +12,7 @@ function createWhereStatement(obj, nextPlaceholderNum = 1) {
   Object.keys(obj).forEach((fieldName, idx) => {
     if (this.fields.includes(fieldName)) {
       if (obj[fieldName] === "NULL" || obj[fieldName] === "NOT NULL") {
-        edits.push(`${fieldName} IS ${obj[fieldName]}`)
+        edits.push(`${fieldName} IS ${obj[fieldName]}`);
       } else {
         edits.push(`${fieldName} = $${idx + nextPlaceholderNum}`);
         whereVals.push(obj[fieldName]);
@@ -32,7 +32,7 @@ const queryCreator = {
     const placeholders = createPlaceholdersArr(values);
     const queryString = `INSERT INTO ${this.tableName}(${columns.join(", ")})
       VALUES (${placeholders.join(", ")}) RETURNING *`;
-    return [queryString, values]
+    return [queryString, values];
   },
 
   // Ex. createUpdateStatement({ status: false, name: "New Flag"}, { id: 2})
@@ -48,25 +48,28 @@ const queryCreator = {
         validUpdatedValues.push(updatedFields[fieldName]);
       }
     });
-    const [where, wValues] = createWhereStatement.call(this, whereObj, validUpdatedValues.length + 1);
+    const [where, wValues] = createWhereStatement.call(
+      this,
+      whereObj,
+      validUpdatedValues.length + 1
+    );
     const values = validUpdatedValues.concat(wValues);
-    const queryString = `UPDATE ${this.tableName} SET ${edits.join(
-      ", "
-    )} ${where} RETURNING *`;
+    const queryString = `UPDATE ${this.tableName} SET ${edits.join(", ")}
+      ${where} RETURNING *`;
     return [queryString, values];
   },
 
   createDeleteStatement(whereObj = {}) {
     const [where, wValues] = createWhereStatement.call(this, whereObj);
     const queryString = `DELETE FROM ${this.tableName} ${where} RETURNING *`;
-    return [queryString, wValues]
+    return [queryString, wValues];
   },
 
   createSelectStatement(whereObj = {}) {
     const [where, wValues] = createWhereStatement.call(this, whereObj);
     const queryString = `SELECT * FROM ${this.tableName} ${where}`;
-    return [queryString, wValues]
+    return [queryString, wValues];
   },
-}
+};
 
 exports.queryCreator = queryCreator;
