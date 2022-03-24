@@ -190,7 +190,7 @@ const FlagDetailsPage = () => {
                 </span>
                 <div className="inline-block w-1/2 text-right pr-10">Always off for user IDs:</div>
                 <span className="font-bold">
-                  {customAssignments.off.length > 0 ? customAssignments.on.join(", ") : " "}
+                  {customAssignments.off.length > 0 ? customAssignments.off.join(", ") : " "}
                 </span>
               </>
             )}
@@ -205,7 +205,7 @@ const FlagDetailsPage = () => {
       )}
       {exptData &&
         exptData.map((expt) => {
-          return <ExperimentInfo key={expt.id} allMetrics={metricData} data={expt} />;
+          return <ExperimentInfo key={`exptinfo-${expt.id}`} allMetrics={metricData} data={expt} />;
         })}
     </div>
   );
