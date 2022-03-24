@@ -27,7 +27,7 @@ CREATE TABLE custom_assignments (
 
 CREATE TABLE flag_events (
     id SERIAL PRIMARY KEY,
-    flag_id INTEGER NOT NULL,
+    flag_id INTEGER REFERENCES flags (id) NOT NULL,
     event_type VARCHAR(255) NOT NULL,
     timestamp TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
