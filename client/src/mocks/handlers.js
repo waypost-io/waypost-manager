@@ -88,5 +88,10 @@ export const handlers = [
         p_value: null
       }
     ]));
-  })
+  }),
+  rest.get('/api/flags/:id/custom-assignments', (req, res, ctx) => {
+    return res(ctx.status(200), ctx.json({
+      '2': { user123: false,  user888: false}
+    }));
+  }),
 ];
