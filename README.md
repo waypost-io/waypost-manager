@@ -422,7 +422,7 @@ Unsuccessful response:
    "connected": false
 }
 ```
-### GET api/flags/:id/custom-assignments
+## Endpoint: GET api/flags/:id/custom-assignments
 
 No request body needed
 
@@ -431,7 +431,7 @@ Successful response, if :id == 2:
 {'2': { user123: false,  user888: false}}
 ```
 
-### POST api/flags/:id/custom-assignments
+## Endpoint: POST api/flags/:id/custom-assignments
 
 Request body:
 
@@ -450,7 +450,7 @@ Response, if :id == 1
 }
 ```
 
-### DELETE api/flags/:id/custom-assignments
+## Endpoint: DELETE api/flags/:id/custom-assignments
 
 Request body:
 
