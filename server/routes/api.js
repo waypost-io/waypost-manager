@@ -14,7 +14,7 @@ router.get("/flags",
   flagsController.getAllFlags,
   flagsController.setFlagsOnReq,
   cAssignmentController.setAssignmentsOnEachFlag,
-  flagsController.sendFlagsWebhook
+  flagsController.sendFlagsOnReq
 );
 
 router.get("/flags/:id", flagsController.getFlag);
