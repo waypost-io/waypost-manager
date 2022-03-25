@@ -422,3 +422,44 @@ Unsuccessful response:
    "connected": false
 }
 ```
+### GET api/flags/:id/custom-assignments
+
+No request body needed
+
+Successful response, if :id == 2:
+```
+{'2': { user123: false,  user888: false}}
+```
+
+### POST api/flags/:id/custom-assignments
+
+Request body:
+
+```
+{ user8: true, user9: false}
+```
+
+Response, if :id == 1
+
+```
+{
+    "1": {
+        "user8": true,
+        "user9": false
+    }
+}
+```
+
+### DELETE api/flags/:id/custom-assignments
+
+Request body:
+
+```
+["userId1", "userId2"]
+```
+
+Response:
+
+```
+{flag_id: 1, user_ids: ["userId1", "userId2"] }
+```
