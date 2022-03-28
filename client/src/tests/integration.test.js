@@ -48,3 +48,15 @@ test('Shows flag events log after navigating to page', () => {
   fireEvent.click(screen.getByTestId('logLink'));
   expect(screen.getByTestId('flagLogTable')).toBeInTheDocument();
 });
+
+test('Custom assignments button changes after click', async () => {
+  render(<App />);
+  fireEvent.click(screen.getByTestId('flagsLink'));
+  const flag2 = await screen.findByText("Test Flag 2");
+  fireEvent.click(flag2);
+  const button = await screen.findByText("Show Custom Assignments");
+  fireEvent.click(button);
+  expect(button).toHaveTextContent("Hide Custom Assignments");
+  fireEvent.click(button);
+  expect(button).toHaveTextContent("Show Custom Assignments");
+});
