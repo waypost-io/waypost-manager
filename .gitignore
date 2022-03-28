@@ -106,3 +106,4 @@ dist
 #Postgres
 *waypost_db_reset.sql
 seedDatabase.js
+seedFlags.js
