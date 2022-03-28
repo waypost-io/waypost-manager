@@ -42,17 +42,25 @@ POSTGRES_USER=<user>
 POSTGRES_PASSWORD=<password>
 POSTGRES_HOST="localhost"
 POSTGRES_PORT= 5432
-WEBHOOK_VALIDATOR="secret"
+WEBHOOK_VALIDATOR=<secret>
 FLAG_PROVIDER_URL="http://localhost:5050"
 ```
+Note that the `WEBHOOK_VALIDATOR` property should match the `WEBHOOK_VALIDATOR` property in the provider's .env file. Otherwise, the two applications will not be able to communicate with eachother.
+
 /client: (optional if you want to run tests)
 ```
 NODE_ENV="development"
 ```
-6. Start the application from the /server directory.
+6. Start the application:
+From the `/server` directory
 ```
-npm run dev
+npm start
 ```
+In a new console, in the `/client` directory
+```
+npm start
+```
+
 The client will run on port `:3000` and the server will run on port `:5000`
 
 # API Docs
