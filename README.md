@@ -2,14 +2,24 @@
     <img src="" alt="Waypost logo" width="200" height="200">
 </p>
 
-Full-stack application for feature flag management and A/B testing
+Waypost is an open-source, lightweight, self-hosted feature flag management system that specializes in A/B Testing, providing analytical insights for your experiments on both the front-end and back-end.
+
+## Usage
+
+This repository contains the files to run the Waypost feature flag managment application. This application allows you to create, update, and delete feature flags, connect to an outside database to analyze user event data, and communicate with a Waypost flag provider service so that flags are available to clients. Note that this appication is intended to be used with both the [Waypost flag provider](https://github.com/waypost-io/waypost-flag-provider) and [Waypost SDKs](https://github.com/waypost-io/waypost-react-sdk).
+
+To learn more about Waypost, visit our [case study page]().
+
+For more detailed information on how to use Waypost, visit our [documentation page]().
 
 ## Database setup
-1. Make sure postgres is installed.
+1. With postgres installed, log in to the postgres console and create a new database called "waypost"
 ```
-psql -V
+CREATE DATABASE waypost;
+/c waypost
 ```
-2. 
+2. Run all of the queries in the /server/waypost_db_setup.sql file to create the waypost schema locally.
+3. Make sure that the credientials in the .env file match your postgres login credientials (see "local setup").
 
 ## Local setup
 1. Clone the Waypost repository.
