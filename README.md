@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="" alt="Waypost logo" width="200" height="200">
+    <img src="./client/public/assets/PNGs/Waypost_graphic_color.png" alt="Waypost logo" width="200" height="200">
 </p>
 
 Waypost is an open-source, lightweight, self-hosted feature flag management system that specializes in A/B Testing, providing analytical insights for your experiments on both the front-end and back-end.
@@ -13,55 +13,64 @@ To learn more about Waypost, visit our [case study page]().
 For more detailed information on how to use Waypost, visit our [documentation page]().
 
 ## Database setup
+
 1. With postgres installed, log in to the postgres console and create a new database called "waypost"
+
 ```
 CREATE DATABASE waypost;
 /c waypost
 ```
+
 2. Run all of the queries in the /server/waypost_db_setup.sql file to create the waypost schema locally.
 3. Make sure that the credientials in the .env file match your postgres login credientials (see "local setup").
 
 ## Local setup
+
 1. Clone the Waypost repository.
+
 ```
 git clone https://github.com/waypost-io/waypost.git
 cd waypost
 ```
+
 2. Install dependancies
+
 ```
 cd waypost/server
 npm install
 cd ../client
 npm install
 ```
-3. Add .env files
-/server:
+
+3. Add .env file in the server directory with the following environment variables. Make sure the URL’s and WEBHOOK_VALIDATOR are correct.
+
 ```
 POSTGRES_DB="waypost"
 POSTGRES_USER=<user>
 POSTGRES_PASSWORD=<password>
 POSTGRES_HOST="localhost"
 POSTGRES_PORT= 5432
-WEBHOOK_VALIDATOR=<secret>
+WEBHOOK_VALIDATOR="secret"
 FLAG_PROVIDER_URL="http://localhost:5050"
 ```
-Note that the `WEBHOOK_VALIDATOR` property should match the `WEBHOOK_VALIDATOR` property in the provider's .env file. Otherwise, the two applications will not be able to communicate with eachother.
 
-/client: (optional if you want to run tests)
+and in the client directory: (optional if you want to run tests)
+
 ```
 NODE_ENV="development"
 ```
-6. Start the application:
-From the `/server` directory
-```
-npm start
-```
-In a new console, in the `/client` directory
-```
-npm start
-```
 
-The client will run on port `:3000` and the server will run on port `:5000`
+4. Start the back-end from the server directory.
+
+```
+npm start
+```
+5. Open a new terminal and start the front-end from the client directory.
+```
+cd ../client
+npm start
+```
+The client will run on port :3000 and the server will run on port :5000.
 
 # API Docs
 
@@ -168,11 +177,14 @@ Response example:
 ```
 `Flag '${deletedFlagName}' with id = ${id} successfully deleted`
 ```
+
 ## Endpoint: GET api/flags/:id/experiments
+
 No request body needed.
 Returns an array of all the experiments for the given flag.
 
 Response example:
+
 ```
 [
     {
@@ -219,9 +231,12 @@ Response example:
     "p_value": null
 }
 ```
+
 ## Endpoint: POST api/experiments
-For creating a new experiment.  Request body should have the following fields in the example unless marked optional.
+
+For creating a new experiment. Request body should have the following fields in the example unless marked optional.
 Example:
+
 ```
 {
   "flag_id": 1,
@@ -231,8 +246,10 @@ Example:
   "description": "Very important test" (OPTIONAL)
 }
 ```
+
 The API will return the newly created experiment object.
 Example response:
+
 ```
 {
     "id": 4,
@@ -253,9 +270,11 @@ Example response:
 ```
 
 ## Endpoint: PUT api/experiments/:id
+
 Request body should contain all updated fields and their new values. Can use this to end the experiment (to do this, set the "date_ended" to `true`), or to update other fields like duration, name, etc. When an experiment is ended, it automatically runs the analysis and will return the analysis instead.
 
 Example for changing duration, name, and description:
+
 ```
 {
   "duration": 30,
@@ -263,8 +282,10 @@ Example for changing duration, name, and description:
   "description": "A cool description"
 }
 ```
+
 Returns the newly updated experiment.
 Response example:
+
 ```
 {
     "id": 1,
@@ -283,17 +304,22 @@ Response example:
     "p_value": null
 }
 ```
+
 Example for stopping an experiment:
+
 ```
 {
     "date_ended": true
 }
 ```
+
 Response will contain the analysis data.
 
 ## Endpoint: GET api/metrics
+
 Returns an array of all metrics for the account.
 Example response:
+
 ```
 [
     {
@@ -316,9 +342,12 @@ Example response:
     }
 ]
 ```
+
 ## Endpoint: GET api/metrics/:id
+
 Returns the metric with the given id.
 Example response:
+
 ```
 {
     "id": 1,
@@ -327,12 +356,16 @@ Example response:
     "type": "binomial"
 }
 ```
+
 ## Endpoint: POST api/metrics
+
 For creating a new metric. Required fields are:
+
 - name (string up to 50 chars, must be unique)
 - query_string (string representing the query to get this data from your database)
 - type (one of: 'binomial', 'count', 'duration', 'revenue')
-Example request body:
+  Example request body:
+
 ```
 {
   "name": "Pageviews",
@@ -340,8 +373,10 @@ Example request body:
   "type": "count"
 }
 ```
+
 Returns the newly created metric.
 Example response body:
+
 ```
 {
     "id": 10,
@@ -350,16 +385,21 @@ Example response body:
     "type": "count"
 }
 ```
+
 ## Endpoint: PUT api/metrics/:id
+
 For editing a specific metric. Fields can include name, query_string, or type.
 Example response body:
+
 ```
 {
   "name": "Pageviews per user"
 }
 ```
+
 Returns the newly updated object.
 Example response body:
+
 ```
 {
     "id": 10,
@@ -368,7 +408,9 @@ Example response body:
     "type": "count"
 }
 ```
+
 ## Endpoint: DELETE api/metrics/:id
+
 For deleting a specific metric. No request body needed.
 Example response body for `DELETE api/metrics/10`:
 `"Metric 'Pageviews per user' with id 10 successfully deleted"`
@@ -440,11 +482,13 @@ Unsuccessful response:
    "connected": false
 }
 ```
+
 ## Endpoint: GET api/flags/:id/custom-assignments
 
 No request body needed
 
 Successful response, if :id == 2:
+
 ```
 {'2': { user123: false,  user888: false}}
 ```

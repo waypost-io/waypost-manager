@@ -106,3 +106,4 @@ dist
 #Postgres
 *.sql
 seedDatabase.js
+seedFlags.js
