@@ -104,6 +104,6 @@ dist
 .tern-port
 
 #Postgres
-*.sql
+*waypost_db_reset.sql
 seedDatabase.js
 seedFlags.js

@@ -130,7 +130,6 @@ const EditFlagForm = ({ setIsEditing, customAssignments }) => {
 
     setIsEditing(false);
   };
-  const underlineStyle = "underline underline-offset-4 mx-1 text-primary-violet hover:text-primaryDark-violet";
 
   return (
     <div className="flex flex-col items-center py-8">
@@ -190,7 +189,7 @@ const EditFlagForm = ({ setIsEditing, customAssignments }) => {
           <span className="ml-2">{existingAssignments.off.join(", ")}</span>
         </div>
         <div className={FIELD_DIV_CSS}>
-          <label html-for="delete-custom-assignment" className={LABEL_CSS}>
+          <label htmlFor="delete-custom-assignment" className={LABEL_CSS}>
             Delete a custom assignment:
           </label>
           <input
@@ -205,7 +204,7 @@ const EditFlagForm = ({ setIsEditing, customAssignments }) => {
           </button>
         </div>
         <div className={FIELD_DIV_CSS}>
-          <label html-for="delete-custom-assignment" className={LABEL_CSS}>
+          <label htmlFor="delete-custom-assignment" className={LABEL_CSS}>
             Add a custom assignment:
           </label>
           <input
