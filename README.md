@@ -1,4 +1,4 @@
-<img src="./client/public/assets/PNGs/Waypost_logo_color.png" alt="Waypost Logo" width="200" />
+<img src="./client/public/assets/PNGs/Waypost_white_background.png" alt="Waypost Logo" width="200" />
 
 **Waypost** is an open-source, lightweight, self-hosted feature flag management system that specializes in A/B Testing, providing analytical insights for your experiments on both the front-end and back-end.
 
