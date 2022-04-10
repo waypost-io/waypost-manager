@@ -108,7 +108,7 @@ const NewFlagModal = ({ modalOpen, setModalOpen }) => {
         </form>
         <button
           type="submit"
-          className="btn bg-primary-violet"
+          className="btn bg-primary-violet mt-8"
           onClick={handleSubmit}
         >
           Submit
